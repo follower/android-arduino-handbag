@@ -19,8 +19,7 @@ AndroidAccessory acc("example.com",
 void setup();
 void loop();
 
-void init_buttons()
-{
+void init_buttons() {
 	pinMode(BUTTON1, INPUT);
 
 	// enable the internal pullups
@@ -28,23 +27,20 @@ void init_buttons()
 }
 
 
-void init_relays()
-{
+void init_relays() {
 	pinMode(RELAY1, OUTPUT);
 	digitalWrite(RELAY1, LOW);
 }
 
 
-void init_leds()
-{
+void init_leds() {
 	digitalWrite(LED1, 1);
 
 	pinMode(LED1, OUTPUT);
 }
 
 byte b1;
-void setup()
-{
+void setup() {
 	Serial.begin(115200);
 	Serial.print("\r\nStart");
 
@@ -58,8 +54,7 @@ void setup()
 	acc.powerOn();
 }
 
-void loop()
-{
+void loop() {
 	static byte count = 0;
 	byte msg[3];
 
