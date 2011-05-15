@@ -25,7 +25,6 @@
 #define  RELAY2         A1
 
 #define  LIGHT_SENSOR   A2
-#define  TEMP_SENSOR    A3
 
 #define  BUTTON1        A6
 #define  BUTTON2        A7
@@ -193,14 +192,6 @@ void loop()
 		}
 
 		switch (count++ % 0x10) {
-		case 0:
-			val = analogRead(TEMP_SENSOR);
-			msg[0] = 0x4;
-			msg[1] = val >> 8;
-			msg[2] = val & 0xff;
-			acc.write(msg, 3);
-			break;
-
 		case 0x4:
 			val = analogRead(LIGHT_SENSOR);
 			msg[0] = 0x5;
