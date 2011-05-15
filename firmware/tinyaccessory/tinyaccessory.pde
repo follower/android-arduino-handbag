@@ -5,7 +5,6 @@
 #define  LED1_RED       8
 
 #define  RELAY1         A0
-#define  RELAY2         A1
 
 #define  LIGHT_SENSOR   A2
 
@@ -32,7 +31,6 @@ void init_buttons()
 void init_relays()
 {
 	pinMode(RELAY1, OUTPUT);
-	pinMode(RELAY2, OUTPUT);
 }
 
 
@@ -84,8 +82,6 @@ void loop()
 			} else if (msg[0] == 0x3) {
 				if (msg[1] == 0x0)
 					digitalWrite(RELAY1, msg[2] ? HIGH : LOW);
-				else if (msg[1] == 0x1)
-					digitalWrite(RELAY2, msg[2] ? HIGH : LOW);
 			}
 		}
 
@@ -113,7 +109,6 @@ void loop()
 		// reset outputs to default values on disconnect
 		analogWrite(LED1_RED, 255);
 		digitalWrite(RELAY1, LOW);
-		digitalWrite(RELAY2, LOW);
 	}
 
 	delay(10);
