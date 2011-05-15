@@ -2,20 +2,14 @@ package com.google.android.DemoKit;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.text.SpannableStringBuilder;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.SubscriptSpan;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class RelayController implements OnCheckedChangeListener {
-	private final int mRelayNumber;
 	private final byte mCommandTarget;
 	private DemoKitActivity mActivity;
-	private TextView mLabel;
 	private ToggleButton mButton;
 	private Drawable mOffBackground;
 	private Drawable mOnBackground;
@@ -23,7 +17,6 @@ public class RelayController implements OnCheckedChangeListener {
 	public RelayController(DemoKitActivity activity, int relayNumber,
 			Resources res) {
 		mActivity = activity;
-		mRelayNumber = relayNumber;
 		mCommandTarget = (byte) (relayNumber - 1);
 		mOffBackground = res
 				.getDrawable(R.drawable.toggle_button_off_holo_dark);

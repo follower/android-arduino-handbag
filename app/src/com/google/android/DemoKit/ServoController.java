@@ -1,21 +1,14 @@
 package com.google.android.DemoKit;
 
-import android.text.SpannableStringBuilder;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.SubscriptSpan;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class ServoController implements Slider.SliderPositionListener {
-	private final int mServoNumber;
 	private final byte mCommandTarget;
-	private TextView mLabel;
 	private Slider mSlider;
 	private DemoKitActivity mActivity;
 
 	public ServoController(DemoKitActivity activity, int servoNumber) {
 		mActivity = activity;
-		mServoNumber = servoNumber;
 		mCommandTarget = (byte) (servoNumber - 1 + 0x10);
 	}
 
