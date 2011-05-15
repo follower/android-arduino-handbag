@@ -1,6 +1,3 @@
-#include <Wire.h>
-#include <Servo.h>
-
 #include <Max3421e.h>
 #include <Usb.h>
 #include <AndroidAccessory.h>
@@ -17,10 +14,6 @@
 #define  LED1_GREEN     10
 #define  LED1_BLUE      9
 
-#define  SERVO1         11
-#define  SERVO2         12
-#define  SERVO3         13
-
 #define  RELAY1         A0
 #define  RELAY2         A1
 
@@ -34,8 +27,6 @@ AndroidAccessory acc("example.com",
 		     "1.0",
 		     "http://www.example.com",
 		     "0000000012345678");
-Servo servos[3];
-
 void setup();
 void loop();
 
@@ -92,13 +83,6 @@ void setup()
 	init_relays();
 	init_buttons();
 
-	servos[0].attach(SERVO1);
-	servos[0].write(90);
-	servos[1].attach(SERVO2);
-	servos[1].write(90);
-	servos[2].attach(SERVO3);
-	servos[2].write(90);
-
 
 	b1 = digitalRead(BUTTON1);
 	c = 0;
@@ -143,12 +127,6 @@ void loop()
 					analogWrite(LED3_GREEN, 255 - msg[2]);
 				else if (msg[1] == 0x8)
 					analogWrite(LED3_BLUE, 255 - msg[2]);
-				else if (msg[1] == 0x10)
-					servos[0].write(map(msg[2], 0, 255, 0, 180));
-				else if (msg[1] == 0x11)
-					servos[1].write(map(msg[2], 0, 255, 0, 180));
-				else if (msg[1] == 0x12)
-					servos[2].write(map(msg[2], 0, 255, 0, 180));
 			} else if (msg[0] == 0x3) {
 				if (msg[1] == 0x0)
 					digitalWrite(RELAY1, msg[2] ? HIGH : LOW);
@@ -188,9 +166,6 @@ void loop()
 		analogWrite(LED3_RED, 255);
 		analogWrite(LED3_GREEN, 255);
 		analogWrite(LED3_BLUE, 255);
-		servos[0].write(90);
-		servos[0].write(90);
-		servos[0].write(90);
 		digitalWrite(RELAY1, LOW);
 		digitalWrite(RELAY2, LOW);
 	}
