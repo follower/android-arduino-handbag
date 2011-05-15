@@ -3,7 +3,7 @@
 	android:paddingLeft="5dip" android:layout_width="fill_parent"
 	android:orientation="vertical" android:layout_height="wrap_content"
 	android:paddingTop="30dip" >
-	<TextView android:text="Digital input" android:id="@+id/lightPercentValue"
+	<TextView android:text="Digital input (pin 5)" android:id="@+id/lightPercentValue"
 		style="@style/TinyAccessoryControlLabel" android:layout_weight="1"
 		android:layout_height="wrap_content" android:layout_width="wrap_content"
 		android:gravity="center|top"></TextView>

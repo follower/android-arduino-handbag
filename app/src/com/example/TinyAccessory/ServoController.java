@@ -9,7 +9,7 @@ public class ServoController implements Slider.SliderPositionListener {
 
 	public ServoController(TinyAccessoryActivity activity, int servoNumber) {
 		mActivity = activity;
-		mCommandTarget = (byte) (servoNumber - 1 + 0x10);
+		mCommandTarget = (byte) 0;
 	}
 
 	public void attachToView(ViewGroup targetView) {
