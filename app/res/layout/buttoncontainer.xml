@@ -12,12 +12,6 @@
 		android:layout_height="wrap_content" android:layout_gravity="center_vertical">
 		<ImageButton android:background="@null" android:id="@+id/Button1"
 			style="@style/DemoKitButtonDisplay" android:src="@drawable/indicator_button1_off_noglow"></ImageButton>
-		<ImageButton android:background="@null" android:id="@+id/Button2"
-			style="@style/DemoKitButtonDisplay" android:src="@drawable/indicator_button2_off_noglow"></ImageButton>
-		<ImageButton android:background="@null" android:id="@+id/Button3"
-			style="@style/DemoKitButtonDisplay" android:src="@drawable/indicator_button3_off_noglow"></ImageButton>
-		<ImageButton android:background="@null" android:id="@+id/Button4"
-			style="@style/DemoKitButtonDisplay" android:src="@drawable/indicator_button_capacitive_off_noglow"></ImageButton>
 	</LinearLayout>
 </LinearLayout>
 

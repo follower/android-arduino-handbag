@@ -63,21 +63,6 @@ public class InputController extends AccessoryController {
 				onImageId = R.drawable.indicator_button1_on_noglow;
 				offImageId = R.drawable.indicator_button1_off_noglow;
 				break;
-			case 1:
-				viewId = R.id.Button2;
-				onImageId = R.drawable.indicator_button2_on_noglow;
-				offImageId = R.drawable.indicator_button2_off_noglow;
-				break;
-			case 2:
-				viewId = R.id.Button3;
-				onImageId = R.drawable.indicator_button3_on_noglow;
-				offImageId = R.drawable.indicator_button3_off_noglow;
-				break;
-			case 3:
-				viewId = R.id.Button4;
-				onImageId = R.drawable.indicator_button_capacitive_on_noglow;
-				offImageId = R.drawable.indicator_button_capacitive_off_noglow;
-				break;
 			}
 			mTargetView = (ImageView) findViewById(viewId);
 			mOffImage = mHostActivity.getResources().getDrawable(offImageId);
