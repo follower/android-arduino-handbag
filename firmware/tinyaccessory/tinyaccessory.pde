@@ -27,8 +27,6 @@
 #define  LIGHT_SENSOR   A2
 
 #define  BUTTON1        A6
-#define  BUTTON2        A7
-#define  BUTTON3        A8
 
 AndroidAccessory acc("example.com",
 		     "TinyAccessory",
@@ -44,13 +42,9 @@ void loop();
 void init_buttons()
 {
 	pinMode(BUTTON1, INPUT);
-	pinMode(BUTTON2, INPUT);
-	pinMode(BUTTON3, INPUT);
 
 	// enable the internal pullups
 	digitalWrite(BUTTON1, HIGH);
-	digitalWrite(BUTTON2, HIGH);
-	digitalWrite(BUTTON3, HIGH);
 }
 
 
@@ -88,7 +82,7 @@ void init_leds()
 	pinMode(LED3_BLUE, OUTPUT);
 }
 
-byte b1, b2, b3, b4, c;
+byte b1, c;
 void setup()
 {
 	Serial.begin(115200);
@@ -107,8 +101,6 @@ void setup()
 
 
 	b1 = digitalRead(BUTTON1);
-	b2 = digitalRead(BUTTON2);
-	b3 = digitalRead(BUTTON3);
 	c = 0;
 
 	acc.powerOn();
@@ -173,22 +165,6 @@ void loop()
 			msg[2] = b ? 0 : 1;
 			acc.write(msg, 3);
 			b1 = b;
-		}
-
-		b = digitalRead(BUTTON2);
-		if (b != b2) {
-			msg[1] = 1;
-			msg[2] = b ? 0 : 1;
-			acc.write(msg, 3);
-			b2 = b;
-		}
-
-		b = digitalRead(BUTTON3);
-		if (b != b3) {
-			msg[1] = 2;
-			msg[2] = b ? 0 : 1;
-			acc.write(msg, 3);
-			b3 = b;
 		}
 
 		switch (count++ % 0x10) {
