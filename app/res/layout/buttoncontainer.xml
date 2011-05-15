@@ -4,7 +4,7 @@
 	android:orientation="vertical" android:layout_height="wrap_content"
 	android:paddingTop="30dip" >
 	<TextView android:text="Digital input" android:id="@+id/lightPercentValue"
-		style="@style/DemoKitControlLabel" android:layout_weight="1"
+		style="@style/TinyAccessoryControlLabel" android:layout_weight="1"
 		android:layout_height="wrap_content" android:layout_width="wrap_content"
 		android:gravity="center|top"></TextView>
 	<LinearLayout android:id="@+id/ButtonContainer"
@@ -12,7 +12,7 @@
 		android:layout_marginTop="5dip"
 		android:layout_height="wrap_content" android:layout_gravity="left|center_vertical">
 		<ImageButton android:background="@null" android:id="@+id/Button1"
-			style="@style/DemoKitButtonDisplay" android:src="@drawable/indicator_button1_off_noglow"></ImageButton>
+			style="@style/TinyAccessoryButtonDisplay" android:src="@drawable/indicator_button1_off_noglow"></ImageButton>
 	</LinearLayout>
 </LinearLayout>
 

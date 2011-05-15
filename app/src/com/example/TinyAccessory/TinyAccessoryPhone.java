@@ -1,7 +1,7 @@
-package com.google.android.DemoKit;
+package com.example.TinyAccessory;
 
-public class DemoKitPhone extends BaseActivity {
-	static final String TAG = "DemoKitPhone";
+public class TinyAccessoryPhone extends BaseActivity {
+	static final String TAG = "TinyAccessoryPhone";
 	/** Called when the activity is first created. */
 	OutputController mOutputController;
 

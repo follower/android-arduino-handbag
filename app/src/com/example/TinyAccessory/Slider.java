@@ -1,4 +1,6 @@
-package com.google.android.DemoKit;
+package com.example.TinyAccessory;
+
+import com.example.TinyAccessory.R;
 
 import android.content.Context;
 import android.content.res.Resources;

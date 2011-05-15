@@ -1,4 +1,6 @@
-package com.google.android.DemoKit;
+package com.example.TinyAccessory;
+
+import com.example.TinyAccessory.R;
 
 import android.view.ViewGroup;
 
@@ -6,7 +8,7 @@ public class OutputController extends AccessoryController {
 
 	private boolean mVertical;
 
-	OutputController(DemoKitActivity hostActivity, boolean vertical) {
+	OutputController(TinyAccessoryActivity hostActivity, boolean vertical) {
 		super(hostActivity);
 		mVertical = vertical;
 	}

@@ -1,7 +1,9 @@
-package com.google.android.DemoKit;
+package com.example.TinyAccessory;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import com.example.TinyAccessory.R;
 
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
@@ -13,7 +15,7 @@ public class InputController extends AccessoryController {
 	ArrayList<SwitchDisplayer> mSwitchDisplayers;
 	private final DecimalFormat mLightValueFormatter = new DecimalFormat("##.#");
 
-	InputController(DemoKitActivity hostActivity) {
+	InputController(TinyAccessoryActivity hostActivity) {
 		super(hostActivity);
 		mLightView = (TextView) findViewById(R.id.lightPercentValue);
 		mLightRawView = (TextView) findViewById(R.id.lightRawValue);

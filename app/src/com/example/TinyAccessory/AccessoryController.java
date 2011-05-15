@@ -1,13 +1,13 @@
-package com.google.android.DemoKit;
+package com.example.TinyAccessory;
 
 import android.content.res.Resources;
 import android.view.View;
 
 public abstract class AccessoryController {
 
-	protected DemoKitActivity mHostActivity;
+	protected TinyAccessoryActivity mHostActivity;
 
-	public AccessoryController(DemoKitActivity activity) {
+	public AccessoryController(TinyAccessoryActivity activity) {
 		mHostActivity = activity;
 	}
 

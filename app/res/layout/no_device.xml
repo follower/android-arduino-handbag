@@ -6,6 +6,6 @@
 	android:layout_gravity="fill_horizontal">
 	<TextView android:layout_width="match_parent"
 		android:layout_height="wrap_content" android:id="@+id/textView1"
-		android:layout_weight="1" android:text="@string/no_device" style="@style/DemoKitNoDevice"
+		android:layout_weight="1" android:text="@string/no_device" style="@style/TinyAccessoryNoDevice"
 		android:gravity="center"></TextView>
 </LinearLayout>

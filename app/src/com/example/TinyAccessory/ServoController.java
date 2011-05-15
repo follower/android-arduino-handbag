@@ -1,13 +1,13 @@
-package com.google.android.DemoKit;
+package com.example.TinyAccessory;
 
 import android.view.ViewGroup;
 
 public class ServoController implements Slider.SliderPositionListener {
 	private final byte mCommandTarget;
 	private Slider mSlider;
-	private DemoKitActivity mActivity;
+	private TinyAccessoryActivity mActivity;
 
-	public ServoController(DemoKitActivity activity, int servoNumber) {
+	public ServoController(TinyAccessoryActivity activity, int servoNumber) {
 		mActivity = activity;
 		mCommandTarget = (byte) (servoNumber - 1 + 0x10);
 	}
@@ -19,7 +19,7 @@ public class ServoController implements Slider.SliderPositionListener {
 
 	public void onPositionChange(double value) {
 		byte v = (byte) (value * 255);
-		mActivity.sendCommand(DemoKitActivity.LED_SERVO_COMMAND,
+		mActivity.sendCommand(TinyAccessoryActivity.LED_SERVO_COMMAND,
 				mCommandTarget, v);
 	}
 

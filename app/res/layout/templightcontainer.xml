@@ -7,23 +7,23 @@
 		android:layout_width="fill_parent" android:orientation="vertical"
 		android:layout_weight="1" android:layout_height="wrap_content">
 		<TextView android:id="@+id/lightPercentLabel" android:text="Analog input"
-			style="@style/DemoKitControlLabel" android:gravity="center"
+			style="@style/TinyAccessoryControlLabel" android:gravity="center"
 			android:layout_weight="1"></TextView>
 		<LinearLayout android:id="@+id/lightPercentValueContainer"
 			android:layout_width="fill_parent" android:orientation="horizontal"
 			android:layout_height="wrap_content">
 			<TextView android:text="23" android:id="@+id/lightPercentValue"
-				style="@style/DemoKitMeasurement"></TextView>
-			<TextView android:id="@+id/lightPercentSuffix" style="@style/DemoKitMeasurementSuffix"
+				style="@style/TinyAccessoryMeasurement"></TextView>
+			<TextView android:id="@+id/lightPercentSuffix" style="@style/TinyAccessoryMeasurementSuffix"
 				android:gravity="top" android:text="%"></TextView>
 		</LinearLayout>
 		<LinearLayout android:id="@+id/lightRawValueContainer"
 			android:layout_width="wrap_content" android:orientation="horizontal"
 			android:layout_height="wrap_content">
 			<TextView android:text="200" android:id="@+id/lightRawValue"
-				style="@style/DemoKitControlLightLowerLabel"></TextView>
+				style="@style/TinyAccessoryControlLightLowerLabel"></TextView>
 			<TextView android:text="/1024"
-				style="@style/DemoKitControlLightLowerLabelConst"></TextView>
+				style="@style/TinyAccessoryControlLightLowerLabelConst"></TextView>
 		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>

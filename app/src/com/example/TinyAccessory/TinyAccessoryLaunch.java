@@ -1,4 +1,4 @@
-package com.google.android.DemoKit;
+package com.example.TinyAccessory;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-public class DemoKitLaunch extends Activity {
-	static final String TAG = "DemoKitLaunch";
+public class TinyAccessoryLaunch extends Activity {
+	static final String TAG = "TinyAccessoryLaunch";
 
 	static Intent createIntent(Activity activity) {
 		Intent intent;
 		Log.i(TAG, "starting phone ui");
-		intent = new Intent(activity, DemoKitPhone.class);
+		intent = new Intent(activity, TinyAccessoryPhone.class);
 		return intent;
 	}
 	
@@ -27,7 +27,7 @@ public class DemoKitLaunch extends Activity {
 		try {
 			startActivity(intent);
 		} catch (ActivityNotFoundException e) {
-			Log.e(TAG, "unable to start DemoKit activity", e);
+			Log.e(TAG, "unable to start TinyAccessory activity", e);
 		}
 		finish();
 	}

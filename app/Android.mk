@@ -21,7 +21,7 @@ LOCAL_MODULE_TAGS := tests
 
 LOCAL_SRC_FILES := $(call all-subdir-java-files)
 
-LOCAL_PACKAGE_NAME := DemoKit
+LOCAL_PACKAGE_NAME := TinyAccessory
 
 LOCAL_JAVA_LIBRARIES := com.android.future.usb.accessory
 

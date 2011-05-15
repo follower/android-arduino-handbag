@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.DemoKit;
+package com.example.TinyAccessory;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -36,11 +36,12 @@ import android.widget.SeekBar;
 
 import com.android.future.usb.UsbAccessory;
 import com.android.future.usb.UsbManager;
+import com.example.TinyAccessory.R;
 
-public class DemoKitActivity extends Activity implements Runnable {
-	private static final String TAG = "DemoKit";
+public class TinyAccessoryActivity extends Activity implements Runnable {
+	private static final String TAG = "TinyAccessory";
 
-	private static final String ACTION_USB_PERMISSION = "com.google.android.DemoKit.action.USB_PERMISSION";
+	private static final String ACTION_USB_PERMISSION = "com.example.TinyAccessory.action.USB_PERMISSION";
 
 	private UsbManager mUsbManager;
 	private PendingIntent mPermissionIntent;
@@ -190,7 +191,7 @@ public class DemoKitActivity extends Activity implements Runnable {
 			FileDescriptor fd = mFileDescriptor.getFileDescriptor();
 			mInputStream = new FileInputStream(fd);
 			mOutputStream = new FileOutputStream(fd);
-			Thread thread = new Thread(null, this, "DemoKit");
+			Thread thread = new Thread(null, this, "TinyAccessory");
 			thread.start();
 			Log.d(TAG, "accessory opened");
 			enableControls(true);

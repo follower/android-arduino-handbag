@@ -1,10 +1,12 @@
-package com.google.android.DemoKit;
+package com.example.TinyAccessory;
+
+import com.example.TinyAccessory.R;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class BaseActivity extends DemoKitActivity {
+public class BaseActivity extends TinyAccessoryActivity {
 
 	private InputController mInputController;
 

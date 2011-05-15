@@ -1,4 +1,6 @@
-package com.google.android.DemoKit;
+package com.example.TinyAccessory;
+
+import com.example.TinyAccessory.R;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -9,12 +11,12 @@ import android.widget.ToggleButton;
 
 public class RelayController implements OnCheckedChangeListener {
 	private final byte mCommandTarget;
-	private DemoKitActivity mActivity;
+	private TinyAccessoryActivity mActivity;
 	private ToggleButton mButton;
 	private Drawable mOffBackground;
 	private Drawable mOnBackground;
 
-	public RelayController(DemoKitActivity activity, int relayNumber,
+	public RelayController(TinyAccessoryActivity activity, int relayNumber,
 			Resources res) {
 		mActivity = activity;
 		mCommandTarget = (byte) (relayNumber - 1);
@@ -35,7 +37,7 @@ public class RelayController implements OnCheckedChangeListener {
 			mButton.setBackgroundDrawable(mOffBackground);
 		}
 		if (mActivity != null) {
-			mActivity.sendCommand(DemoKitActivity.RELAY_COMMAND,
+			mActivity.sendCommand(TinyAccessoryActivity.RELAY_COMMAND,
 					mCommandTarget, isChecked ? 1 : 0);
 		}
 	}

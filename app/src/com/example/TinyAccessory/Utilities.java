@@ -1,4 +1,4 @@
-package com.google.android.DemoKit;
+package com.example.TinyAccessory;
 
 import android.graphics.drawable.Drawable;
 
