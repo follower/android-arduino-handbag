@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/TempLightContainer" android:layout_width="fill_parent"
 	android:orientation="horizontal" android:layout_height="wrap_content"
-	android:paddingLeft="5dip">
+	android:paddingLeft="5dip" android:paddingTop="30dip">
 	<LinearLayout android:id="@+id/LightContainer"
 		android:layout_width="fill_parent" android:orientation="vertical"
 		android:layout_weight="1" android:layout_height="wrap_content">
-		<TextView android:id="@+id/lightPercentLabel" android:text="Light"
+		<TextView android:id="@+id/lightPercentLabel" android:text="Analog input"
 			style="@style/DemoKitControlLabel" android:gravity="center"
 			android:layout_weight="1"></TextView>
 		<LinearLayout android:id="@+id/lightPercentValueContainer"
