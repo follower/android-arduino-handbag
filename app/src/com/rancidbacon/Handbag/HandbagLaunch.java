@@ -1,4 +1,4 @@
-package com.example.TinyAccessory;
+package com.rancidbacon.Handbag;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-public class TinyAccessoryLaunch extends Activity {
-	static final String TAG = "TinyAccessoryLaunch";
+public class HandbagLaunch extends Activity {
+	static final String TAG = "HandbagLaunch";
 
 	static Intent createIntent(Activity activity) {
 		Intent intent;
 		Log.i(TAG, "starting phone ui");
-		intent = new Intent(activity, TinyAccessoryPhone.class);
+		intent = new Intent(activity, HandbagPhone.class);
 		return intent;
 	}
 	
@@ -27,7 +27,7 @@ public class TinyAccessoryLaunch extends Activity {
 		try {
 			startActivity(intent);
 		} catch (ActivityNotFoundException e) {
-			Log.e(TAG, "unable to start TinyAccessory activity", e);
+			Log.e(TAG, "unable to start Handbag activity", e);
 		}
 		finish();
 	}

@@ -1,6 +1,6 @@
-package com.example.TinyAccessory;
+package com.rancidbacon.Handbag;
 
-import com.example.TinyAccessory.R;
+import com.rancidbacon.Handbag.R;
 
 import android.content.Context;
 import android.content.res.Resources;

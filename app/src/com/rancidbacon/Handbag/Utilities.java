@@ -1,4 +1,4 @@
-package com.example.TinyAccessory;
+package com.rancidbacon.Handbag;
 
 import android.graphics.drawable.Drawable;
 

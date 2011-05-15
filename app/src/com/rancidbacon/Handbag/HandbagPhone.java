@@ -1,7 +1,7 @@
-package com.example.TinyAccessory;
+package com.rancidbacon.Handbag;
 
-public class TinyAccessoryPhone extends BaseActivity {
-	static final String TAG = "TinyAccessoryPhone";
+public class HandbagPhone extends BaseActivity {
+	static final String TAG = "HandbagPhone";
 	/** Called when the activity is first created. */
 	OutputController mOutputController;
 

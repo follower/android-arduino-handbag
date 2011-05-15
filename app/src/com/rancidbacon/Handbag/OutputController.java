@@ -1,6 +1,6 @@
-package com.example.TinyAccessory;
+package com.rancidbacon.Handbag;
 
-import com.example.TinyAccessory.R;
+import com.rancidbacon.Handbag.R;
 
 import android.view.ViewGroup;
 
@@ -8,7 +8,7 @@ public class OutputController extends AccessoryController {
 
 	private boolean mVertical;
 
-	OutputController(TinyAccessoryActivity hostActivity, boolean vertical) {
+	OutputController(HandbagActivity hostActivity, boolean vertical) {
 		super(hostActivity);
 		mVertical = vertical;
 	}

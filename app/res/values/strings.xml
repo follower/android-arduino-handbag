@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">TinyAccessory</string>
+	<string name="app_name">Handbag</string>
 	<string name="no_device">Please connect an accessory board.</string>
 	<string name="pwmout1Label">PWM output (pin 3)</string>
 	<string name="digitalout1Label">Digital output (pin 4)</string>

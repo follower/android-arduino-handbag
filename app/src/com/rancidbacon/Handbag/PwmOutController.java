@@ -1,13 +1,13 @@
-package com.example.TinyAccessory;
+package com.rancidbacon.Handbag;
 
 import android.view.ViewGroup;
 
 public class PwmOutController implements Slider.SliderPositionListener {
 	private final byte mCommandTarget;
 	private Slider mSlider;
-	private TinyAccessoryActivity mActivity;
+	private HandbagActivity mActivity;
 
-	public PwmOutController(TinyAccessoryActivity activity, int pwmoutNumber) {
+	public PwmOutController(HandbagActivity activity, int pwmoutNumber) {
 		mActivity = activity;
 		mCommandTarget = (byte) pwmoutNumber;
 	}
@@ -19,7 +19,7 @@ public class PwmOutController implements Slider.SliderPositionListener {
 
 	public void onPositionChange(double value) {
 		byte v = (byte) (value * 255);
-		mActivity.sendCommand(TinyAccessoryActivity.PWM_OUT_COMMAND,
+		mActivity.sendCommand(HandbagActivity.PWM_OUT_COMMAND,
 				mCommandTarget, v);
 	}
 

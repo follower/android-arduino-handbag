@@ -1,13 +1,13 @@
-package com.example.TinyAccessory;
+package com.rancidbacon.Handbag;
 
 import android.content.res.Resources;
 import android.view.View;
 
 public abstract class AccessoryController {
 
-	protected TinyAccessoryActivity mHostActivity;
+	protected HandbagActivity mHostActivity;
 
-	public AccessoryController(TinyAccessoryActivity activity) {
+	public AccessoryController(HandbagActivity activity) {
 		mHostActivity = activity;
 	}
 

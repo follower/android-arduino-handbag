@@ -1,6 +1,6 @@
-package com.example.TinyAccessory;
+package com.rancidbacon.Handbag;
 
-import com.example.TinyAccessory.R;
+import com.rancidbacon.Handbag.R;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -11,12 +11,12 @@ import android.widget.ToggleButton;
 
 public class DigitalOutController implements OnCheckedChangeListener {
 	private final byte mCommandTarget;
-	private TinyAccessoryActivity mActivity;
+	private HandbagActivity mActivity;
 	private ToggleButton mButton;
 	private Drawable mOffBackground;
 	private Drawable mOnBackground;
 
-	public DigitalOutController(TinyAccessoryActivity activity, int digitalOutIndexNumber,
+	public DigitalOutController(HandbagActivity activity, int digitalOutIndexNumber,
 			Resources res) {
 		mActivity = activity;
 		mCommandTarget = (byte) (digitalOutIndexNumber - 1);
@@ -37,7 +37,7 @@ public class DigitalOutController implements OnCheckedChangeListener {
 			mButton.setBackgroundDrawable(mOffBackground);
 		}
 		if (mActivity != null) {
-			mActivity.sendCommand(TinyAccessoryActivity.DIGITAL_OUT_COMMAND,
+			mActivity.sendCommand(HandbagActivity.DIGITAL_OUT_COMMAND,
 					mCommandTarget, isChecked ? 1 : 0);
 		}
 	}

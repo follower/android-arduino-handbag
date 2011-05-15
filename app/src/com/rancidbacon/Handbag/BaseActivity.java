@@ -1,12 +1,12 @@
-package com.example.TinyAccessory;
+package com.rancidbacon.Handbag;
 
-import com.example.TinyAccessory.R;
+import com.rancidbacon.Handbag.R;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class BaseActivity extends TinyAccessoryActivity {
+public class BaseActivity extends HandbagActivity {
 
 	private InputController mInputController;
 

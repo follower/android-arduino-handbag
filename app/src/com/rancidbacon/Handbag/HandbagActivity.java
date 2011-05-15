@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.TinyAccessory;
+package com.rancidbacon.Handbag;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -36,12 +36,12 @@ import android.widget.SeekBar;
 
 import com.android.future.usb.UsbAccessory;
 import com.android.future.usb.UsbManager;
-import com.example.TinyAccessory.R;
+import com.rancidbacon.Handbag.R;
 
-public class TinyAccessoryActivity extends Activity implements Runnable {
-	private static final String TAG = "TinyAccessory";
+public class HandbagActivity extends Activity implements Runnable {
+	private static final String TAG = "Handbag";
 
-	private static final String ACTION_USB_PERMISSION = "com.example.TinyAccessory.action.USB_PERMISSION";
+	private static final String ACTION_USB_PERMISSION = "com.rancidbacon.Handbag.action.USB_PERMISSION";
 
 	private UsbManager mUsbManager;
 	private PendingIntent mPermissionIntent;
@@ -191,7 +191,7 @@ public class TinyAccessoryActivity extends Activity implements Runnable {
 			FileDescriptor fd = mFileDescriptor.getFileDescriptor();
 			mInputStream = new FileInputStream(fd);
 			mOutputStream = new FileOutputStream(fd);
-			Thread thread = new Thread(null, this, "TinyAccessory");
+			Thread thread = new Thread(null, this, "Handbag");
 			thread.start();
 			Log.d(TAG, "accessory opened");
 			enableControls(true);

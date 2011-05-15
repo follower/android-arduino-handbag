@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent" android:orientation="vertical"
 	android:layout_height="wrap_content" >
-	<TextView android:layout_height="wrap_content" style="@style/TinyAccessoryControlLabel"
+	<TextView android:layout_height="wrap_content" style="@style/HandbagControlLabel"
 		android:layout_width="wrap_content" android:text="@string/pwmout1Label"></TextView>
-	<com.example.TinyAccessory.Slider
+	<com.rancidbacon.Handbag.Slider
 		android:layout_height="wrap_content" android:layout_width="match_parent"
-		android:layout_marginTop="0dip"></com.example.TinyAccessory.Slider>
+		android:layout_marginTop="0dip"></com.rancidbacon.Handbag.Slider>
 </LinearLayout>
 
