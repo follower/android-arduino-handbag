@@ -101,24 +101,6 @@ public class DemoKitActivity extends Activity implements Runnable {
 		}
 	}
 
-	protected class JoyMsg {
-		private int x;
-		private int y;
-
-		public JoyMsg(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-
-		public int getX() {
-			return x;
-		}
-
-		public int getY() {
-			return y;
-		}
-	}
-
 	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -302,15 +284,6 @@ public class DemoKitActivity extends Activity implements Runnable {
 					i += 3;
 					break;
 
-				case 0x6:
-					if (len >= 3) {
-						Message m = Message.obtain(mHandler, MESSAGE_JOY);
-						m.obj = new JoyMsg(buffer[i + 1], buffer[i + 2]);
-						mHandler.sendMessage(m);
-					}
-					i += 3;
-					break;
-
 				default:
 					Log.d(TAG, "unknown msg: " + buffer[i]);
 					i = len;
@@ -340,11 +313,6 @@ public class DemoKitActivity extends Activity implements Runnable {
 				handleLightMessage(l);
 				break;
 
-			case MESSAGE_JOY:
-				JoyMsg j = (JoyMsg) msg.obj;
-				handleJoyMessage(j);
-				break;
-
 			}
 		}
 	};
@@ -364,9 +332,6 @@ public class DemoKitActivity extends Activity implements Runnable {
 				Log.e(TAG, "write failed", e);
 			}
 		}
-	}
-
-	protected void handleJoyMessage(JoyMsg j) {
 	}
 
 	protected void handleLightMessage(LightMsg l) {

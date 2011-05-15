@@ -60,9 +60,6 @@ public class BaseActivity extends DemoKitActivity {
 		mInputController.accessoryAttached();
 	}
 
-	protected void handleJoyMessage(JoyMsg j) {
-	}
-
 	protected void handleLightMessage(LightMsg l) {
 		if (mInputController != null) {
 			mInputController.setLightValue(l.getLight());
