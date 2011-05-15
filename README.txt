@@ -1,5 +1,5 @@
-TinyAccessory -- simplified example for Android Arduino Uno accessory
-=====================================================================
+TinyAccessory -- simplified example of an Android Arduino Uno accessory
+=======================================================================
 
 TinyAccessory is stripped down and lightly modified from the original
 'demokit'/'DemoKit' example available from Google.
