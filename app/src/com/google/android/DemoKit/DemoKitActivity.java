@@ -52,9 +52,7 @@ public class DemoKitActivity extends Activity implements Runnable {
 	FileOutputStream mOutputStream;
 
 	private static final int MESSAGE_SWITCH = 1;
-	private static final int MESSAGE_TEMPERATURE = 2;
 	private static final int MESSAGE_LIGHT = 3;
-	private static final int MESSAGE_JOY = 4;
 
 	public static final byte LED_SERVO_COMMAND = 2;
 	public static final byte RELAY_COMMAND = 3;

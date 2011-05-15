@@ -1,11 +1,8 @@
 package com.google.android.DemoKit;
 
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class DemoKitPhone extends BaseActivity {
 	static final String TAG = "DemoKitPhone";

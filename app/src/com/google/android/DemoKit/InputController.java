@@ -12,8 +12,6 @@ public class InputController extends AccessoryController {
 	private TextView mLightRawView;
 	ArrayList<SwitchDisplayer> mSwitchDisplayers;
 	private final DecimalFormat mLightValueFormatter = new DecimalFormat("##.#");
-	private final DecimalFormat mTemperatureFormatter = new DecimalFormat(
-			"###" + (char)0x00B0);
 
 	InputController(DemoKitActivity hostActivity) {
 		super(hostActivity);
