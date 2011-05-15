@@ -49,7 +49,7 @@
 		<item name="android:layout_margin">2dip</item>
 		<item name="android:padding">2dip</item>
 	</style>
-	<style name="TinyAccessoryRelayButton" parent="@style/TinyAccessoryTextBase">
+	<style name="TinyAccessoryDigitalOutButton" parent="@style/TinyAccessoryTextBase">
 		<item name="android:textSize">15dip</item>
 		<item name="android:layout_marginTop">-10dip</item>
 		<item name="android:layout_height">70dip</item>

@@ -56,7 +56,7 @@ public class TinyAccessoryActivity extends Activity implements Runnable {
 	private static final int MESSAGE_LIGHT = 3;
 
 	public static final byte PWM_OUT_COMMAND = 2;
-	public static final byte RELAY_COMMAND = 3;
+	public static final byte DIGITAL_OUT_COMMAND = 3;
 
 	protected class SwitchMsg {
 		private byte sw;

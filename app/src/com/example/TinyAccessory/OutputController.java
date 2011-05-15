@@ -16,7 +16,7 @@ public class OutputController extends AccessoryController {
 	protected void onAccesssoryAttached() {
 		setupPwmOutController(0, R.id.pwmout1);
 
-		setupRelayController(1, R.id.relay1);
+		setupDigitalOutController(1, R.id.digitalout1);
 	}
 
 	private void setupPwmOutController(int pwmoutIndex, int viewId) {
@@ -24,8 +24,8 @@ public class OutputController extends AccessoryController {
 		sc.attachToView((ViewGroup) findViewById(viewId));
 	}
 
-	private void setupRelayController(int index, int viewId) {
-		RelayController r = new RelayController(mHostActivity, index,
+	private void setupDigitalOutController(int index, int viewId) {
+		DigitalOutController r = new DigitalOutController(mHostActivity, index,
 				getResources());
 		r.attachToView((ViewGroup) findViewById(viewId));
 	}

@@ -3,7 +3,7 @@
 	<string name="app_name">TinyAccessory</string>
 	<string name="no_device">Please connect an accessory board.</string>
 	<string name="pwmout1Label">PWM output (pin 3)</string>
-	<string name="relay1Label">Digital output (pin 4)</string>
+	<string name="digitalout1Label">Digital output (pin 4)</string>
 	<string name="off">Off</string>
 	<string name="on">On</string>
 </resources>

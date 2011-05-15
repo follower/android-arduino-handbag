@@ -20,10 +20,10 @@
 					android:layout_width="match_parent" android:layout_height="wrap_content" />
 			</LinearLayout>
 			<LinearLayout android:layout_height="wrap_content"
-				android:id="@+id/relays" android:orientation="vertical"
+				android:id="@+id/digitalouts" android:orientation="vertical"
 				android:paddingLeft="5dip" android:paddingTop="30dip"
 				android:layout_width="fill_parent" >
-				<include android:id="@+id/relay1" layout="@layout/relaybutton"
+				<include android:id="@+id/digitalout1" layout="@layout/digitaloutbutton"
 					android:layout_width="wrap_content" android:layout_height="wrap_content" />
 			</LinearLayout>
 		</LinearLayout>

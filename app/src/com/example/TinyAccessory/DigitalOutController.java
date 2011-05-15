@@ -9,17 +9,17 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
 
-public class RelayController implements OnCheckedChangeListener {
+public class DigitalOutController implements OnCheckedChangeListener {
 	private final byte mCommandTarget;
 	private TinyAccessoryActivity mActivity;
 	private ToggleButton mButton;
 	private Drawable mOffBackground;
 	private Drawable mOnBackground;
 
-	public RelayController(TinyAccessoryActivity activity, int relayNumber,
+	public DigitalOutController(TinyAccessoryActivity activity, int digitalOutIndexNumber,
 			Resources res) {
 		mActivity = activity;
-		mCommandTarget = (byte) (relayNumber - 1);
+		mCommandTarget = (byte) (digitalOutIndexNumber - 1);
 		mOffBackground = res
 				.getDrawable(R.drawable.toggle_button_off_holo_dark);
 		mOnBackground = res.getDrawable(R.drawable.toggle_button_on_holo_dark);
@@ -37,7 +37,7 @@ public class RelayController implements OnCheckedChangeListener {
 			mButton.setBackgroundDrawable(mOffBackground);
 		}
 		if (mActivity != null) {
-			mActivity.sendCommand(TinyAccessoryActivity.RELAY_COMMAND,
+			mActivity.sendCommand(TinyAccessoryActivity.DIGITAL_OUT_COMMAND,
 					mCommandTarget, isChecked ? 1 : 0);
 		}
 	}
