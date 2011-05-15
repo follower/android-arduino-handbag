@@ -13,10 +13,10 @@
 			<include layout="@layout/buttoncontainer" android:id="@+id/ButtonContainer_ref"
 				android:layout_width="match_parent" android:layout_height="wrap_content" />
 			<LinearLayout android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:id="@+id/servos"
+				android:layout_height="wrap_content" android:id="@+id/pwmouts"
 				android:orientation="vertical"
 				android:paddingLeft="5dip" android:paddingTop="30dip" >
-				<include layout="@layout/servo" android:id="@+id/servo1"
+				<include layout="@layout/pwmout" android:id="@+id/pwmout1"
 					android:layout_width="match_parent" android:layout_height="wrap_content" />
 			</LinearLayout>
 			<LinearLayout android:layout_height="wrap_content"

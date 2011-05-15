@@ -2,14 +2,14 @@ package com.example.TinyAccessory;
 
 import android.view.ViewGroup;
 
-public class ServoController implements Slider.SliderPositionListener {
+public class PwmOutController implements Slider.SliderPositionListener {
 	private final byte mCommandTarget;
 	private Slider mSlider;
 	private TinyAccessoryActivity mActivity;
 
-	public ServoController(TinyAccessoryActivity activity, int servoNumber) {
+	public PwmOutController(TinyAccessoryActivity activity, int pwmoutNumber) {
 		mActivity = activity;
-		mCommandTarget = (byte) 0;
+		mCommandTarget = (byte) pwmoutNumber;
 	}
 
 	public void attachToView(ViewGroup targetView) {
@@ -19,7 +19,7 @@ public class ServoController implements Slider.SliderPositionListener {
 
 	public void onPositionChange(double value) {
 		byte v = (byte) (value * 255);
-		mActivity.sendCommand(TinyAccessoryActivity.LED_SERVO_COMMAND,
+		mActivity.sendCommand(TinyAccessoryActivity.PWM_OUT_COMMAND,
 				mCommandTarget, v);
 	}
 

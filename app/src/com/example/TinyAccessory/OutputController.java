@@ -14,13 +14,13 @@ public class OutputController extends AccessoryController {
 	}
 
 	protected void onAccesssoryAttached() {
-		setupServoController(1, R.id.servo1);
+		setupPwmOutController(0, R.id.pwmout1);
 
 		setupRelayController(1, R.id.relay1);
 	}
 
-	private void setupServoController(int servoIndex, int viewId) {
-		ServoController sc = new ServoController(mHostActivity, servoIndex);
+	private void setupPwmOutController(int pwmoutIndex, int viewId) {
+		PwmOutController sc = new PwmOutController(mHostActivity, pwmoutIndex);
 		sc.attachToView((ViewGroup) findViewById(viewId));
 	}
 

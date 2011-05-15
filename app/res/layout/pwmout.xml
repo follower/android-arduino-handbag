@@ -3,7 +3,7 @@
 	android:layout_width="match_parent" android:orientation="vertical"
 	android:layout_height="wrap_content" >
 	<TextView android:layout_height="wrap_content" style="@style/TinyAccessoryControlLabel"
-		android:layout_width="wrap_content" android:text="@string/servo1Label"></TextView>
+		android:layout_width="wrap_content" android:text="@string/pwmout1Label"></TextView>
 	<com.example.TinyAccessory.Slider
 		android:layout_height="wrap_content" android:layout_width="match_parent"
 		android:layout_marginTop="0dip"></com.example.TinyAccessory.Slider>
