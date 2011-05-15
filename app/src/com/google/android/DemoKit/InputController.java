@@ -11,7 +11,6 @@ public class InputController extends AccessoryController {
 	private TextView mTemperature;
 	private TextView mLightView;
 	private TextView mLightRawView;
-	private JoystickView mJoystickView;
 	ArrayList<SwitchDisplayer> mSwitchDisplayers;
 	private final DecimalFormat mLightValueFormatter = new DecimalFormat("##.#");
 	private final DecimalFormat mTemperatureFormatter = new DecimalFormat(
@@ -22,7 +21,6 @@ public class InputController extends AccessoryController {
 		mTemperature = (TextView) findViewById(R.id.tempValue);
 		mLightView = (TextView) findViewById(R.id.lightPercentValue);
 		mLightRawView = (TextView) findViewById(R.id.lightRawValue);
-		mJoystickView = (JoystickView) findViewById(R.id.joystickView);
 	}
 
 	protected void onAccesssoryAttached() {
@@ -69,15 +67,6 @@ public class InputController extends AccessoryController {
 			sd.onSwitchStateChange(switchState);
 		}
 	}
-
-	public void joystickButtonSwitchStateChanged(boolean buttonState) {
-		mJoystickView.setPressed(buttonState);
-	}
-
-	public void joystickMoved(int x, int y) {
-		mJoystickView.setPosition(x, y);
-	}
-
 	public void onTemperature(int temperature) {
 		setTemperature(temperature);
 	}
@@ -88,14 +77,6 @@ public class InputController extends AccessoryController {
 
 	public void onSwitchStateChange(int switchIndex, Boolean switchState) {
 		switchStateChanged(switchIndex, switchState);
-	}
-
-	public void onButton(Boolean buttonState) {
-		joystickButtonSwitchStateChanged(buttonState);
-	}
-
-	public void onStickMoved(int x, int y) {
-		joystickMoved(x, y);
 	}
 
 	class SwitchDisplayer {

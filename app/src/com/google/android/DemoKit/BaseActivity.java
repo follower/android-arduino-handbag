@@ -61,9 +61,6 @@ public class BaseActivity extends DemoKitActivity {
 	}
 
 	protected void handleJoyMessage(JoyMsg j) {
-		if (mInputController != null) {
-			mInputController.joystickMoved(j.getX(), j.getY());
-		}
 	}
 
 	protected void handleLightMessage(LightMsg l) {
@@ -83,9 +80,6 @@ public class BaseActivity extends DemoKitActivity {
 			byte sw = o.getSw();
 			if (sw >= 0 && sw < 4) {
 				mInputController.switchStateChanged(sw, o.getState() != 0);
-			} else if (sw == 4) {
-				mInputController
-						.joystickButtonSwitchStateChanged(o.getState() != 0);
 			}
 		}
 	}
