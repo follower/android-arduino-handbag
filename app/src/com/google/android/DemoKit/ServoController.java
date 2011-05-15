@@ -20,12 +20,6 @@ public class ServoController implements Slider.SliderPositionListener {
 	}
 
 	public void attachToView(ViewGroup targetView) {
-		mLabel = (TextView) targetView.getChildAt(0);
-		SpannableStringBuilder ssb = new SpannableStringBuilder("Servo");
-		ssb.append(String.valueOf(mServoNumber));
-		ssb.setSpan(new SubscriptSpan(), 5, 6, 0);
-		ssb.setSpan(new RelativeSizeSpan(0.7f), 5, 6, 0);
-		mLabel.setText(ssb);
 		mSlider = (Slider) targetView.getChildAt(1);
 		mSlider.setPositionListener(this);
 	}
