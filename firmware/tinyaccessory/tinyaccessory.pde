@@ -2,13 +2,13 @@
 #include <Usb.h>
 #include <AndroidAccessory.h>
 
-#define  LED1_RED       8
+#define  LED1           3
 
-#define  RELAY1         A0
+#define  RELAY1         4
 
-#define  LIGHT_SENSOR   A2
+#define  LIGHT_SENSOR   A0
 
-#define  BUTTON1        A6
+#define  BUTTON1        7
 
 AndroidAccessory acc("example.com",
 		     "TinyAccessory",
@@ -36,12 +36,12 @@ void init_relays()
 
 void init_leds()
 {
-	digitalWrite(LED1_RED, 1);
+	digitalWrite(LED1, 1);
 
-	pinMode(LED1_RED, OUTPUT);
+	pinMode(LED1, OUTPUT);
 }
 
-byte b1, c;
+byte b1;
 void setup()
 {
 	Serial.begin(115200);
@@ -53,32 +53,25 @@ void setup()
 
 
 	b1 = digitalRead(BUTTON1);
-	c = 0;
 
 	acc.powerOn();
 }
 
 void loop()
 {
-	byte err;
-	byte idle;
 	static byte count = 0;
 	byte msg[3];
-	long touchcount;
 
 	if (acc.isConnected()) {
 		int len = acc.read(msg, sizeof(msg), 1);
-		int i;
 		byte b;
 		uint16_t val;
-		int x, y;
-		char c0;
 
 		if (len > 0) {
 			// assumes only one command per packet
 			if (msg[0] == 0x2) {
 				if (msg[1] == 0x0)
-					analogWrite(LED1_RED, 255 - msg[2]);
+					analogWrite(LED1, 255 - msg[2]);
 			} else if (msg[0] == 0x3) {
 				if (msg[1] == 0x0)
 					digitalWrite(RELAY1, msg[2] ? HIGH : LOW);
@@ -107,7 +100,7 @@ void loop()
 		}
 	} else {
 		// reset outputs to default values on disconnect
-		analogWrite(LED1_RED, 255);
+		analogWrite(LED1, 255);
 		digitalWrite(RELAY1, LOW);
 	}
 
