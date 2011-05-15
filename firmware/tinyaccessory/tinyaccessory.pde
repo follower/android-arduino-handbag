@@ -8,7 +8,7 @@
 
 #define  LIGHT_SENSOR   A0
 
-#define  BUTTON1        7
+#define  BUTTON1        5
 
 AndroidAccessory acc("example.com",
 		     "TinyAccessory",
