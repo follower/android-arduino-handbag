@@ -66,9 +66,6 @@ public class BaseActivity extends DemoKitActivity {
 		}
 	}
 
-	protected void handleTemperatureMessage(TemperatureMsg t) {
-	}
-
 	protected void handleSwitchMessage(SwitchMsg o) {
 		if (mInputController != null) {
 			byte sw = o.getSw();

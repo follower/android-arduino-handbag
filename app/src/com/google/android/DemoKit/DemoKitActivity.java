@@ -77,18 +77,6 @@ public class DemoKitActivity extends Activity implements Runnable {
 		}
 	}
 
-	protected class TemperatureMsg {
-		private int temperature;
-
-		public TemperatureMsg(int temperature) {
-			this.temperature = temperature;
-		}
-
-		public int getTemperature() {
-			return temperature;
-		}
-	}
-
 	protected class LightMsg {
 		private int light;
 
@@ -263,17 +251,6 @@ public class DemoKitActivity extends Activity implements Runnable {
 					i += 3;
 					break;
 
-				case 0x4:
-					if (len >= 3) {
-						Message m = Message.obtain(mHandler,
-								MESSAGE_TEMPERATURE);
-						m.obj = new TemperatureMsg(composeInt(buffer[i + 1],
-								buffer[i + 2]));
-						mHandler.sendMessage(m);
-					}
-					i += 3;
-					break;
-
 				case 0x5:
 					if (len >= 3) {
 						Message m = Message.obtain(mHandler, MESSAGE_LIGHT);
@@ -303,11 +280,6 @@ public class DemoKitActivity extends Activity implements Runnable {
 				handleSwitchMessage(o);
 				break;
 
-			case MESSAGE_TEMPERATURE:
-				TemperatureMsg t = (TemperatureMsg) msg.obj;
-				handleTemperatureMessage(t);
-				break;
-
 			case MESSAGE_LIGHT:
 				LightMsg l = (LightMsg) msg.obj;
 				handleLightMessage(l);
@@ -335,9 +307,6 @@ public class DemoKitActivity extends Activity implements Runnable {
 	}
 
 	protected void handleLightMessage(LightMsg l) {
-	}
-
-	protected void handleTemperatureMessage(TemperatureMsg t) {
 	}
 
 	protected void handleSwitchMessage(SwitchMsg o) {
