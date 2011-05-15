@@ -13,11 +13,8 @@ public class OutputController extends AccessoryController {
 
 	protected void onAccesssoryAttached() {
 		setupServoController(1, R.id.servo1);
-		setupServoController(2, R.id.servo2);
-		setupServoController(3, R.id.servo3);
 
 		setupRelayController(1, R.id.relay1);
-		setupRelayController(2, R.id.relay2);
 	}
 
 	private void setupServoController(int servoIndex, int viewId) {
