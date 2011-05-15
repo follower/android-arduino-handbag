@@ -70,9 +70,6 @@ public class BaseActivity extends DemoKitActivity {
 	}
 
 	protected void handleTemperatureMessage(TemperatureMsg t) {
-		if (mInputController != null) {
-			mInputController.setTemperature(t.getTemperature());
-		}
 	}
 
 	protected void handleSwitchMessage(SwitchMsg o) {

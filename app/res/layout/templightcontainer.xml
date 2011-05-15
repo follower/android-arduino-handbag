@@ -3,18 +3,6 @@
 	android:id="@+id/TempLightContainer" android:layout_width="fill_parent"
 	android:orientation="horizontal" android:layout_height="wrap_content"
 	android:paddingLeft="5dip">
-	<LinearLayout android:id="@+id/TempContainer"
-		android:layout_width="fill_parent" android:orientation="vertical"
-		android:layout_weight="1" android:layout_height="wrap_content">
-		<TextView android:id="@+id/tempLabel" android:text="Temp"
-			style="@style/DemoKitControlLabel" android:gravity="center"
-			android:layout_weight="1"></TextView>
-		<TextView android:text="45º" android:id="@+id/tempValue"
-			style="@style/DemoKitMeasurement" android:layout_weight="1"></TextView>
-		<TextView android:text=" " android:id="@+id/hiddenPercentValue"
-			style="@style/DemoKitControlLabel" android:gravity="center"
-			android:layout_weight="1"></TextView>
-	</LinearLayout>
 	<LinearLayout android:id="@+id/LightContainer"
 		android:layout_width="fill_parent" android:orientation="vertical"
 		android:layout_weight="1" android:layout_height="wrap_content">
