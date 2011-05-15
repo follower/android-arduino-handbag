@@ -31,6 +31,7 @@ void init_buttons()
 void init_relays()
 {
 	pinMode(RELAY1, OUTPUT);
+	digitalWrite(RELAY1, LOW);
 }
 
 
@@ -52,7 +53,7 @@ void setup()
 	init_buttons();
 
 
-	b1 = digitalRead(BUTTON1);
+	b1 = 0;
 
 	acc.powerOn();
 }
