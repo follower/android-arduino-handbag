@@ -1,10 +1,14 @@
 package com.rancidbacon.Handbag;
 
 import com.rancidbacon.Handbag.R;
+import com.rancidbacon.Handbag.HandbagActivity.ConfigMsg;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class BaseActivity extends HandbagActivity {
 
@@ -55,6 +59,27 @@ public class BaseActivity extends HandbagActivity {
 		mInputController = null;
 	}
 
+	
+	void addButton() {
+				
+		LinearLayout layout = (LinearLayout) findViewById(R.id.mainstage);
+		
+		Button buttonView = new Button(this); 
+        buttonView.setText("Button");
+
+        layout.addView(buttonView);
+	}
+	
+	void addLabel() {
+		
+		LinearLayout layout = (LinearLayout) findViewById(R.id.mainstage);
+		
+		TextView label = new TextView(this); 
+        label.setText("Label");
+
+        layout.addView(label);
+	}
+	
 	protected void showControls() {
 		setContentView(R.layout.main);
 
@@ -62,6 +87,18 @@ public class BaseActivity extends HandbagActivity {
 		mInputController.accessoryAttached();
 	}
 
+	protected void handleConfigMessage(ConfigMsg c) {
+		switch (c.getWidgetType()) {
+			case 0x00:
+				addButton();
+				break;
+				
+			case 0x01:
+				addLabel();
+				break;
+		} 
+	}	
+	
 	protected void handleLightMessage(LightMsg l) {
 		if (mInputController != null) {
 			mInputController.setLightValue(l.getLight());

@@ -54,7 +54,10 @@ public class HandbagActivity extends Activity implements Runnable {
 
 	private static final int MESSAGE_SWITCH = 1;
 	private static final int MESSAGE_LIGHT = 3;
+	private static final int MESSAGE_CONFIGURE = 0x10;
 
+	private static final int CONFIG_OFFSET_WIDGET_TYPE = 1;
+	
 	public static final byte PWM_OUT_COMMAND = 2;
 	public static final byte DIGITAL_OUT_COMMAND = 3;
 
@@ -85,6 +88,18 @@ public class HandbagActivity extends Activity implements Runnable {
 
 		public int getLight() {
 			return light;
+		}
+	}
+	
+	protected class ConfigMsg {
+		private int widgetType;
+		
+		public ConfigMsg(int widgetType) {
+			this.widgetType = widgetType;
+		}
+		
+		public int getWidgetType() {
+			return widgetType;
 		}
 	}
 
@@ -260,6 +275,15 @@ public class HandbagActivity extends Activity implements Runnable {
 					i += 3;
 					break;
 
+				case MESSAGE_CONFIGURE:
+					if (len >= 3) {
+						Message m = Message.obtain(mHandler, MESSAGE_CONFIGURE);
+						m.obj = new ConfigMsg(buffer[i + CONFIG_OFFSET_WIDGET_TYPE]);
+						mHandler.sendMessage(m);
+					}
+					i += 3;
+					break;					
+					
 				default:
 					Log.d(TAG, "unknown msg: " + buffer[i]);
 					i = len;
@@ -284,6 +308,10 @@ public class HandbagActivity extends Activity implements Runnable {
 				handleLightMessage(l);
 				break;
 
+			case MESSAGE_CONFIGURE:
+				ConfigMsg c = (ConfigMsg) msg.obj;
+				handleConfigMessage(c);
+				break;
 			}
 		}
 	};
@@ -309,6 +337,9 @@ public class HandbagActivity extends Activity implements Runnable {
 	}
 
 	protected void handleSwitchMessage(SwitchMsg o) {
+	}
+
+	protected void handleConfigMessage(ConfigMsg c) {
 	}
 
 	public void onStartTrackingTouch(SeekBar seekBar) {
