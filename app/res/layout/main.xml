@@ -7,14 +7,17 @@
 		android:paddingLeft="10dip" android:paddingRight="10dip">
 		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			android:layout_width="match_parent" android:layout_height="match_parent"
-			android:orientation="vertical" >
+			android:orientation="vertical" android:id="@+id/mainstage" >
 			<include layout="@layout/templightcontainer" android:id="@+id/TempLightContainer_ref"
+				android:visibility="gone"
 				android:layout_width="match_parent" android:layout_height="wrap_content" />
 			<include layout="@layout/buttoncontainer" android:id="@+id/ButtonContainer_ref"
+				android:visibility="gone"
 				android:layout_width="match_parent" android:layout_height="wrap_content" />
 			<LinearLayout android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:id="@+id/pwmouts"
 				android:orientation="vertical"
+				android:visibility="gone"
 				android:paddingLeft="5dip" android:paddingTop="30dip" >
 				<include layout="@layout/pwmout" android:id="@+id/pwmout1"
 					android:layout_width="match_parent" android:layout_height="wrap_content" />
@@ -22,6 +25,7 @@
 			<LinearLayout android:layout_height="wrap_content"
 				android:id="@+id/digitalouts" android:orientation="vertical"
 				android:paddingLeft="5dip" android:paddingTop="30dip"
+				android:visibility="gone"				
 				android:layout_width="fill_parent" >
 				<include android:id="@+id/digitalout1" layout="@layout/digitaloutbutton"
 					android:layout_width="wrap_content" android:layout_height="wrap_content" />
