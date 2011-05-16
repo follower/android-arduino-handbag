@@ -25,6 +25,10 @@ AndroidAccessory acc("rancidbacon.com",
 #define UI_WIDGET_BUTTON 0x00
 #define UI_WIDGET_LABEL 0x01
 
+#define COMMAND_GOT_EVENT 0x80
+
+#define EVENT_BUTTON_CLICK 0x01
+
 void setup();
 void loop();
 
@@ -48,6 +52,67 @@ void init_leds() {
 	pinMode(PWM_OUT, OUTPUT);
 }
 
+void doAction1() {
+  digitalWrite(DIGITAL_OUT, !digitalRead(DIGITAL_OUT));
+}
+
+void doAction2() {
+  digitalWrite(DIGITAL_OUT, LOW);
+  digitalWrite(A5, LOW);  
+}
+
+void doAction3() {
+  pinMode(A5, OUTPUT);
+  digitalWrite(A5, !digitalRead(A5));  
+}
+
+void doAction4() {
+  digitalWrite(DIGITAL_OUT, HIGH);
+  digitalWrite(A5, HIGH);  
+}
+
+void doAction5() {
+  pinMode(A5, OUTPUT);
+  digitalWrite(A5, !digitalRead(A5));  
+  digitalWrite(DIGITAL_OUT, !digitalRead(DIGITAL_OUT));
+}
+
+#define MSG_BUFFER_SIZE 50
+void configureWidget(byte widgetType, byte widgetId, char *labelText) {
+  /*
+   */
+  byte msg[MSG_BUFFER_SIZE];
+  byte offset = 0;
+  
+  byte lengthToCopy = 0;
+  
+  msg[offset++] = MESSAGE_CONFIGURE;
+  msg[offset++] = widgetType;
+  
+  msg[offset++] = widgetId;
+  
+  lengthToCopy = MSG_BUFFER_SIZE - (offset + 1);
+  
+  if (strlen(labelText) < lengthToCopy) {
+    lengthToCopy = strlen(labelText);
+  }
+  
+  msg[offset++] = lengthToCopy;
+  
+  memcpy(msg+offset, labelText, lengthToCopy);
+  
+  offset += lengthToCopy;
+  
+  acc.write(msg, offset);
+}
+
+#define ID_NONE 0
+#define ID_B1 1
+#define ID_B2 2
+#define ID_B3 3
+#define ID_B4 4
+#define ID_B5 5
+
 byte b1;
 void setup() {
 	Serial.begin(115200);
@@ -67,16 +132,17 @@ void setup() {
         }
         
         // Do UI configuration
-	byte msg[3];
-	msg[0] = MESSAGE_CONFIGURE;
-	msg[1] = UI_WIDGET_LABEL;
-	msg[2] = 0;
-	acc.write(msg, 3);
-
-	msg[1] = UI_WIDGET_BUTTON;
-	acc.write(msg, 3);
-
-	acc.write(msg, 3);
+	byte msg[4];
+        configureWidget(UI_WIDGET_LABEL, ID_NONE, "");
+        configureWidget(UI_WIDGET_LABEL, ID_NONE, "Example Handbag Android Accessory");
+        configureWidget(UI_WIDGET_LABEL, ID_NONE, "");        
+        configureWidget(UI_WIDGET_BUTTON, ID_B1, "Toggle Digital Pin 4");
+        configureWidget(UI_WIDGET_BUTTON, ID_B2, "Turn D4 and A5 off");
+        configureWidget(UI_WIDGET_BUTTON, ID_B3, "Toggle Analog Pin 5");
+        configureWidget(UI_WIDGET_BUTTON, ID_B4, "Turn D4 and A5 on");        
+        configureWidget(UI_WIDGET_BUTTON, ID_B5, "Toggle D4 and A5");                
+        configureWidget(UI_WIDGET_LABEL, ID_NONE, "");
+        configureWidget(UI_WIDGET_LABEL, ID_NONE, "rancidbacon.com");        
 }
 
 void loop() {
@@ -96,7 +162,31 @@ void loop() {
 			} else if (msg[0] == 0x3) {
 				if (msg[1] == 0x0)
 					digitalWrite(DIGITAL_OUT, msg[2] ? HIGH : LOW);
-			}
+			} else if (msg[0] == COMMAND_GOT_EVENT) {
+                          if (msg[1] == EVENT_BUTTON_CLICK) {
+                            switch (msg[2]) {
+                              case ID_B1:
+                                doAction1();
+                                break;
+                              
+                              case ID_B2:
+                                doAction2();
+                                break;
+                                
+                               case ID_B3:
+                                 doAction3();
+                                 break;
+                                
+                               case ID_B4:
+                                 doAction4();
+                                 break;
+                                
+                               case ID_B5:
+                                 doAction5();
+                                 break;
+                            }
+                          }
+                        }
 		}
 
 		msg[0] = 0x1;

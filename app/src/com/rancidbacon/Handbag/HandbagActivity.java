@@ -20,6 +20,7 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -56,7 +57,11 @@ public class HandbagActivity extends Activity implements Runnable {
 	private static final int MESSAGE_LIGHT = 3;
 	private static final int MESSAGE_CONFIGURE = 0x10;
 
+	// These need to change if they're changed in the sketch
 	private static final int CONFIG_OFFSET_WIDGET_TYPE = 1;
+	private static final int CONFIG_OFFSET_WIDGET_ID = 2;
+	private static final int CONFIG_OFFSET_TEXT_LENGTH = 3;
+	private static final int CONFIG_OFFSET_TEXT_START = 4;
 	
 	public static final byte PWM_OUT_COMMAND = 2;
 	public static final byte DIGITAL_OUT_COMMAND = 3;
@@ -93,13 +98,25 @@ public class HandbagActivity extends Activity implements Runnable {
 	
 	protected class ConfigMsg {
 		private int widgetType;
+		private byte widgetId;
+		private String widgetText;
 		
-		public ConfigMsg(int widgetType) {
+		public ConfigMsg(int widgetType, byte widgetId, byte[] widgetTextAsBytes) {
 			this.widgetType = widgetType;
+			this.widgetId = widgetId;
+			this.widgetText = new String(widgetTextAsBytes);
 		}
 		
 		public int getWidgetType() {
 			return widgetType;
+		}
+		
+		public byte getWidgetId() {
+			return widgetId;
+		}
+
+		public String getWidgetText() {
+			return widgetText;
 		}
 	}
 
@@ -244,6 +261,8 @@ public class HandbagActivity extends Activity implements Runnable {
 		byte[] buffer = new byte[16384];
 		int i;
 
+		byte textLength = 0;
+		
 		while (ret >= 0) {
 			try {
 				ret = mInputStream.read(buffer);
@@ -276,12 +295,17 @@ public class HandbagActivity extends Activity implements Runnable {
 					break;
 
 				case MESSAGE_CONFIGURE:
-					if (len >= 3) {
+					if (len >= 4) {
 						Message m = Message.obtain(mHandler, MESSAGE_CONFIGURE);
-						m.obj = new ConfigMsg(buffer[i + CONFIG_OFFSET_WIDGET_TYPE]);
+						textLength = buffer[i + CONFIG_OFFSET_TEXT_LENGTH];						
+						m.obj = new ConfigMsg(buffer[i + CONFIG_OFFSET_WIDGET_TYPE],
+								buffer[i + CONFIG_OFFSET_WIDGET_ID],
+								Arrays.copyOfRange(buffer,
+										i + CONFIG_OFFSET_TEXT_START,
+										i + CONFIG_OFFSET_TEXT_START + textLength));
 						mHandler.sendMessage(m);
 					}
-					i += 3;
+					i += (4 + textLength); // NOTE: This needs to change when more items are added.
 					break;					
 					
 				default:

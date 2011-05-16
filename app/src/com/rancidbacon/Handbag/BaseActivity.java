@@ -6,6 +6,7 @@ import com.rancidbacon.Handbag.HandbagActivity.ConfigMsg;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,6 +16,9 @@ public class BaseActivity extends HandbagActivity {
 	private static final int UI_WIDGET_BUTTON = 0x00;
 	private static final int UI_WIDGET_LABEL = 0x01;
 
+	private static final byte COMMAND_GOT_EVENT = (byte) 0x80;
+	private static final byte EVENT_BUTTON_CLICK = (byte) 0x01;
+	
 	private InputController mInputController;
 
 	public BaseActivity() {
@@ -63,22 +67,29 @@ public class BaseActivity extends HandbagActivity {
 	}
 
 	
-	void addButton() {
+	void addButton(String labelText, final byte widgetId) {
 				
 		LinearLayout layout = (LinearLayout) findViewById(R.id.mainstage);
 		
-		Button buttonView = new Button(this); 
-        buttonView.setText("Button");
+		Button button = new Button(this); 
+        button.setText(labelText);
 
-        layout.addView(buttonView);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+            	sendCommand(COMMAND_GOT_EVENT, EVENT_BUTTON_CLICK, widgetId);
+            }
+        });        
+        
+        layout.addView(button);
 	}
 	
-	void addLabel() {
+	void addLabel(String labelText) {
 		
 		LinearLayout layout = (LinearLayout) findViewById(R.id.mainstage);
 		
 		TextView label = new TextView(this); 
-        label.setText("Label");
+        label.setText(labelText);
 
         layout.addView(label);
 	}
@@ -93,11 +104,11 @@ public class BaseActivity extends HandbagActivity {
 	protected void handleConfigMessage(ConfigMsg c) {
 		switch (c.getWidgetType()) {
 			case UI_WIDGET_BUTTON:
-				addButton();
+				addButton(c.getWidgetText(), c.getWidgetId());
 				break;
 				
 			case UI_WIDGET_LABEL:
-				addLabel();
+				addLabel(c.getWidgetText());
 				break;
 		} 
 	}	
