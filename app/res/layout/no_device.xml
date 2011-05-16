@@ -4,8 +4,14 @@
 	android:layout_height="fill_parent" android:orientation="vertical"
 	android:background="@drawable/background_holo_dark"
 	android:layout_gravity="fill_horizontal">
+	<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+		android:layout_weight="1.0"></LinearLayout>
+	<ImageView android:id="@+id/imageView1" android:layout_width="match_parent" android:gravity="bottom"
+		android:layout_height="wrap_content" android:layout_weight="0.3" android:scaleType="center"
+		android:paddingBottom="10dip"
+		android:src="@drawable/image_handbag"></ImageView>
 	<TextView android:layout_width="match_parent"
 		android:layout_height="wrap_content" android:id="@+id/textView1"
-		android:layout_weight="1" android:text="@string/no_device" style="@style/HandbagNoDevice"
-		android:gravity="center"></TextView>
+		android:layout_weight="0.7" android:text="@string/no_device" style="@style/HandbagNoDevice"
+		android:gravity="top|center"></TextView>
 </LinearLayout>
