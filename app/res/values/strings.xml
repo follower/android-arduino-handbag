@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Handbag</string>
-	<string name="no_device">Please connect an accessory board.</string>
+	<string name="no_device">Your Android needs to be accessorized.\n\n<small>Please connect a\nHandbag™-compatible\naccessory board.</small></string>
 	<string name="pwmout1Label">PWM output (pin 3)</string>
 	<string name="digitalout1Label">Digital output (pin 4)</string>
 	<string name="off">Off</string>
