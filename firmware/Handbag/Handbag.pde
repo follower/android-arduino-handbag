@@ -19,6 +19,12 @@ AndroidAccessory acc("rancidbacon.com",
 		     "http://rancidbacon.com",
 		     "0000000000000001");
 
+
+#define MESSAGE_CONFIGURE 0x10
+
+#define UI_WIDGET_BUTTON 0x00
+#define UI_WIDGET_LABEL 0x01
+
 void setup();
 void loop();
 
@@ -55,6 +61,22 @@ void setup() {
 	b1 = 0;
 
 	acc.powerOn();
+
+        while (!acc.isConnected()) {
+          // Wait for connection
+        }
+        
+        // Do UI configuration
+	byte msg[3];
+	msg[0] = MESSAGE_CONFIGURE;
+	msg[1] = UI_WIDGET_LABEL;
+	msg[2] = 0;
+	acc.write(msg, 3);
+
+	msg[1] = UI_WIDGET_BUTTON;
+	acc.write(msg, 3);
+
+	acc.write(msg, 3);
 }
 
 void loop() {
