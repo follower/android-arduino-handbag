@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 public class BaseActivity extends HandbagActivity {
 
+	private static final int UI_WIDGET_BUTTON = 0x00;
+	private static final int UI_WIDGET_LABEL = 0x01;
+
 	private InputController mInputController;
 
 	public BaseActivity() {
@@ -89,11 +92,11 @@ public class BaseActivity extends HandbagActivity {
 
 	protected void handleConfigMessage(ConfigMsg c) {
 		switch (c.getWidgetType()) {
-			case 0x00:
+			case UI_WIDGET_BUTTON:
 				addButton();
 				break;
 				
-			case 0x01:
+			case UI_WIDGET_LABEL:
 				addLabel();
 				break;
 		} 
