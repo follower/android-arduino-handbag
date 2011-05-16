@@ -12,12 +12,13 @@
 
 #define  DIGITAL_IN        5
 
-AndroidAccessory acc("example.com",
-		     "TinyAccessory",
-		     "TinyAccessory (Arduino Board)",
-		     "1.0",
-		     "http://www.example.com",
-		     "0000000012345678");
+AndroidAccessory acc("rancidbacon.com",
+		     "Handbag",
+		     "Handbag (Arduino Board)",
+		     "0.1",
+		     "http://rancidbacon.com",
+		     "0000000000000001");
+
 void setup();
 void loop();
 
