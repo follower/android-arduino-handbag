@@ -14,16 +14,32 @@ AndroidAccessory acc("rancidbacon.com",
 
 #define CALLBACK(varname) void (*varname)()
 
+class Widget {
+  private:
+    CALLBACK(callback);
+    unsigned int id;
+    unsigned int type;
+    
+    friend class HandbagApp;
+};
+
+#define MAX_WIDGETS 20
+
 class HandbagApp {
 
 private:
   AndroidAccessory& accessory;
   
-  CALLBACK(callbacks[10]);
+  // TODO: Dynamically allocate this?
+  Widget widgets[MAX_WIDGETS];
+  
+  unsigned int widgetCount;
   
 public:
   HandbagApp(AndroidAccessory& accessory) : accessory(accessory) {
-  
+    /*
+     */
+     widgetCount = 0;
   }
 
   int begin() {
@@ -41,15 +57,21 @@ public:
         
   }
 
-  void add(CALLBACK(callback)) {
+  int add(CALLBACK(callback)) {
     /*
      */
-    callbacks[0] = callback; 
+    if (widgetCount == MAX_WIDGETS) {
+      return -1;
+    }
+    widgets[widgetCount].callback = callback; 
+    return widgetCount++;
   }
   
   
   void doIt() {
-    callbacks[0]();
+    for (int i = 0; i < widgetCount; i++) {
+      widgets[i].callback();
+    }
   }
 };
 
@@ -73,8 +95,12 @@ void setup() {
 
   Serial.println("Started.");
   
-  Handbag.add(callMe);
+  Serial.print("Widget id: ");
+  Serial.println(Handbag.add(callMe));
   
+  Serial.print("Widget id: ");
+  Serial.println(Handbag.add(callMe));
+
   Handbag.doIt();
   
   Serial.println("Finished.");  
