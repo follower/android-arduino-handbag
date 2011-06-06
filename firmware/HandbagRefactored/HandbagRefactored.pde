@@ -94,6 +94,43 @@ private:
 
     uiIsSetup = true; 
   }
+
+  // TODO: Set type-specific things like "label text" differently?
+  int addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), const char *labelText) {
+    /*
+     */
+
+    if (widgetCount == MAX_WIDGETS) {
+      return -1;
+    }
+
+    Widget& theWidget = widgets[widgetCount];
+
+    theWidget.id = widgetCount;
+    widgetCount++;
+    
+    theWidget.type = widgetType;
+    theWidget.callback = callback; 
+    
+    // TODO: Wait for confirmation?
+    sendWidgetConfiguration(theWidget.type, theWidget.id, labelText);
+    
+    return theWidget.id;
+  }  
+
+  void triggerButtonCallback(int widgetId) {
+    /*
+     */
+    if (widgetId < widgetCount) {
+      // TODO: Actually search to match the ID?
+      Widget& theWidget = widgets[widgetId];
+      
+      if ((theWidget.type == UI_WIDGET_TYPE_BUTTON) && (theWidget.callback != NULL)) {
+        theWidget.callback();
+      }
+    }
+  }
+
   
 public:
   HandbagApp(AndroidAccessory& accessory) : accessory(accessory) {
@@ -122,30 +159,6 @@ public:
         
   }
 
-  // TODO: Make private
-  // TODO: Set type-specific things like "label text" differently?
-  int addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), const char *labelText) {
-    /*
-     */
-
-    if (widgetCount == MAX_WIDGETS) {
-      return -1;
-    }
-
-    Widget& theWidget = widgets[widgetCount];
-
-    theWidget.id = widgetCount;
-    widgetCount++;
-    
-    theWidget.type = widgetType;
-    theWidget.callback = callback; 
-    
-    // TODO: Wait for confirmation?
-    sendWidgetConfiguration(theWidget.type, theWidget.id, labelText);
-    
-    return theWidget.id;
-  }
-  
   int addLabel(const char *labelText) {
     /*
      */
@@ -156,19 +169,6 @@ public:
     /*
      */
     return addWidget(UI_WIDGET_TYPE_BUTTON, callback, labelText);
-  }
-
-  void triggerButtonCallback(int widgetId) {
-    /*
-     */
-    if (widgetId < widgetCount) {
-      // TODO: Actually search to match the ID?
-      Widget& theWidget = widgets[widgetId];
-      
-      if ((theWidget.type == UI_WIDGET_TYPE_BUTTON) && (theWidget.callback != NULL)) {
-        theWidget.callback();
-      }
-    }
   }
 
   void refresh() {
