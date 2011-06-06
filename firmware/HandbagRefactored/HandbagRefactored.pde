@@ -14,6 +14,13 @@ AndroidAccessory acc("rancidbacon.com",
 
 #define CALLBACK(varname) void (*varname)()
 
+
+#define UI_WIDGET_TYPE_BUTTON 0x00
+#define UI_WIDGET_TYPE_LABEL 0x01
+
+
+#define WIDGET_TYPE unsigned int
+
 class Widget {
   private:
     CALLBACK(callback);
@@ -25,6 +32,8 @@ class Widget {
 
 #define MAX_WIDGETS 20
 
+#define MESSAGE_CONFIGURE 0x10
+
 class HandbagApp {
 
 private:
@@ -34,6 +43,39 @@ private:
   Widget widgets[MAX_WIDGETS];
   
   unsigned int widgetCount;
+
+// TODO: Dynamically allocate this?  
+#define MSG_BUFFER_SIZE 50
+
+  void sendWidgetConfiguration(byte widgetType, byte widgetId, const char *labelText) {
+    /*
+     */
+    // TODO: Do something stream based instead.
+    byte msg[MSG_BUFFER_SIZE];
+    byte offset = 0;
+    
+    byte lengthToCopy = 0;
+    
+    msg[offset++] = MESSAGE_CONFIGURE;
+    msg[offset++] = widgetType;
+    
+    msg[offset++] = widgetId;
+    
+    lengthToCopy = MSG_BUFFER_SIZE - (offset + 1);
+    
+    if (strlen(labelText) < lengthToCopy) {
+      lengthToCopy = strlen(labelText);
+    }
+    
+    msg[offset++] = lengthToCopy;
+    
+    memcpy(msg+offset, labelText, lengthToCopy);
+    
+    offset += lengthToCopy;
+    
+    accessory.write(msg, offset);
+  }  
+  
   
 public:
   HandbagApp(AndroidAccessory& accessory) : accessory(accessory) {
@@ -57,14 +99,28 @@ public:
         
   }
 
-  int add(CALLBACK(callback)) {
+  // TODO: Make private
+  // TODO: Set type-specific things like "label text" differently?
+  int addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), const char *labelText) {
     /*
      */
+
     if (widgetCount == MAX_WIDGETS) {
       return -1;
     }
-    widgets[widgetCount].callback = callback; 
-    return widgetCount++;
+
+    Widget& theWidget = widgets[widgetCount];
+
+    theWidget.id = widgetCount;
+    widgetCount++;
+    
+    theWidget.type = widgetType;
+    theWidget.callback = callback; 
+    
+    // TODO: Wait for confirmation?
+    sendWidgetConfiguration(theWidget.type, theWidget.id, labelText);
+    
+    return theWidget.id;
   }
   
   
@@ -96,10 +152,10 @@ void setup() {
   Serial.println("Started.");
   
   Serial.print("Widget id: ");
-  Serial.println(Handbag.add(callMe));
+  Serial.println(Handbag.addWidget(UI_WIDGET_TYPE_LABEL, callMe, "Hello"));
   
   Serial.print("Widget id: ");
-  Serial.println(Handbag.add(callMe));
+  Serial.println(Handbag.addWidget(UI_WIDGET_TYPE_LABEL, callMe, "There"));
 
   Handbag.doIt();
   
