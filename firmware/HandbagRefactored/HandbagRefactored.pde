@@ -46,6 +46,10 @@ private:
   Widget widgets[MAX_WIDGETS];
   
   unsigned int widgetCount;
+  
+  CALLBACK(setupUICallback);
+
+  boolean uiIsSetup;  
 
 // TODO: Dynamically allocate this?  
 #define MSG_BUFFER_SIZE 50
@@ -79,20 +83,36 @@ private:
     accessory.write(msg, offset);
   }  
   
+  void setupUI() {
+    /*
+     */
+    widgetCount = 0; // TODO: Reset more than just this?
+    
+    if (setupUICallback != NULL) {
+      setupUICallback();
+    }
+
+    uiIsSetup = true; 
+  }
   
 public:
   HandbagApp(AndroidAccessory& accessory) : accessory(accessory) {
     /*
      */
-     widgetCount = 0;
+     uiIsSetup = false;
   }
 
-  int begin() {
+  int begin(CALLBACK(theSetupUICallback)) {
     /*
      */
+    // TODO: Find a more friendly way to supply UI configuration/callback?
+
+    setupUICallback = theSetupUICallback;
+    
     accessory.powerOn();
     
     while (!accessory.isConnected()) {
+      // TODO: Don't do this here?
       // Wait for connection
       // TODO: Do time out?
     }
@@ -159,6 +179,10 @@ public:
     // TODO: Ensure we're not called too often? (Original had 'delay(10)'.)
 
     if (accessory.isConnected()) {
+      if (!uiIsSetup) {
+        setupUI();
+      }
+      
       // TODO: Change this to all be stream based.
       int len = acc.read(msg, sizeof(msg), 1);
       
@@ -186,6 +210,7 @@ public:
     } else {
       // TODO: Handle disconnection.
       // TODO: Move widget configuration to happen when connected? (Or also via a callback?)
+      uiIsSetup = false;
     }
     
   }
@@ -202,22 +227,23 @@ void callMe() {
   Serial.println("Callback called."); 
 }
 
+void setupUI() {
+  /*
+   */
+  Handbag.addLabel("Hello");
+  Handbag.addButton("There", callMe);
+}
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   
   Serial.println("Starting...");
 
-  Handbag.begin();
+  Handbag.begin(setupUI);
 
   Serial.println("Started.");
   
-  Serial.print("Widget id: ");
-  Serial.println(Handbag.addLabel("Hello"));
-  
-  Serial.print("Widget id: ");
-  Serial.println(Handbag.addButton("There", callMe));
-
   Serial.println("Finished.");  
 }
 
