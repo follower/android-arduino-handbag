@@ -23,11 +23,21 @@ void callMe() {
   Serial.println("Callback called."); 
 }
 
+void lightUp() {
+  /*
+   */
+  const int ledPin = 4;
+  
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, !digitalRead(ledPin));
+}
+
 void setupUI() {
   /*
    */
   Handbag.addLabel("Hello");
   Handbag.addButton("There", callMe);
+  Handbag.addButton("World", lightUp);  
 }
 
 void setup() {
