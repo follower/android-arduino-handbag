@@ -12,8 +12,6 @@ AndroidAccessory acc("rancidbacon.com",
 		     "http://rancidbacon.com",
 		     "0000000000000001");
 
-  
-
 HandbagApp Handbag(acc);
 
 
@@ -22,6 +20,7 @@ void callMe() {
    */
   Serial.println("Callback called."); 
 }
+
 
 void lightUp() {
   /*
@@ -32,6 +31,7 @@ void lightUp() {
   digitalWrite(ledPin, !digitalRead(ledPin));
 }
 
+
 void setupUI() {
   /*
    */
@@ -40,12 +40,13 @@ void setupUI() {
   Handbag.addButton("World", lightUp);  
 }
 
+
 void setup() {
   Serial.begin(9600);
   
   Handbag.begin(setupUI);
-
 }
+
 
 void loop() {
   Handbag.refresh();  
