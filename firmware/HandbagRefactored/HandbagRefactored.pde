@@ -18,6 +18,9 @@ AndroidAccessory acc("rancidbacon.com",
 #define UI_WIDGET_TYPE_BUTTON 0x00
 #define UI_WIDGET_TYPE_LABEL 0x01
 
+#define COMMAND_GOT_EVENT 0x80
+
+#define EVENT_BUTTON_CLICK 0x01
 
 #define WIDGET_TYPE unsigned int
 
@@ -123,12 +126,70 @@ public:
     return theWidget.id;
   }
   
+  int addLabel(const char *labelText) {
+    /*
+     */
+    return addWidget(UI_WIDGET_TYPE_LABEL, NULL, labelText);
+  }
   
-  void doIt() {
-    for (int i = 0; i < widgetCount; i++) {
-      widgets[i].callback();
+  int addButton(const char *labelText, CALLBACK(callback)) {
+    /*
+     */
+    return addWidget(UI_WIDGET_TYPE_BUTTON, callback, labelText);
+  }
+
+  void triggerButtonCallback(int widgetId) {
+    /*
+     */
+    if (widgetId < widgetCount) {
+      // TODO: Actually search to match the ID?
+      Widget& theWidget = widgets[widgetId];
+      
+      if ((theWidget.type == UI_WIDGET_TYPE_BUTTON) && (theWidget.callback != NULL)) {
+        theWidget.callback();
+      }
     }
   }
+
+  void refresh() {
+    /*
+     */
+    byte msg[3];
+
+    // TODO: Ensure we're not called too often? (Original had 'delay(10)'.)
+
+    if (accessory.isConnected()) {
+      // TODO: Change this to all be stream based.
+      int len = acc.read(msg, sizeof(msg), 1);
+      
+      if (len > 0) {
+        // Requires only one command per "packet".
+        // TODO: Check actual length received?
+        // Currently bytes are: (command_type, arg1, arg2)
+        // For command type event occured: arg 1 = event type, arg2 = widget id 
+        switch (msg[0]) {
+          case COMMAND_GOT_EVENT:
+            switch (msg[1]) {
+              case EVENT_BUTTON_CLICK:
+                triggerButtonCallback(msg[2]);
+                break;
+                
+              default:
+                break;
+            }
+            break;
+          
+          default:
+            break;
+        }
+      }
+    } else {
+      // TODO: Handle disconnection.
+      // TODO: Move widget configuration to happen when connected? (Or also via a callback?)
+    }
+    
+  }
+
 };
 
 
@@ -152,19 +213,17 @@ void setup() {
   Serial.println("Started.");
   
   Serial.print("Widget id: ");
-  Serial.println(Handbag.addWidget(UI_WIDGET_TYPE_LABEL, callMe, "Hello"));
+  Serial.println(Handbag.addLabel("Hello"));
   
   Serial.print("Widget id: ");
-  Serial.println(Handbag.addWidget(UI_WIDGET_TYPE_LABEL, callMe, "There"));
+  Serial.println(Handbag.addButton("There", callMe));
 
-  Handbag.doIt();
-  
   Serial.println("Finished.");  
 }
 
 void loop() {
   // put your main code here, to run repeatedly: 
-  
+  Handbag.refresh();  
 }
 
 
