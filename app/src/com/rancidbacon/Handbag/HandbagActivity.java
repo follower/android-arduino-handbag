@@ -101,11 +101,11 @@ public class HandbagActivity extends Activity implements Runnable {
 	protected class ConfigMsg {
 		private int widgetType;
 		private byte widgetId;
-		private byte fontSize;
+		private int fontSize;
 		private byte widgetAlignment;
 		private String widgetText;
 		
-		public ConfigMsg(int widgetType, byte widgetId, byte fontSize, byte widgetAlignment, byte[] widgetTextAsBytes) {
+		public ConfigMsg(int widgetType, byte widgetId, int fontSize, byte widgetAlignment, byte[] widgetTextAsBytes) {
 			this.widgetType = widgetType;
 			this.widgetId = widgetId;
 			this.fontSize = fontSize;
@@ -121,7 +121,7 @@ public class HandbagActivity extends Activity implements Runnable {
 			return widgetId;
 		}
 
-		public byte getFontSize() {
+		public int getFontSize() {
 			return fontSize;
 		}
 
@@ -314,7 +314,7 @@ public class HandbagActivity extends Activity implements Runnable {
 						textLength = buffer[i + CONFIG_OFFSET_TEXT_LENGTH];						
 						m.obj = new ConfigMsg(buffer[i + CONFIG_OFFSET_WIDGET_TYPE],
 								buffer[i + CONFIG_OFFSET_WIDGET_ID],
-								buffer[i + CONFIG_OFFSET_FONT_SIZE],
+								composeInt((byte) 0x00, buffer[i + CONFIG_OFFSET_FONT_SIZE]), // To deal with fact bytes are signed in Java. :/
 								buffer[i + CONFIG_OFFSET_WIDGET_ALIGNMENT],
 								Arrays.copyOfRange(buffer,
 										i + CONFIG_OFFSET_TEXT_START,
