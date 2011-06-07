@@ -47,11 +47,11 @@ private:
 // TODO: Dynamically allocate this?  
 #define MSG_BUFFER_SIZE 50
 
-  void sendWidgetConfiguration(byte widgetType, byte widgetId, const char *labelText);
+  void sendWidgetConfiguration(byte widgetType, byte widgetId, byte fontSize, byte widgetAlignment, const char *labelText);
   
   void setupUI();
 
-  int addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), const char *labelText);
+  int addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), byte widgetId, byte fontSize, const char *labelText);
 
   void triggerButtonCallback(int widgetId);
 
@@ -61,7 +61,7 @@ public:
 
   int begin(CALLBACK(theSetupUICallback));
   
-  int addLabel(const char *labelText);
+  int addLabel(const char *labelText, byte fontSize = 0, byte alignment = 0);
   
   int addButton(const char *labelText, CALLBACK(callback));
 

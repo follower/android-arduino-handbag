@@ -60,8 +60,10 @@ public class HandbagActivity extends Activity implements Runnable {
 	// These need to change if they're changed in the sketch
 	private static final int CONFIG_OFFSET_WIDGET_TYPE = 1;
 	private static final int CONFIG_OFFSET_WIDGET_ID = 2;
-	private static final int CONFIG_OFFSET_TEXT_LENGTH = 3;
-	private static final int CONFIG_OFFSET_TEXT_START = 4;
+	private static final int CONFIG_OFFSET_FONT_SIZE = 3;
+	private static final int CONFIG_OFFSET_WIDGET_ALIGNMENT = 4;	
+	private static final int CONFIG_OFFSET_TEXT_LENGTH = 5;
+	private static final int CONFIG_OFFSET_TEXT_START = 6;
 	
 	public static final byte PWM_OUT_COMMAND = 2;
 	public static final byte DIGITAL_OUT_COMMAND = 3;
@@ -99,11 +101,15 @@ public class HandbagActivity extends Activity implements Runnable {
 	protected class ConfigMsg {
 		private int widgetType;
 		private byte widgetId;
+		private byte fontSize;
+		private byte widgetAlignment;
 		private String widgetText;
 		
-		public ConfigMsg(int widgetType, byte widgetId, byte[] widgetTextAsBytes) {
+		public ConfigMsg(int widgetType, byte widgetId, byte fontSize, byte widgetAlignment, byte[] widgetTextAsBytes) {
 			this.widgetType = widgetType;
 			this.widgetId = widgetId;
+			this.fontSize = fontSize;
+			this.widgetAlignment = widgetAlignment;
 			this.widgetText = new String(widgetTextAsBytes);
 		}
 		
@@ -113,6 +119,14 @@ public class HandbagActivity extends Activity implements Runnable {
 		
 		public byte getWidgetId() {
 			return widgetId;
+		}
+
+		public byte getFontSize() {
+			return fontSize;
+		}
+
+		public byte getWidgetAlignment() {
+			return widgetAlignment;
 		}
 
 		public String getWidgetText() {
@@ -295,17 +309,19 @@ public class HandbagActivity extends Activity implements Runnable {
 					break;
 
 				case MESSAGE_CONFIGURE:
-					if (len >= 4) {
+					if (len >= 6) {
 						Message m = Message.obtain(mHandler, MESSAGE_CONFIGURE);
 						textLength = buffer[i + CONFIG_OFFSET_TEXT_LENGTH];						
 						m.obj = new ConfigMsg(buffer[i + CONFIG_OFFSET_WIDGET_TYPE],
 								buffer[i + CONFIG_OFFSET_WIDGET_ID],
+								buffer[i + CONFIG_OFFSET_FONT_SIZE],
+								buffer[i + CONFIG_OFFSET_WIDGET_ALIGNMENT],
 								Arrays.copyOfRange(buffer,
 										i + CONFIG_OFFSET_TEXT_START,
 										i + CONFIG_OFFSET_TEXT_START + textLength));
 						mHandler.sendMessage(m);
 					}
-					i += (4 + textLength); // NOTE: This needs to change when more items are added.
+					i += (6 + textLength); // NOTE: This needs to change when more items are added.
 					break;					
 					
 				default:

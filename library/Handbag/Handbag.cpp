@@ -3,7 +3,7 @@
 // Requires Serial to have been initialised.
 #define LOG_DEBUG(x) Serial.println(x)
 
-void HandbagApp::sendWidgetConfiguration(byte widgetType, byte widgetId, const char *labelText) {
+void HandbagApp::sendWidgetConfiguration(byte widgetType, byte widgetId, byte fontSize, byte widgetAlignment, const char *labelText) {
   /*
    */
   // TODO: Do something stream based instead.
@@ -16,6 +16,9 @@ void HandbagApp::sendWidgetConfiguration(byte widgetType, byte widgetId, const c
   msg[offset++] = widgetType;
   
   msg[offset++] = widgetId;
+
+  msg[offset++] = fontSize;
+  msg[offset++] = widgetAlignment;
   
   lengthToCopy = MSG_BUFFER_SIZE - (offset + 1);
   
@@ -47,7 +50,7 @@ void HandbagApp::setupUI() {
 
 
 // TODO: Set type-specific things like "label text" differently?
-int HandbagApp::addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), const char *labelText) {
+int HandbagApp::addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), byte fontSize, byte widgetAlignment, const char *labelText) {
   /*
    */
 
@@ -64,7 +67,7 @@ int HandbagApp::addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), const char
   theWidget.callback = callback; 
   
   // TODO: Wait for confirmation?
-  sendWidgetConfiguration(theWidget.type, theWidget.id, labelText);
+  sendWidgetConfiguration(theWidget.type, theWidget.id, fontSize, widgetAlignment, labelText);
   
   return theWidget.id;
 }  
@@ -157,16 +160,22 @@ void HandbagApp::refresh() {
 }
 
 
-int HandbagApp::addLabel(const char *labelText) {
+int HandbagApp::addLabel(const char *labelText, byte fontSize, byte alignment) {
   /*
+
+
+    alignment - See the valid "gravity" values from here:
+
+      * <http://developer.android.com/reference/android/widget/TextView.html#attr_android:gravity>
+
    */
-  return addWidget(UI_WIDGET_TYPE_LABEL, NULL, labelText);
+  return addWidget(UI_WIDGET_TYPE_LABEL, NULL, fontSize, alignment, labelText);
 }
 
 
 int HandbagApp::addButton(const char *labelText, CALLBACK(callback)) {
   /*
    */
-  return addWidget(UI_WIDGET_TYPE_BUTTON, callback, labelText);
+  return addWidget(UI_WIDGET_TYPE_BUTTON, callback, 0, 0, labelText);
 }
 

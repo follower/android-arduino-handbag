@@ -84,12 +84,20 @@ public class BaseActivity extends HandbagActivity {
         layout.addView(button);
 	}
 	
-	void addLabel(String labelText) {
+	void addLabel(String labelText, int fontSize, byte widgetAlignment) {
 		
 		LinearLayout layout = (LinearLayout) findViewById(R.id.mainstage);
 		
 		TextView label = new TextView(this); 
         label.setText(labelText);
+        
+        if (fontSize > 0) {
+        	label.setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, fontSize);
+        }
+        
+        if (widgetAlignment > 0) {
+        	label.setGravity(widgetAlignment);
+        }
 
         layout.addView(label);
 	}
@@ -108,7 +116,7 @@ public class BaseActivity extends HandbagActivity {
 				break;
 				
 			case UI_WIDGET_LABEL:
-				addLabel(c.getWidgetText());
+				addLabel(c.getWidgetText(), c.getFontSize(), c.getWidgetAlignment());
 				break;
 		} 
 	}	
