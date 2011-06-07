@@ -67,7 +67,7 @@ void setupUI() {
    */
 
     Handbag.addLabel("");
-    Handbag.addLabel("Example Handbag Android Accessory");
+    Handbag.addLabel("Example Handbag Android Accessory", 16, 0x01);
     Handbag.addLabel("");        
     Handbag.addButton("Toggle Digital Pin 4", toggleFirstLed);
     Handbag.addButton("Turn D4 and A5 off", bothLedsOff);
@@ -75,7 +75,7 @@ void setupUI() {
     Handbag.addButton("Turn D4 and A5 on", bothLedsOn);        
     Handbag.addButton("Toggle D4 and A5", bothLedsToggle);                
     Handbag.addLabel("");
-    Handbag.addLabel("rancidbacon.com");
+    Handbag.addLabel("rancidbacon.com", 32, 0x01);
 
 }
 
