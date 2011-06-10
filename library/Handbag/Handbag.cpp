@@ -128,7 +128,10 @@ int HandbagApp::begin(CALLBACK(theSetupUICallback)) {
 
   // TODO: Do protocol version handshake.
   // TODO: Return result status.
-      
+
+  // This ensures the UI etc is setup once connected because we have
+  // no control over when it's first called otherwise.
+  refresh();
 }
 
 
