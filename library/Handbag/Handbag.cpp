@@ -105,6 +105,22 @@ void HandbagApp::triggerButtonCallback(int widgetId) {
 }
 
 
+void HandbagApp::triggerTextInputCallback(int widgetId, char *theString) {
+  /*
+   */
+  if (widgetId < widgetCount) {
+    // TODO: Actually search to match the ID?
+    Widget& theWidget = widgets[widgetId];
+    
+    // TODO: Fix up this callback stuff.
+    if ((theWidget.type == UI_WIDGET_TYPE_TEXT_INPUT) &&
+	(theWidget.callback2 != NULL)) {
+      theWidget.callback2(theString);
+    }
+  }
+}
+
+
 HandbagApp::HandbagApp(AndroidAccessory& accessory) : accessory(accessory) {
   /*
    */
@@ -156,12 +172,39 @@ void HandbagApp::refresh() {
       // TODO: Check actual length received?
       // Currently bytes are: (command_type, arg1, arg2)
       // For command type event occured: arg 1 = event type, arg2 = widget id 
+      byte widgetId;
+
       switch (msg[0]) {
         case COMMAND_GOT_EVENT:
           switch (msg[1]) {
             case EVENT_BUTTON_CLICK:
               triggerButtonCallback(msg[2]);
               break;
+
+            case EVENT_TEXT_INPUT:
+	      len = 0;
+	      widgetId = msg[2];
+	      // TODO: Provide timeout on -1's
+	      while (len <= 0) {
+		len = accessory.read(msg, sizeof(msg), 1);
+	      }
+	      if (len > 0) {
+		byte lengthToRequest = msg[2];
+		// TODO: Fix all this
+#define MAX_SIZE 30
+		byte theString[MAX_SIZE];
+		len = 0;
+		// TODO: Provide timeout on -1's
+		while (len <= 0) {
+		  len = accessory.read(theString, MAX_SIZE-1, 1);
+		}
+
+		if (len > 0) {
+		  theString[len] = '\0';
+		  triggerTextInputCallback(widgetId, (char *) theString);
+		}
+	      }
+	      break;
               
             default:
               break;
@@ -200,3 +243,22 @@ int HandbagApp::addButton(const char *labelText, CALLBACK(callback)) {
   return addWidget(UI_WIDGET_TYPE_BUTTON, callback, 0, 0, labelText);
 }
 
+
+int HandbagApp::addTextInput(CALLBACK2(callback2)) {
+  /*
+
+     Note: The string supplied to the callback must be copied if it
+           is used after the callback exits.
+
+   */
+  return addWidget(UI_WIDGET_TYPE_TEXT_INPUT, NULL, 0, 0, NULL, callback2);
+}
+
+void HandbagApp::showDialog(const char *messageText) {
+  /*
+   */
+  
+  // TODO: Wait for confirmation?
+  // TODO: Do this properly
+  sendWidgetConfiguration(UI_WIDGET_TYPE_DIALOG, 0, 0, 0, messageText);
+}

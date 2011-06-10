@@ -12,10 +12,13 @@
 
 #define UI_WIDGET_TYPE_BUTTON 0x00
 #define UI_WIDGET_TYPE_LABEL 0x01
+#define UI_WIDGET_TYPE_TEXT_INPUT 0x02
+#define UI_WIDGET_TYPE_DIALOG 0x03
 
 #define COMMAND_GOT_EVENT 0x80
 
 #define EVENT_BUTTON_CLICK 0x01
+#define EVENT_TEXT_INPUT 0x02
 
 #define WIDGET_TYPE unsigned int
 
@@ -58,6 +61,8 @@ private:
 
   void triggerButtonCallback(int widgetId);
 
+  void triggerTextInputCallback(int widgetId, char *theString);
+
   
 public:
   HandbagApp(AndroidAccessory& accessory);
@@ -68,7 +73,11 @@ public:
   
   int addButton(const char *labelText, CALLBACK(callback));
 
+  int addTextInput(CALLBACK2(callback2));
+
   void setText(int widgetId, const char *labelText, byte fontSize = 0, byte alignment = 0);
+
+  void showDialog(const char *messageText);
 
   void refresh();
 
