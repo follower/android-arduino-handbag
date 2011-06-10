@@ -381,6 +381,7 @@ public class HandbagActivity extends Activity implements Runnable {
 
 		byte numBytesToWrite = (byte) Math.min(buffer.length, MAX_STRING_LENGTH);
 		
+		// Hacky way of sending the length without altering anything else.
 		sendCommand((byte) 0xff, (byte) 0x00, (int) numBytesToWrite);
 		
 		if (mOutputStream != null) {
