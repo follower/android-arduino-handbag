@@ -65,6 +65,8 @@ public:
   
   int addButton(const char *labelText, CALLBACK(callback));
 
+  void setText(int widgetId, const char *labelText, byte fontSize = 0, byte alignment = 0);
+
   void refresh();
 
 };

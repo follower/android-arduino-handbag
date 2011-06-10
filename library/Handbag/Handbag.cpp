@@ -72,6 +72,23 @@ int HandbagApp::addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), byte fontS
   return theWidget.id;
 }  
 
+void HandbagApp::setText(int widgetId, const char *labelText, byte fontSize, byte widgetAlignment) {
+  /*
+   */
+  if (widgetId < widgetCount) {
+    // TODO: Actually search to match the ID?
+    Widget& theWidget = widgets[widgetId];
+    
+    // Check this is valid for this widget
+    if ((theWidget.type == UI_WIDGET_TYPE_LABEL) ||
+	(theWidget.type == UI_WIDGET_TYPE_BUTTON)) { 
+
+      sendWidgetConfiguration(UI_WIDGET_TYPE_LABEL, theWidget.id,
+			      fontSize, widgetAlignment, labelText);
+    }
+  }
+}
+
 
 void HandbagApp::triggerButtonCallback(int widgetId) {
   /*
