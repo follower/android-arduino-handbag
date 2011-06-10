@@ -373,6 +373,25 @@ public class HandbagActivity extends Activity implements Runnable {
 		}
 	}
 
+	public void sendString(String theString) {
+		// TODO: Implement all this better.
+		byte[] buffer = theString.getBytes();
+		
+		final byte MAX_STRING_LENGTH = 20;
+
+		byte numBytesToWrite = (byte) Math.min(buffer.length, MAX_STRING_LENGTH);
+		
+		sendCommand((byte) 0xff, (byte) 0x00, (int) numBytesToWrite);
+		
+		if (mOutputStream != null) {
+			try {
+				mOutputStream.write(buffer, 0, numBytesToWrite);
+			} catch (IOException e) {
+				Log.e(TAG, "write failed", e);
+			}
+		}
+	}
+
 	protected void handleLightMessage(LightMsg l) {
 	}
 
