@@ -19,6 +19,8 @@ public class BaseActivity extends HandbagActivity {
 	private static final byte COMMAND_GOT_EVENT = (byte) 0x80;
 	private static final byte EVENT_BUTTON_CLICK = (byte) 0x01;
 	
+	private static final int WIDGET_ID_OFFSET = 7200;
+	
 	private InputController mInputController;
 
 	public BaseActivity() {
@@ -71,7 +73,8 @@ public class BaseActivity extends HandbagActivity {
 				
 		LinearLayout layout = (LinearLayout) findViewById(R.id.mainstage);
 		
-		Button button = new Button(this); 
+        Button button = new Button(this);
+        button.setId(WIDGET_ID_OFFSET + widgetId);
         button.setText(labelText);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -84,12 +87,29 @@ public class BaseActivity extends HandbagActivity {
         layout.addView(button);
 	}
 	
-	void addLabel(String labelText, int fontSize, byte widgetAlignment) {
+	void addLabel(String labelText, int fontSize, byte widgetAlignment, final byte widgetId) {
+		/*
+		 
+		   This (now slightly misnamed) method either creates a new label or modifies an existing
+		   label.
+		   
+		   It works for both labels and other widgets that subclass TextView. (e.g. Buttons)
+		   
+		 */
 		
 		LinearLayout layout = (LinearLayout) findViewById(R.id.mainstage);
 		
-		TextView label = new TextView(this); 
-        label.setText(labelText);
+		// TODO: Check we actually got what we were looking for.
+		TextView label = (TextView) layout.findViewById(WIDGET_ID_OFFSET + widgetId);
+		
+		if (label == null) {
+			label = new TextView(this);
+			label.setId(WIDGET_ID_OFFSET + widgetId);
+
+			layout.addView(label);
+		}
+
+		label.setText(labelText);		
         
         if (fontSize > 0) {
         	label.setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, fontSize);
@@ -99,7 +119,6 @@ public class BaseActivity extends HandbagActivity {
         	label.setGravity(widgetAlignment);
         }
 
-        layout.addView(label);
 	}
 	
 	protected void showControls() {
@@ -116,7 +135,7 @@ public class BaseActivity extends HandbagActivity {
 				break;
 				
 			case UI_WIDGET_LABEL:
-				addLabel(c.getWidgetText(), c.getFontSize(), c.getWidgetAlignment());
+				addLabel(c.getWidgetText(), c.getFontSize(), c.getWidgetAlignment(), c.getWidgetId());
 				break;
 		} 
 	}	
