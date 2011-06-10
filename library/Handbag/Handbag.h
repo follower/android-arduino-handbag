@@ -7,6 +7,8 @@
 
 #define CALLBACK(varname) void (*varname)()
 
+#define CALLBACK2(varname) void (*varname)(char *)
+
 
 #define UI_WIDGET_TYPE_BUTTON 0x00
 #define UI_WIDGET_TYPE_LABEL 0x01
@@ -20,6 +22,7 @@
 class Widget {
   private:
     CALLBACK(callback);
+    CALLBACK2(callback2);
     unsigned int id;
     unsigned int type;
     
@@ -51,7 +54,7 @@ private:
   
   void setupUI();
 
-  int addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), byte widgetId, byte fontSize, const char *labelText);
+  int addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), byte widgetId, byte fontSize, const char *labelText, CALLBACK2(callback2) = NULL);
 
   void triggerButtonCallback(int widgetId);
 

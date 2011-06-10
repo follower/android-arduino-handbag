@@ -50,7 +50,7 @@ void HandbagApp::setupUI() {
 
 
 // TODO: Set type-specific things like "label text" differently?
-int HandbagApp::addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), byte fontSize, byte widgetAlignment, const char *labelText) {
+int HandbagApp::addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), byte fontSize, byte widgetAlignment, const char *labelText, CALLBACK2(callback2)) {
   /*
    */
 
@@ -64,7 +64,8 @@ int HandbagApp::addWidget(WIDGET_TYPE widgetType, CALLBACK(callback), byte fontS
   widgetCount++;
   
   theWidget.type = widgetType;
-  theWidget.callback = callback; 
+  theWidget.callback = callback;
+  theWidget.callback2 = callback2;
   
   // TODO: Wait for confirmation?
   sendWidgetConfiguration(theWidget.type, theWidget.id, fontSize, widgetAlignment, labelText);
