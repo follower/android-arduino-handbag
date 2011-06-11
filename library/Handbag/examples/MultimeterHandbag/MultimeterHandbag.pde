@@ -99,6 +99,10 @@ void setupUI() {
     Handbag.addLabel("", 8);
     Handbag.addLabel("rancidbacon.com", 32, 0x01);
 
+    // To get the label displayed
+    // TODO: Preserve the previous state?
+    displayCounter = false;
+    toggleCounterAdcDisplay();
 }
 
 
@@ -112,7 +116,6 @@ void setup() {
   
   Handbag.begin(setupUI);
 
-  toggleCounterAdcDisplay(); // To get the label displayed
 }
 
 
@@ -143,7 +146,9 @@ void loop() {
   result[3] = (value % 10) + '0';
   result[4] = '\0';
 
-  Handbag.setText(displayWidgetId, result);
+  if (Handbag.isConnected()) {
+    Handbag.setText(displayWidgetId, result);
+  }
   
   delay(100);
 }
