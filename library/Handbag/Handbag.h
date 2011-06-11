@@ -81,6 +81,7 @@ public:
 
   void refresh();
 
+  boolean isConnected();
 };
 
 #endif

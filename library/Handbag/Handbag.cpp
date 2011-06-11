@@ -223,6 +223,17 @@ void HandbagApp::refresh() {
   
 }
 
+boolean HandbagApp::isConnected() {
+  /*
+   */
+  // Note: This kind of makes refresh() redundant and I'm
+  //       not convinced this is the best approach.
+  // TODO: Make better?
+  // TODO: Make sure all communication routines check for connection first?
+  refresh();
+  return uiIsSetup;
+}
+
 
 int HandbagApp::addLabel(const char *labelText, byte fontSize, byte alignment) {
   /*
