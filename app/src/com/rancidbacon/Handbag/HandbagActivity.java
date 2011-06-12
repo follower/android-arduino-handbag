@@ -33,7 +33,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
-import android.widget.SeekBar;
 
 import com.android.future.usb.UsbAccessory;
 import com.android.future.usb.UsbManager;
