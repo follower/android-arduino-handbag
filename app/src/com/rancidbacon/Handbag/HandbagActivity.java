@@ -311,7 +311,8 @@ public class HandbagActivity extends Activity implements Runnable {
 				// TODO: Do all this properly (& handle "too old"/"too new"/ options.)				
 				if ((ret >= 3) && (buffer[0] == MESSAGE_HANDSHAKE) && (buffer[1] == 'B') && buffer[2] == 0x01) {
 					handshakeOk = true;
-					// TODO: Send response.
+					// Send response.
+					sendCommand((byte) 'H', (byte) 'B', (byte) 0x01); 
 				} else {
 					handshakeOk = false;
 					Message m = Message.obtain(mHandler, MESSAGE_HANDSHAKE);

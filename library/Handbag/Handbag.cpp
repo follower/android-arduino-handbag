@@ -148,12 +148,37 @@ void HandbagApp::refresh() {
 
   if (accessory.isConnected()) {
     if (!uiIsSetup) {
-      // TODO: Do protocol version handshake.
+      // Do protocol version handshake.
       msg[0] = 'H';
       msg[1] = 'B';
       msg[2] = 0x01;
       accessory.write(msg, sizeof(msg));
-      // TODO: Wait for response.
+
+      // Wait for response.
+      unsigned long timeout = millis() + 2000;
+
+      boolean timedOut = true;
+
+      int len;
+
+      while (millis() < timeout) {
+	len = accessory.read(msg, sizeof(msg), 1);
+
+	if (len > 0) {
+	  timedOut = false;
+	  break;
+	}
+      }
+
+      if (timedOut 
+	  || (len < 3) 
+	  || !((msg[0] == 'H') && (msg[1] == 'B') && (msg[2] == 0x01))) {
+	// No response, short response or bad response received so we
+	// assume it's an "old" version.
+	// TODO: Print error message to Serial for debugging?
+	Serial.println("Version mismatch.");
+	return;
+      }
 
       setupUI();
     }
