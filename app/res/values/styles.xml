@@ -9,53 +9,7 @@
 		<item name="android:background">@null</item>
 		<item name="android:includeFontPadding">false</item>
 	</style>
-	<style name="HandbagControlLabel" parent="@style/HandbagTextBase">
-		<item name="android:textSize">15dip</item>
-		<item name="android:textColor">@color/HandbagLabelGray</item>
-		<item name="android:includeFontPadding">true</item>
-		<item name="android:layout_height">25dip</item>
-		<item name="android:lineSpacingExtra">2dip</item>
-	</style>
-	<style name="HandbagControlLightLowerLabel" parent="@style/HandbagTextBase">
-		<item name="android:layout_marginTop">-2dip</item>
-		<item name="android:textSize">15dip</item>
-		<item name="android:textColor">@color/HandbagTextWhite</item>
-	</style>
-	<style name="HandbagControlLightLowerLabelConst" parent="@style/HandbagControlLightLowerLabel">
-		<item name="android:textColor">@color/HandbagLabelGray</item>
-	</style>
-	<style name="HandbagMeasurement" parent="@style/HandbagTextBase">
-		<item name="android:textSize">40dip</item>
-		<item name="android:layout_marginTop">-8dip</item>
-		<item name="android:layout_marginBottom">0dip</item>
-		<item name="android:layout_gravity">top</item>
-	</style>
-	<style name="HandbagLEDText" parent="@style/HandbagControlLabel">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">wrap_content</item>
-	</style>
 	<style name="HandbagNoDevice" parent="@style/HandbagTextBase">
 		<item name="android:textSize">20dip</item>
-	</style>
-	<style name="HandbagMeasurementSuffix" parent="@style/HandbagMeasurement">
-		<item name="android:textSize">20dip</item>
-	</style>
-	<style name="HandbagButtonDisplay">
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_weight">1</item>
-		<item name="android:gravity">center_horizontal|bottom</item>
-		<item name="android:layout_gravity">center</item>
-		<item name="android:layout_margin">2dip</item>
-		<item name="android:padding">2dip</item>
-	</style>
-	<style name="HandbagDigitalOutButton" parent="@style/HandbagTextBase">
-		<item name="android:textSize">15dip</item>
-		<item name="android:layout_marginTop">-10dip</item>
-		<item name="android:layout_height">70dip</item>
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:textColor">@color/HandbagTextWhite</item>
-		<item name="android:gravity">center</item>
-		<item name="android:background">@drawable/toggle_button_off_holo_dark</item>
 	</style>
 </resources>

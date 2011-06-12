@@ -53,8 +53,6 @@ public class HandbagActivity extends Activity implements Runnable {
 	FileInputStream mInputStream;
 	FileOutputStream mOutputStream;
 
-	private static final int MESSAGE_SWITCH = 1;
-	private static final int MESSAGE_LIGHT = 3;
 	private static final int MESSAGE_CONFIGURE = 0x10;
 	private static final int MESSAGE_HANDSHAKE = 0x48;
 
@@ -66,42 +64,9 @@ public class HandbagActivity extends Activity implements Runnable {
 	private static final int CONFIG_OFFSET_TEXT_LENGTH = 5;
 	private static final int CONFIG_OFFSET_TEXT_START = 6;
 	
-	public static final byte PWM_OUT_COMMAND = 2;
-	public static final byte DIGITAL_OUT_COMMAND = 3;
-	
 	private boolean handshakeAttempted = false;
 	private boolean handshakeOk = false;
 
-	protected class SwitchMsg {
-		private byte sw;
-		private byte state;
-
-		public SwitchMsg(byte sw, byte state) {
-			this.sw = sw;
-			this.state = state;
-		}
-
-		public byte getSw() {
-			return sw;
-		}
-
-		public byte getState() {
-			return state;
-		}
-	}
-
-	protected class LightMsg {
-		private int light;
-
-		public LightMsg(int light) {
-			this.light = light;
-		}
-
-		public int getLight() {
-			return light;
-		}
-	}
-	
 	protected class ConfigMsg {
 		private int widgetType;
 		private byte widgetId;
@@ -330,24 +295,6 @@ public class HandbagActivity extends Activity implements Runnable {
 				int len = ret - i;
 
 				switch (buffer[i]) {
-				case 0x1:
-					if (len >= 3) {
-						Message m = Message.obtain(mHandler, MESSAGE_SWITCH);
-						m.obj = new SwitchMsg(buffer[i + 1], buffer[i + 2]);
-						mHandler.sendMessage(m);
-					}
-					i += 3;
-					break;
-
-				case 0x5:
-					if (len >= 3) {
-						Message m = Message.obtain(mHandler, MESSAGE_LIGHT);
-						m.obj = new LightMsg(composeInt(buffer[i + 1],
-								buffer[i + 2]));
-						mHandler.sendMessage(m);
-					}
-					i += 3;
-					break;
 
 				case MESSAGE_CONFIGURE:
 					if (len >= 6) {
@@ -379,15 +326,6 @@ public class HandbagActivity extends Activity implements Runnable {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case MESSAGE_SWITCH:
-				SwitchMsg o = (SwitchMsg) msg.obj;
-				handleSwitchMessage(o);
-				break;
-
-			case MESSAGE_LIGHT:
-				LightMsg l = (LightMsg) msg.obj;
-				handleLightMessage(l);
-				break;
 
 			case MESSAGE_CONFIGURE:
 				ConfigMsg c = (ConfigMsg) msg.obj;
@@ -439,21 +377,9 @@ public class HandbagActivity extends Activity implements Runnable {
 		}
 	}
 
-	protected void handleLightMessage(LightMsg l) {
-	}
-
-	protected void handleSwitchMessage(SwitchMsg o) {
-	}
-
 	protected void handleConfigMessage(ConfigMsg c) {
 	}
 
 	protected void handleHandshakeMessage(HandshakeMsg c) {
-	}
-
-	public void onStartTrackingTouch(SeekBar seekBar) {
-	}
-
-	public void onStopTrackingTouch(SeekBar seekBar) {
 	}
 }

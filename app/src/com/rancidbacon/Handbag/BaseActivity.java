@@ -1,7 +1,6 @@
 package com.rancidbacon.Handbag;
 
 import com.rancidbacon.Handbag.R;
-import com.rancidbacon.Handbag.HandbagActivity.ConfigMsg;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -27,8 +26,6 @@ public class BaseActivity extends HandbagActivity {
 	private static final byte EVENT_TEXT_INPUT = (byte) 0x02;
 	
 	private static final int WIDGET_ID_OFFSET = 7200;
-	
-	private InputController mInputController;
 	
 	private boolean preserveDisplayOnDisconnect = false;
 
@@ -77,7 +74,6 @@ public class BaseActivity extends HandbagActivity {
 		if (!preserveDisplayOnDisconnect) {
 			setContentView(R.layout.no_device);
 		}
-		mInputController = null;
 	}
 
 	
@@ -170,9 +166,6 @@ public class BaseActivity extends HandbagActivity {
 	
 	protected void showControls() {
 		setContentView(R.layout.main);
-
-		mInputController = new InputController(this);
-		mInputController.accessoryAttached();
 	}
 
 	protected void handleConfigMessage(ConfigMsg c) {
@@ -200,19 +193,4 @@ public class BaseActivity extends HandbagActivity {
 		new AlertDialog.Builder(this).setMessage("This accessory is not compatible with this version of the Handbag App.").show();
 	}
 	
-	protected void handleLightMessage(LightMsg l) {
-		if (mInputController != null) {
-			mInputController.setLightValue(l.getLight());
-		}
-	}
-
-	protected void handleSwitchMessage(SwitchMsg o) {
-		if (mInputController != null) {
-			byte sw = o.getSw();
-			if (sw >= 0 && sw < 4) {
-				mInputController.switchStateChanged(sw, o.getState() != 0);
-			}
-		}
-	}
-
 }
