@@ -14,9 +14,6 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".HandbagActivity" android:label="@string/app_name"
-			android:screenOrientation="portrait">
-		</activity>
 		<activity android:name="com.rancidbacon.Handbag.UsbAccessoryActivity" android:label="Handbag"
 			android:taskAffinity="" android:launchMode="singleInstance">
 			<intent-filter>
