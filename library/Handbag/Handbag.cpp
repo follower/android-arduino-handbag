@@ -1,3 +1,13 @@
+/*
+
+  Handbag library -- create Android accessories without Android code
+
+  (c) 2011 follower@rancidbacon.com
+
+  Licensed under the LGPL 2.0.
+
+ */
+
 #include "Handbag.h"
 
 // Requires Serial to have been initialised.
