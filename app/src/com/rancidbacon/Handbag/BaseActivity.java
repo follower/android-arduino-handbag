@@ -81,6 +81,13 @@ public class BaseActivity extends HandbagActivity {
 				
 		LinearLayout layout = (LinearLayout) findViewById(R.id.mainstage);
 		
+		// TODO: Do something so we don't repeat this boilerplate everywhere.
+		if (layout == null) { 
+			// This is really an error but we do this and hope for the
+			// best rather than generating a null pointer exception.
+			return;
+		}		
+		
         Button button = new Button(this);
         button.setId(WIDGET_ID_OFFSET + widgetId);
         button.setText(labelText);
@@ -102,6 +109,13 @@ public class BaseActivity extends HandbagActivity {
 		 */
 
 		LinearLayout layout = (LinearLayout) findViewById(R.id.mainstage);
+
+		// TODO: Do something so we don't repeat this boilerplate everywhere.
+		if (layout == null) { 
+			// This is really an error but we do this and hope for the
+			// best rather than generating a null pointer exception.
+			return;
+		}		
 		
         // TODO: Do a find by ID in the listener rather than make this final?
         final EditText textInput = new EditText(this);
@@ -135,6 +149,13 @@ public class BaseActivity extends HandbagActivity {
 		 */
 		
 		LinearLayout layout = (LinearLayout) findViewById(R.id.mainstage);
+		
+		// TODO: Do something so we don't repeat this boilerplate everywhere.
+		if (layout == null) { 
+			// This is really an error but we do this and hope for the
+			// best rather than generating a null pointer exception.
+			return;
+		}
 		
 		// TODO: Check we actually got what we were looking for.
 		TextView label = (TextView) layout.findViewById(WIDGET_ID_OFFSET + widgetId);
