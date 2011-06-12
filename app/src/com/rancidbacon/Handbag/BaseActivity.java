@@ -29,6 +29,8 @@ public class BaseActivity extends HandbagActivity {
 	private static final int WIDGET_ID_OFFSET = 7200;
 	
 	private InputController mInputController;
+	
+	private boolean preserveDisplayOnDisconnect = false;
 
 	public BaseActivity() {
 		super();
@@ -46,15 +48,16 @@ public class BaseActivity extends HandbagActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add("Simulate");
+		menu.add("Preserve");
 		menu.add("Quit");
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getTitle() == "Simulate") {
-			showControls();
+		if (item.getTitle() == "Preserve") {
+			// We preserve the display so we can use ddms to take a screenshot.
+			preserveDisplayOnDisconnect = !preserveDisplayOnDisconnect;
 		} else if (item.getTitle() == "Quit") {
 			finish();
 			System.exit(0);
@@ -71,7 +74,9 @@ public class BaseActivity extends HandbagActivity {
 	}
 
 	protected void hideControls() {
-		setContentView(R.layout.no_device);
+		if (!preserveDisplayOnDisconnect) {
+			setContentView(R.layout.no_device);
+		}
 		mInputController = null;
 	}
 
