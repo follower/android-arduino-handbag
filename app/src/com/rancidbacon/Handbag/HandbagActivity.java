@@ -56,6 +56,7 @@ public class HandbagActivity extends Activity implements Runnable {
 	private static final int MESSAGE_SWITCH = 1;
 	private static final int MESSAGE_LIGHT = 3;
 	private static final int MESSAGE_CONFIGURE = 0x10;
+	private static final int MESSAGE_HANDSHAKE = 0x48;
 
 	// These need to change if they're changed in the sketch
 	private static final int CONFIG_OFFSET_WIDGET_TYPE = 1;
@@ -67,6 +68,9 @@ public class HandbagActivity extends Activity implements Runnable {
 	
 	public static final byte PWM_OUT_COMMAND = 2;
 	public static final byte DIGITAL_OUT_COMMAND = 3;
+	
+	private boolean handshakeAttempted = false;
+	private boolean handshakeOk = false;
 
 	protected class SwitchMsg {
 		private byte sw;
@@ -131,6 +135,18 @@ public class HandbagActivity extends Activity implements Runnable {
 
 		public String getWidgetText() {
 			return widgetText;
+		}
+	}
+	
+	protected class HandshakeMsg {
+		public byte byte1;
+		public byte byte2;
+		public byte byte3;
+		
+		public HandshakeMsg(byte theByte1, byte theByte2, byte theByte3) {
+			byte1 = theByte1;
+			byte2 = theByte2;
+			byte3 = theByte3;			
 		}
 	}
 
@@ -277,11 +293,35 @@ public class HandbagActivity extends Activity implements Runnable {
 
 		byte textLength = 0;
 		
+		// TODO: Reset this if we are disconnected?
+		if (handshakeAttempted && !handshakeOk) {
+			// Ignore all subsequent communication.
+			return;
+		}
+		
 		while (ret >= 0) {
 			try {
 				ret = mInputStream.read(buffer);
 			} catch (IOException e) {
 				break;
+			}
+			
+			if (!handshakeAttempted) {
+				handshakeAttempted = true;
+				// TODO: Do all this properly (& handle "too old"/"too new"/ options.)				
+				if ((ret >= 3) && (buffer[0] == MESSAGE_HANDSHAKE) && (buffer[1] == 'B') && buffer[2] == 0x01) {
+					handshakeOk = true;
+					// TODO: Send response.
+				} else {
+					handshakeOk = false;
+					Message m = Message.obtain(mHandler, MESSAGE_HANDSHAKE);
+					m.obj = new HandshakeMsg((byte) 0, (byte) 0, (byte) 0);
+					mHandler.sendMessage(m);
+				}
+			}
+			
+			if (!handshakeOk) {
+				return;
 			}
 
 			i = 0;
@@ -352,6 +392,11 @@ public class HandbagActivity extends Activity implements Runnable {
 				ConfigMsg c = (ConfigMsg) msg.obj;
 				handleConfigMessage(c);
 				break;
+				
+			case MESSAGE_HANDSHAKE:
+				HandshakeMsg h = (HandshakeMsg) msg.obj;
+				handleHandshakeMessage(h);
+				break;
 			}
 		}
 	};
@@ -400,6 +445,9 @@ public class HandbagActivity extends Activity implements Runnable {
 	}
 
 	protected void handleConfigMessage(ConfigMsg c) {
+	}
+
+	protected void handleHandshakeMessage(HandshakeMsg c) {
 	}
 
 	public void onStartTrackingTouch(SeekBar seekBar) {

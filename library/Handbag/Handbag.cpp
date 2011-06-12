@@ -149,6 +149,12 @@ void HandbagApp::refresh() {
   if (accessory.isConnected()) {
     if (!uiIsSetup) {
       // TODO: Do protocol version handshake.
+      msg[0] = 'H';
+      msg[1] = 'B';
+      msg[2] = 0x01;
+      accessory.write(msg, sizeof(msg));
+      // TODO: Wait for response.
+
       setupUI();
     }
     

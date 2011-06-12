@@ -190,6 +190,11 @@ public class BaseActivity extends HandbagActivity {
 		} 
 	}	
 	
+	protected void handleHandshakeMessage(HandshakeMsg h) {
+		// TODO: Do this properly
+		new AlertDialog.Builder(this).setMessage("This accessory is not compatible with this version of the Handbag App.").show();
+	}
+	
 	protected void handleLightMessage(LightMsg l) {
 		if (mInputController != null) {
 			mInputController.setLightValue(l.getLight());
