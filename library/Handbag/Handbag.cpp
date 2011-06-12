@@ -176,7 +176,7 @@ void HandbagApp::refresh() {
 	// No response, short response or bad response received so we
 	// assume it's an "old" version.
 	// TODO: Print error message to Serial for debugging?
-	Serial.println("Version mismatch.");
+	// Serial.println("Version mismatch.");
 	return;
       }
 
