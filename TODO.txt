@@ -1,5 +1,5 @@
 
 * Use/supply filter to text input. (e.g. InputFilter.LengthFilter, DigitsKeyListener, NumberKeyListener or with .setInputType())
 * Add label to text input?
-
+* Change to create accessory within Handbag instance and accept less information to use in the AndroidAccessory constructor? (Because certain things need to match the app manifest anyway.)
 
