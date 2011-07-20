@@ -3,3 +3,5 @@
 * Add label to text input?
 * Change to create accessory within Handbag instance and accept less information to use in the AndroidAccessory constructor? (Because certain things need to match the app manifest anyway.)
 * Add constants for gravity/alignment options.
+* Change URL used for more information to something on Handbag site.
+* Add simple install instructions to Handbag site.
