@@ -25,10 +25,17 @@
 #include <Usb.h>
 #include <AndroidAccessory.h>
 
+#define USE_SHIFT_LCD 0
+
+#if USE_SHIFT_LCD
+#include <ShiftLCD.h>
+ShiftLCD lcd(6, A2, A3);
+#else
 #include <LiquidCrystal.h>
 
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(A0, A1, A2, A3, A4, A5);
+#endif
 
 #include "Handbag.h"
 
