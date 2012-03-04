@@ -34,8 +34,14 @@ import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
+/* ---
 import com.android.future.usb.UsbAccessory;
 import com.android.future.usb.UsbManager;
+*/
+
+import android.hardware.usb.UsbAccessory;
+import android.hardware.usb.UsbManager;
+
 import com.rancidbacon.Handbag.R;
 
 public class HandbagActivity extends Activity implements Runnable {
@@ -120,7 +126,11 @@ public class HandbagActivity extends Activity implements Runnable {
 			String action = intent.getAction();
 			if (ACTION_USB_PERMISSION.equals(action)) {
 				synchronized (this) {
+/* ---					
 					UsbAccessory accessory = UsbManager.getAccessory(intent);
+*/					
+					UsbAccessory accessory = (UsbAccessory) intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
+					
 					if (intent.getBooleanExtra(
 							UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
 						openAccessory(accessory);
@@ -131,7 +141,10 @@ public class HandbagActivity extends Activity implements Runnable {
 					mPermissionRequestPending = false;
 				}
 			} else if (UsbManager.ACTION_USB_ACCESSORY_DETACHED.equals(action)) {
+/* ---				
 				UsbAccessory accessory = UsbManager.getAccessory(intent);
+*/
+				UsbAccessory accessory = (UsbAccessory) intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
 				if (accessory != null && accessory.equals(mAccessory)) {
 					closeAccessory();
 				}
@@ -144,7 +157,29 @@ public class HandbagActivity extends Activity implements Runnable {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mUsbManager = UsbManager.getInstance(this);
+/*		
+ 		// Playing around with getting reflection working.
+		try {
+			//Class theClass = Class.forName("android.hardware.usb.UsbManager");
+			Class theClass = Class.forName("com.android.future.usb.UsbManager");
+			try {
+				//Object obj = theClass.newInstance();
+				//obj.getClass().getMethod("getInstance", this.getClass()).invoke(obj, this);
+				theClass.getMethod("getInstance", Context.class).invoke(theClass, this);
+			} catch (Exception ex) {
+				Log.d(TAG, ex.toString());
+			}
+			Log.d(TAG, "found class");			
+		} catch (ClassNotFoundException e) {
+			Log.d(TAG, "didn't find class");
+		}
+*/
+		
+/* ---
+  		mUsbManager = UsbManager.getInstance(this);
+*/
+		mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+		
 		mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
 				ACTION_USB_PERMISSION), 0);
 		IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
