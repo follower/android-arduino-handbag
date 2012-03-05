@@ -36,7 +36,7 @@ public class BaseActivity extends HandbagActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (mAccessory != null) {
+		if (usbHandler.getAccessory() != null) { // TODO: Handle better?
 			showControls();
 		} else {
 			hideControls();

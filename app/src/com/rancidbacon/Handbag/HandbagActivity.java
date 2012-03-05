@@ -34,13 +34,6 @@ import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
-/* ---
-import com.android.future.usb.UsbAccessory;
-import com.android.future.usb.UsbManager;
-*/
-
-import android.hardware.usb.UsbAccessory;
-import android.hardware.usb.UsbManager;
 
 import com.rancidbacon.Handbag.R;
 
@@ -49,11 +42,11 @@ public class HandbagActivity extends Activity implements Runnable {
 
 	private static final String ACTION_USB_PERMISSION = "com.rancidbacon.Handbag.action.USB_PERMISSION";
 
-	private UsbManager mUsbManager;
+	UsbAccessoryHandlerInterface usbHandler;
+	
 	private PendingIntent mPermissionIntent;
 	private boolean mPermissionRequestPending;
 
-	UsbAccessory mAccessory;
 	ParcelFileDescriptor mFileDescriptor;
 	FileInputStream mInputStream;
 	FileOutputStream mOutputStream;
@@ -120,32 +113,35 @@ public class HandbagActivity extends Activity implements Runnable {
 		}
 	}
 
+   public HandbagActivity() {
+	   
+       try {
+           Class.forName("android.hardware.usb.UsbManager");
+           usbHandler = new UsbAccessoryHandlerHoneycomb();
+       } catch (ClassNotFoundException ex) {
+    	   try {
+    		   Class.forName("com.android.future.usb.UsbManager");
+               usbHandler = new UsbAccessoryHandlerGingerbread();    		   
+           } catch (ClassNotFoundException ex1) {
+               throw new RuntimeException(ex1);
+           }
+       }
+       
+   }
+   
+   // TODO: Make this part of the UsbHandler class instead?
 	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (ACTION_USB_PERMISSION.equals(action)) {
 				synchronized (this) {
-/* ---					
-					UsbAccessory accessory = UsbManager.getAccessory(intent);
-*/					
-					UsbAccessory accessory = (UsbAccessory) intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
+					usbHandler.getPermission(intent);
 					
-					if (intent.getBooleanExtra(
-							UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
-						openAccessory(accessory);
-					} else {
-						Log.d(TAG, "permission denied for accessory "
-								+ accessory);
-					}
 					mPermissionRequestPending = false;
 				}
-			} else if (UsbManager.ACTION_USB_ACCESSORY_DETACHED.equals(action)) {
-/* ---				
-				UsbAccessory accessory = UsbManager.getAccessory(intent);
-*/
-				UsbAccessory accessory = (UsbAccessory) intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
-				if (accessory != null && accessory.equals(mAccessory)) {
+			} else if (usbHandler.get_ACTION_USB_ACCESSORY_DETACHED().equals(action)) {
+				if (usbHandler.matchesThisAccessory(intent)) {
 					closeAccessory();
 				}
 			}
@@ -157,38 +153,17 @@ public class HandbagActivity extends Activity implements Runnable {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-/*		
- 		// Playing around with getting reflection working.
-		try {
-			//Class theClass = Class.forName("android.hardware.usb.UsbManager");
-			Class theClass = Class.forName("com.android.future.usb.UsbManager");
-			try {
-				//Object obj = theClass.newInstance();
-				//obj.getClass().getMethod("getInstance", this.getClass()).invoke(obj, this);
-				theClass.getMethod("getInstance", Context.class).invoke(theClass, this);
-			} catch (Exception ex) {
-				Log.d(TAG, ex.toString());
-			}
-			Log.d(TAG, "found class");			
-		} catch (ClassNotFoundException e) {
-			Log.d(TAG, "didn't find class");
-		}
-*/
-		
-/* ---
-  		mUsbManager = UsbManager.getInstance(this);
-*/
-		mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
-		
+		// TODO: Do this in the constructor?
+		usbHandler.setManager(this);
+				
 		mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
 				ACTION_USB_PERMISSION), 0);
 		IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
-		filter.addAction(UsbManager.ACTION_USB_ACCESSORY_DETACHED);
+		filter.addAction(usbHandler.get_ACTION_USB_ACCESSORY_DETACHED());
 		registerReceiver(mUsbReceiver, filter);
 
 		if (getLastNonConfigurationInstance() != null) {
-			mAccessory = (UsbAccessory) getLastNonConfigurationInstance();
-			openAccessory(mAccessory);
+			openAccessory(getLastNonConfigurationInstance());
 		}
 
 		setContentView(R.layout.main);
@@ -198,8 +173,9 @@ public class HandbagActivity extends Activity implements Runnable {
 
 	@Override
 	public Object onRetainNonConfigurationInstance() {
-		if (mAccessory != null) {
-			return mAccessory;
+		// TODO: Handle more abstractly?
+		if (usbHandler.getAccessory() != null) {
+			return usbHandler.getAccessory();
 		} else {
 			return super.onRetainNonConfigurationInstance();
 		}
@@ -214,15 +190,15 @@ public class HandbagActivity extends Activity implements Runnable {
 			return;
 		}
 
-		UsbAccessory[] accessories = mUsbManager.getAccessoryList();
-		UsbAccessory accessory = (accessories == null ? null : accessories[0]);
+		Object accessory = usbHandler.getConnectedAccessory();
+		
 		if (accessory != null) {
-			if (mUsbManager.hasPermission(accessory)) {
+			if (usbHandler.hasPermission(accessory)) {	
 				openAccessory(accessory);
 			} else {
 				synchronized (mUsbReceiver) {
 					if (!mPermissionRequestPending) {
-						mUsbManager.requestPermission(accessory,
+						usbHandler.requestPermission(accessory,
 								mPermissionIntent);
 						mPermissionRequestPending = true;
 					}
@@ -245,10 +221,10 @@ public class HandbagActivity extends Activity implements Runnable {
 		super.onDestroy();
 	}
 
-	private void openAccessory(UsbAccessory accessory) {
-		mFileDescriptor = mUsbManager.openAccessory(accessory);
+	private void openAccessory(Object accessory) {		
+		mFileDescriptor = usbHandler.openAccessory(accessory);
 		if (mFileDescriptor != null) {
-			mAccessory = accessory;
+			usbHandler.setAccessory(accessory);
 			FileDescriptor fd = mFileDescriptor.getFileDescriptor();
 			mInputStream = new FileInputStream(fd);
 			mOutputStream = new FileOutputStream(fd);
@@ -271,7 +247,7 @@ public class HandbagActivity extends Activity implements Runnable {
 		} catch (IOException e) {
 		} finally {
 			mFileDescriptor = null;
-			mAccessory = null;
+			usbHandler.setAccessory(null);
 		}
 	}
 
