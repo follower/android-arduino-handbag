@@ -172,7 +172,7 @@ void HandbagApp::refresh() {
       int len;
 
       while (millis() < timeout) {
-	len = accessory.read(msg, sizeof(msg), 1);
+	len = accessory.readBytes((char *) msg, sizeof(msg));
 
 	if (len > 0) {
 	  timedOut = false;
@@ -194,7 +194,7 @@ void HandbagApp::refresh() {
     }
     
     // TODO: Change this to all be stream based.
-    int len = accessory.read(msg, sizeof(msg), 1);
+    int len = accessory.readBytes((char *) msg, sizeof(msg));
     
     if (len > 0) {
       // Requires only one command per "packet".
@@ -213,24 +213,24 @@ void HandbagApp::refresh() {
             case EVENT_TEXT_INPUT:
 	      len = 0;
 	      widgetId = msg[2];
-	      // TODO: Provide timeout on -1's
+	      // TODO: Provide timeout on -1's/0
 	      while (len <= 0) {
-		len = accessory.read(msg, sizeof(msg), 1);
+		len = accessory.readBytes((char *) msg, sizeof(msg));
 	      }
 	      if (len > 0) {
 		byte lengthToRequest = msg[2];
 		// TODO: Fix all this
 #define MAX_SIZE 30
-		byte theString[MAX_SIZE];
+		char theString[MAX_SIZE];
 		len = 0;
 		// TODO: Provide timeout on -1's
 		while (len <= 0) {
-		  len = accessory.read(theString, MAX_SIZE-1, 1);
+		  len = accessory.readBytes(theString, MAX_SIZE-1);
 		}
 
 		if (len > 0) {
 		  theString[len] = '\0';
-		  triggerTextInputCallback(widgetId, (char *) theString);
+		  triggerTextInputCallback(widgetId, theString);
 		}
 	      }
 	      break;
