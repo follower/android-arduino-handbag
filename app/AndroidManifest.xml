@@ -16,7 +16,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="com.rancidbacon.Handbag.UsbAccessoryActivity" android:label="Handbag"
-			android:taskAffinity="" android:launchMode="singleInstance" android:screenOrientation="portrait">
+			android:taskAffinity="" android:launchMode="singleInstance" android:screenOrientation="portrait"  android:excludeFromRecents="true">
 			<intent-filter>
 				<action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
 			</intent-filter>
