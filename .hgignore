@@ -1,7 +1,7 @@
 # use glob syntax.
 syntax: glob
 
-app/bin/*
-app/gen/*
+*/bin/*
+*/gen/*
 
 releases/*
