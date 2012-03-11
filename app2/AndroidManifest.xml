@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         
-         <service android:name=".HandbagParseService" />
+         <service android:name=".HandbagParseService" 
+             	  android:process=":remote_parse" />
         
     </application>
 
