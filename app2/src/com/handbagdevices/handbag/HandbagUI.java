@@ -24,6 +24,9 @@ public class HandbagUI extends Activity {
 	Messenger parseService = null;
 	boolean parseServiceIsBound = false;
 	
+	Messenger commsService = null;
+	boolean commsServiceIsBound = false;
+	
 	// Used to receive messages from service(s)
 	class IncomingUiHandler extends Handler {
 		@Override
@@ -66,6 +69,26 @@ public class HandbagUI extends Activity {
 		
 	};
 	
+
+	private ServiceConnection connCommsService = new ServiceConnection() {
+
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			// Store the object we will use to communicate with the service.
+			commsService = new Messenger(service);
+			commsServiceIsBound = true;
+			Log.d(this.getClass().getSimpleName(), "Comms Service bound");
+			
+			registerWithWiFiCommsService();			
+		}
+
+		public void onServiceDisconnected(ComponentName className) {
+			// Called when the service crashes/unexpectedly disconnects.
+			commsService = null;
+			commsServiceIsBound = false;
+		}
+		
+	};
+	
 	
     /** Called when the activity is first created. */
     @Override
@@ -90,6 +113,23 @@ public class HandbagUI extends Activity {
 		}
     	
     }
+
+    
+    private void registerWithWiFiCommsService() {
+    	
+    	Log.d(this.getClass().getSimpleName(), "Registering with WiFi Comms Service.");
+    	
+		Message msg = Message.obtain(null, HandbagParseService.MSG_UI_ACTIVITY_REGISTER); // TODO: Use Comms-specific constnant or move here.
+		msg.replyTo = ourMessenger;
+		
+		try {
+			commsService.send(msg);
+		} catch (RemoteException ex1) {
+			// Service crashed so just ignore it
+			// TODO: Do something else?
+		}
+    	
+    }
     
 
 	@Override
@@ -100,13 +140,22 @@ public class HandbagUI extends Activity {
 		// Bind to Parse Service which receives configuration information from the data
 		// source, and to which we send event information. TODO: Improve class name?
 		boolean bindSuccessful = bindService(new Intent(HandbagUI.this, HandbagParseService.class), connParseService, Context.BIND_AUTO_CREATE);
-		Log.d(this.getClass().getSimpleName(), "bound:" + bindSuccessful);
+		Log.d(this.getClass().getSimpleName(), "Parse Service bound:" + bindSuccessful);
 
+		// TODO: Use the chose Comms Service (WiFi, USB ADK, BT?) 
+		bindSuccessful = bindService(new Intent(HandbagUI.this, HandbagWiFiCommsService.class), connCommsService, Context.BIND_AUTO_CREATE);
+		Log.d(this.getClass().getSimpleName(), "Comms Service bound:" + bindSuccessful);
 		
 		if (parseService != null) {
 			// We do this here to handle the situation that we're "resuming" after being
 			// hidden. This ensures the Parse Server is "woken up".
 			registerWithParseServer();
+		}
+		
+		if (commsService != null) {
+			// We do this here to handle the situation that we're "resuming" after being
+			// hidden. This ensures the Comms Server is "woken up".
+			registerWithWiFiCommsService(); // TODO: Make generic.
 		}
 		
 		Log.d(this.getClass().getSimpleName(), "Exited onStart()");		

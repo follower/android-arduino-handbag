@@ -22,6 +22,9 @@
          <service android:name=".HandbagParseService" 
              	  android:process=":remote_parse" />
         
-    </application>
+         <service android:name=".HandbagWiFiCommsService" 
+             	  android:process=":remote_wifi_comms" />
+        
+         </application>
 
 </manifest>
