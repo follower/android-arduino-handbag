@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
         item = str(item)
 
-        if (';' in item) or ('\n' in item):
+        if (';' in item) or ('\n' in item): # TODO: Add "starts with ["
             item = "[%d]%s" % (len(item), item)
 
         all_fields.append(item);
