@@ -1,13 +1,12 @@
 
 import sys
 
-if __name__ == "__main__":
-    data = ["abcdef", 4567, "My goodness;\nI spot a newline!", 1]
-
+def createPacket(dataItems):
+    """
+    """
     all_fields = []
 
-    for item in data:
-        #print item
+    for item in dataItems:
 
         item = str(item)
 
@@ -17,6 +16,14 @@ if __name__ == "__main__":
         all_fields.append(item);
 
     output = "%s\n" % (";".join(all_fields))
+    
+    return output
+
+
+if __name__ == "__main__":
+    data = ["abcdef", 4567, "My goodness;\nI spot a newline!", 1]
+
+    output = createPacket(data)
 
     if (len(sys.argv) > 1) and sys.argv[1] == "-":
         print output
