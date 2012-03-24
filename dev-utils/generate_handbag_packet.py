@@ -10,7 +10,9 @@ def createPacket(dataItems):
 
         item = str(item)
 
-        if (';' in item) or ('\n' in item): # TODO: Add "starts with ["
+        if item.startswith("[") \
+                or (';' in item) \
+                or ('\n' in item):
             item = "[%d]%s" % (len(item), item)
 
         all_fields.append(item);
@@ -21,7 +23,7 @@ def createPacket(dataItems):
 
 
 if __name__ == "__main__":
-    data = ["abcdef", 4567, "My goodness;\nI spot a newline!", 1]
+    data = ["abcdef", 4567, "My goodness;\nI spot a newline!", 1, "[bad"]
 
     output = createPacket(data)
 
