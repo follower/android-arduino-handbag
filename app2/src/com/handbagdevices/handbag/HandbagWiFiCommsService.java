@@ -11,6 +11,13 @@ import android.util.Log;
 
 public class HandbagWiFiCommsService extends Service {
 
+	// Messages from UI activity
+	static final int MSG_UI_TEST_NETWORK = 501;
+
+
+	static final int MSG_PARSE_SERVICE_REGISTERED = 502;
+	
+	
 	// Flag that should be checked
 	private boolean shutdownRequested = false;
 

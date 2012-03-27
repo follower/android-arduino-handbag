@@ -17,8 +17,8 @@ public class HandbagParseService extends Service {
 	
 	static final int MSG_UI_EVENT_OCCURRED = 100;
 	
-	// Messages from communications service
-	static final int MSG_COMM_SERVICE_REGISTER = 200;	
+	// Messages to communications service
+	static final int MSG_PARSE_SERVICE_REGISTER = 200;	
 	
 	// Used to communicate with the UI Activity & Communication Service 
 	// We passively receive this connection.
