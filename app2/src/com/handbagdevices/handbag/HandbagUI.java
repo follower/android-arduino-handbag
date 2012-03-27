@@ -143,7 +143,7 @@ public class HandbagUI extends Activity {
     	
     	Log.d(this.getClass().getSimpleName(), "Registering with WiFi Comms Service.");
     	
-		Message msg = Message.obtain(null, HandbagParseService.MSG_UI_ACTIVITY_REGISTER); // TODO: Use Comms-specific constnant or move here.
+		Message msg = Message.obtain(null, HandbagParseService.MSG_UI_ACTIVITY_REGISTER); // TODO: Use Comms-specific constant or move here.
 		msg.replyTo = ourMessenger;
 		
 		try {
@@ -166,7 +166,7 @@ public class HandbagUI extends Activity {
 		boolean bindSuccessful = bindService(new Intent(HandbagUI.this, HandbagParseService.class), connParseService, Context.BIND_AUTO_CREATE);
 		Log.d(this.getClass().getSimpleName(), "Parse Service bound:" + bindSuccessful);
 
-		// TODO: Use the chose Comms Service (WiFi, USB ADK, BT?) 
+		// TODO: Use the chosen Comms Service (WiFi, USB ADK, BT?) 
 		bindSuccessful = bindService(new Intent(HandbagUI.this, HandbagWiFiCommsService.class), connCommsService, Context.BIND_AUTO_CREATE);
 		Log.d(this.getClass().getSimpleName(), "Comms Service bound:" + bindSuccessful);
 		
