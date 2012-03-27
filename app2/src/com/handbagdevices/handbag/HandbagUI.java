@@ -265,6 +265,14 @@ public class HandbagUI extends Activity {
     
 	
 	public void onClick_buttonConnect(View theView) {
-		new AlertDialog.Builder(this).setMessage("Button pressed!").show();
+		
+		if (commsService != null) {
+			try {
+				commsService.send(Message.obtain(null, HandbagWiFiCommsService.MSG_UI_TEST_NETWORK));
+			} catch (RemoteException e) {
+				Log.d(this.getClass().getSimpleName(), "RemoteException on network test.");
+			}
+		}
+		
 	}
 }
