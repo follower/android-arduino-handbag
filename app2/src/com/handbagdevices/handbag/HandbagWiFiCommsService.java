@@ -210,6 +210,10 @@ public class HandbagWiFiCommsService extends Service {
 					
 					if (uiActivity != null) {
 						//startTestMessages();
+						
+						// Can't do this here because a callback counts as a main thread?
+						//doSocketTest();
+						
 					}
 					
 					break;

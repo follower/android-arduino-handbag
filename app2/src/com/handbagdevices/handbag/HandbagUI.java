@@ -44,6 +44,14 @@ public class HandbagUI extends Activity {
 					
 					Log.d(this.getClass().getSimpleName(), "Tid (ui):" + android.os.Process.myTid());
 					
+//					if (commsService != null) {
+//						try {
+//							commsService.send(Message.obtain(null, HandbagWiFiCommsService.MSG_UI_TEST_NETWORK));
+//						} catch (RemoteException e) {
+//							Log.d(this.getClass().getSimpleName(), "RemoteException on network test.");
+//						}
+//					}
+					
 					break;
 
 				case MSG_UI_TEST_STRING_MESSAGE:
@@ -189,6 +197,15 @@ public class HandbagUI extends Activity {
 			// hidden. This ensures the Comms Server is "woken up".
 			registerWithWiFiCommsService(); // TODO: Make generic.
 		}
+		
+//		if (commsService != null) {
+//			try {
+//				commsService.send(Message.obtain(null, HandbagWiFiCommsService.MSG_UI_TEST_NETWORK));
+//			} catch (RemoteException e) {
+//				Log.d(this.getClass().getSimpleName(), "RemoteException on network test.");
+//			}
+//		}
+			
 		
 		Log.d(this.getClass().getSimpleName(), "Exited onStart()");		
 	}
