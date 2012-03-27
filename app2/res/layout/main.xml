@@ -9,4 +9,31 @@
         android:layout_height="wrap_content"
         android:text="@string/hello" />
 
+    <LinearLayout
+        android:id="@+id/layoutHostDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/hostName"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/labelHostname"
+            android:inputType="text" >
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/hostPort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/labelPortValue"
+            android:inputType="number"
+            android:maxLength="5"
+            android:text="@string/valueDefaultPort" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -3,5 +3,8 @@
 
     <string name="hello">Hello World, HandbagUI!</string>
     <string name="app_name">Handbag</string>
+    <string name="labelHostname">Hostname</string>
+    <string name="labelPortValue">Port</string>
+    <string name="valueDefaultPort">2985</string>
 
 </resources>
