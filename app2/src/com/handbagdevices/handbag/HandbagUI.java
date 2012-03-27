@@ -6,12 +6,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
+import android.widget.EditText;
 import android.os.Handler;
 
 public class HandbagUI extends Activity {
@@ -90,11 +92,33 @@ public class HandbagUI extends Activity {
 	};
 	
 	
+	private SharedPreferences appPrefs;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        appPrefs = getSharedPreferences("handbag", MODE_PRIVATE); // Add MODE_MULTI_PROCESS ?
+        
+        // TODO: Find a simpler approach for all these prefs...
+        String pref_network_host_name = appPrefs.getString("network_host_name", "");
+        
+        if (!pref_network_host_name.isEmpty()) {
+        	EditText widgetHostName = (EditText) findViewById(R.id.hostName);
+        	widgetHostName.setText(pref_network_host_name);
+        }
+        
+        
+        String pref_network_host_port = appPrefs.getString("network_host_port", "");
+        
+        if (!pref_network_host_port.isEmpty()) {
+        	EditText widgetHostPort = (EditText) findViewById(R.id.hostPort);
+        	widgetHostPort.setText(pref_network_host_port);        	
+        }
+        
+        
     }
 
     
@@ -159,6 +183,33 @@ public class HandbagUI extends Activity {
 		}
 		
 		Log.d(this.getClass().getSimpleName(), "Exited onStart()");		
+	}
+
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		SharedPreferences.Editor prefs = appPrefs.edit();
+		
+		
+		EditText widgetHostName = (EditText) findViewById(R.id.hostName);
+		
+		if (widgetHostName.length() > 0) {
+			// TODO: Save this when edited instead?
+			prefs.putString("network_host_name", widgetHostName.getText().toString());
+		}
+		
+		
+		EditText widgetHostPort = (EditText) findViewById(R.id.hostPort);
+		if (widgetHostPort.length() > 0) {
+			// TODO: Set default if empty?
+			// TODO: Save this when edited instead?
+			prefs.putString("network_host_port", widgetHostPort.getText().toString());
+		}
+		
+		
+		prefs.commit();
 	}
 
 
