@@ -21,6 +21,7 @@ public class HandbagUI extends Activity {
 	// Messages to UI activity (i.e. us)
 	static final int MSG_UI_ACTIVITY_REGISTERED = 1;
 	static final int MSG_UI_TEST_MESSAGE = 2;
+	static final int MSG_UI_TEST_STRING_MESSAGE = 3;
 	
 	
 	Messenger parseService = null;
@@ -43,6 +44,10 @@ public class HandbagUI extends Activity {
 					
 					Log.d(this.getClass().getSimpleName(), "Tid (ui):" + android.os.Process.myTid());
 					
+					break;
+
+				case MSG_UI_TEST_STRING_MESSAGE:
+					new AlertDialog.Builder(HandbagUI.this).setMessage(msg.getData().getString(null)).show();
 					break;
 				
 				default:
