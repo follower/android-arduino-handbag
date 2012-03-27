@@ -161,7 +161,7 @@ public class HandbagParseService extends Service {
 							registerWithWiFiCommsService();
 						}
 						
-						startTestMessages();
+						//startTestMessages();
 					}
 					
 					break;
