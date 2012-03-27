@@ -213,7 +213,31 @@ public class HandbagWiFiCommsService extends Service {
 					}
 					
 					break;
-			
+
+					
+				case HandbagParseService.MSG_PARSE_SERVICE_REGISTER: // TODO: Move this constant into UI class?
+					// TODO: Handle receiving this more than once?
+					Log.d(this.getClass().getSimpleName(), "    MSG_PARSE_SERVICE_REGISTER");
+					parseService = msg.replyTo;
+					
+					try {
+						parseService.send(Message.obtain(null, MSG_PARSE_SERVICE_REGISTERED));
+					} catch (RemoteException e) {
+						// UI Activity client is dead so no longer try to access it.
+						parseService = null;
+					}
+					
+					break;
+					
+					
+				case MSG_UI_TEST_NETWORK:
+					Log.d(this.getClass().getSimpleName(), "    MSG_UI_TEST_NETWORK");					
+					if (parseService != null) {
+						//doSocketTest();
+						new TestSocketTask().execute();
+					}
+					break;
+					
 			
 				case HandbagParseService.MSG_UI_SHUTDOWN_REQUEST: // TODO: Move this constant into UI class?
 					Log.d(this.getClass().getSimpleName(), "    MSG_UI_SHUTDOWN_REQUEST");
