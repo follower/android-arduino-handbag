@@ -40,6 +40,9 @@ public class HandbagUI extends Activity {
 					
 				case MSG_UI_TEST_MESSAGE:
 					new AlertDialog.Builder(HandbagUI.this).setMessage("Message received!").show();
+					
+					Log.d(this.getClass().getSimpleName(), "Tid (ui):" + android.os.Process.myTid());
+					
 					break;
 				
 				default:
