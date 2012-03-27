@@ -60,6 +60,8 @@ public class HandbagParseService extends Service {
 
 		@Override
 		public void handleMessage(Message msg) {
+			Log.d(this.getClass().getSimpleName(), "Tid (parse):" + android.os.Process.myTid());
+
 			Log.d(this.getClass().getSimpleName(), "Parse Service received message:");
 			
 			switch (msg.what) {

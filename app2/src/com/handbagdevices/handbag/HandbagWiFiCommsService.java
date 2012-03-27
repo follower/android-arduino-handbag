@@ -23,6 +23,8 @@ public class HandbagWiFiCommsService extends Service {
 
 		@Override
 		public void handleMessage(Message msg) {
+			Log.d(this.getClass().getSimpleName(), "Tid (wifi):" + android.os.Process.myTid());
+
 			Log.d(this.getClass().getSimpleName(), "WiFi Comms Service received message:");
 			
 			switch (msg.what) {
