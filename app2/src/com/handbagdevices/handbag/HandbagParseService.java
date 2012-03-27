@@ -21,6 +21,7 @@ public class HandbagParseService extends Service {
 	static final int MSG_COMM_SERVICE_REGISTER = 200;	
 	
 	// Used to communicate with the UI Activity & Communication Service 
+	// We passively receive this connection.
 	Messenger uiActivity = null;
 	Messenger commService = null; // TODO: Implement service.	
 	
