@@ -6,5 +6,6 @@
     <string name="labelHostname">Hostname</string>
     <string name="labelPortValue">Port</string>
     <string name="valueDefaultPort">2985</string>
+    <string name="buttonConnect">Connect</string>
 
 </resources>
