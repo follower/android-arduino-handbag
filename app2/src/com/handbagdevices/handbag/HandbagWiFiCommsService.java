@@ -1,7 +1,16 @@
 package com.handbagdevices.handbag;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -24,6 +33,155 @@ public class HandbagWiFiCommsService extends Service {
 	// Used to communicate with the UI Activity & Communication Service 
 	Messenger uiActivity = null; // Orders us around
 	Messenger parseService = null; // Receives our data, sends us its data.
+	
+	private class TestSocketTask extends AsyncTask<Void, Void, String> {
+
+		@Override
+		protected String doInBackground(Void... params) {
+			return doSocketTest();
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+
+			if (!shutdownRequested) {
+				// Only continue if we haven't been told to shutdown.
+
+				// TODO: Do this properly send to parse service...
+				try {
+					Message msg = Message.obtain(null, HandbagUI.MSG_UI_TEST_STRING_MESSAGE);
+					Bundle bundle = new Bundle();
+					bundle.putString(null, result);
+					msg.setData(bundle);
+					
+					uiActivity.send(msg);
+				} catch (RemoteException e) {
+					// UI Activity client is dead so no longer try to access it.
+					uiActivity = null;
+				}
+			}
+			
+		}
+
+	};
+	
+	String doSocketTest() {
+		Socket socket = null;
+		
+		DataOutputStream dataOutStream = null;
+		DataInputStream dataInStream = null;
+		
+		String wowJavaSucksForStrings = "";
+		
+		// ---------
+		// TODO: Should really handle this differently--like when first registered?
+		//       (Also, these won't have been updated until the app paused...)
+		SharedPreferences appPrefs = getSharedPreferences("handbag", MODE_PRIVATE); // Add MODE_MULTI_PROCESS ?
+		
+		String hostName = appPrefs.getString("network_host_name", "");
+		
+		if (hostName.isEmpty()) {
+			Log.d(this.getClass().getSimpleName(), "No hostname provided.");
+			return "[No hostname provided]"; // Do something else?
+		}
+		
+		String hostPortAsString = appPrefs.getString("network_host_port", "");
+		
+		Log.d(this.getClass().getSimpleName(), "Port as string: " + hostPortAsString);
+		
+		if (hostPortAsString.isEmpty()) {
+			hostPortAsString = "0";
+		}
+		
+		Integer hostPort = Integer.valueOf(hostPortAsString);
+		
+		if (hostPort == 0) {
+			hostPort = 0xba9;
+		}
+		
+		Log.d(this.getClass().getSimpleName(), "Host: " + hostName +" Port: " + hostPort);
+		
+		// ---------
+		
+		// TODO: Check network available
+		
+		try {
+			//socket = new Socket("www.google.com", 80);
+			//socket = new Socket("74.125.237.100", 80);
+			//socket = new Socket("10.1.1.3", 0xBA9);
+			socket = new Socket(hostName, hostPort);
+		} catch (UnknownHostException e) {
+			Log.d(this.getClass().getSimpleName(), "Unknown Host."); // Note: Requires internet permission ***
+		} catch (IOException e) {
+			Log.d(this.getClass().getSimpleName(), "IOException when creating Socket."); // Note: Requires internet permission ***
+		}
+		
+		Log.d(this.getClass().getSimpleName(), "socket: " + socket);
+		
+		if (socket != null) {
+			try {
+				dataOutStream = new DataOutputStream(socket.getOutputStream());
+				dataInStream = new DataInputStream(socket.getInputStream());
+			} catch (IOException e) {
+				Log.d(this.getClass().getSimpleName(), "IOException when creating data streams.");
+			}
+
+			Log.d(this.getClass().getSimpleName(), "dataOutStream: " + dataOutStream);
+			Log.d(this.getClass().getSimpleName(), "dataInStream: " + dataInStream);
+
+			
+			// TODO: Redo all this with one catch for IOException & use finally to close socket?
+			if ((dataOutStream != null) && (dataInStream != null)) {
+				try {
+					dataOutStream.writeBytes("HELLO SERVER. I CAN HAZ PAGE?\n\n");
+					//Thread.sleep(1000); // 
+					Log.d("Got", "available: " + dataInStream.available());
+
+/*
+					StringBuilder wowJavaSucksForStrings = new StringBuilder();
+					
+					while (dataInStream.available() > 0) {
+						wowJavaSucksForStrings.append((char) dataInStream.read());
+					}
+*/
+					wowJavaSucksForStrings = new java.util.Scanner(dataInStream).useDelimiter("\\A").next();
+					
+					Log.d("Got", "result: " + wowJavaSucksForStrings); // TODO: Read as bytes?
+				} catch (IOException e) {
+					Log.d(this.getClass().getSimpleName(), "IOException when sending/reading data.");
+					e.printStackTrace();
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+				} 
+			}
+			
+			if (socket!= null) { // TODO: Can this happen here?
+				try {
+					socket.close();
+				} catch (IOException e) {
+					Log.d(this.getClass().getSimpleName(), "IOException when closing Socket.");
+				}
+			}
+			
+			try {
+				dataOutStream.close();
+				dataInStream.close();
+			} catch (NullPointerException ex1) {
+				Log.d(this.getClass().getSimpleName(), "NullPointerException when closing data streams.");
+			} catch (IOException e) {
+				Log.d(this.getClass().getSimpleName(), "IOException when closing data streams.");
+			}
+		}
+		
+		return wowJavaSucksForStrings;
+		
+	}
+	
+
+
+	
 	
 	// Used to receive messages from client(s)
 	public class IncomingWiFiCommsServiceHandler extends Handler {
