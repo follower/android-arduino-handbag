@@ -282,6 +282,7 @@ public class HandbagUI extends Activity {
 			return;
 		}
 		
+		// TODO: Provide some sort of status feedback.
 		if (commsService != null) {
 			try {
 				commsService.send(Message.obtain(null, HandbagWiFiCommsService.MSG_UI_TEST_NETWORK));
