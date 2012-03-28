@@ -120,7 +120,14 @@ public class HandbagUI extends Activity {
         setContentView(R.layout.main);
         
         appPrefs = getSharedPreferences("handbag", MODE_PRIVATE); // Add MODE_MULTI_PROCESS ?
+
+        populateFromPrefs();        
         
+    }
+
+    
+    private void populateFromPrefs() {
+
         // TODO: Find a simpler approach for all these prefs...
         String pref_network_host_name = appPrefs.getString("network_host_name", "");
         
@@ -136,8 +143,7 @@ public class HandbagUI extends Activity {
         	EditText widgetHostPort = (EditText) findViewById(R.id.hostPort);
         	widgetHostPort.setText(pref_network_host_port);        	
         }
-        
-        
+    	
     }
 
     
