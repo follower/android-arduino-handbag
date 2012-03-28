@@ -304,6 +304,8 @@ public class HandbagUI extends Activity {
 			return;
 		}
 		
+		displayMainStage();
+		
 		// TODO: Provide some sort of status feedback.
 		if (commsService != null) {
 			try {
@@ -313,5 +315,14 @@ public class HandbagUI extends Activity {
 			}
 		}
 		
+	}
+
+
+	@Override
+	public void onBackPressed() {
+
+		hideMainStage();
+		
+		//super.onBackPressed();
 	}
 }
