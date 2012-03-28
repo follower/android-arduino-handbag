@@ -271,7 +271,23 @@ public class HandbagUI extends Activity {
 		Log.d(this.getClass().getSimpleName(), "Exited onStop()");
 	}
     
+	private boolean showingMainStage = false;
 
+	private void displayMainStage() {
+		if (!showingMainStage) {
+			setContentView(R.layout.mainstage);
+			showingMainStage = true;
+		}
+	}
+	
+	private void hideMainStage() {
+		if (showingMainStage) {
+			setContentView(R.layout.main);
+			showingMainStage = false;
+			populateFromPrefs();
+		}
+	}
+	
 	private boolean isOnline() {
 		NetworkInfo netInfo = ((ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
 		
