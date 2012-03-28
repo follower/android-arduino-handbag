@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -263,8 +265,22 @@ public class HandbagUI extends Activity {
 		Log.d(this.getClass().getSimpleName(), "Exited onStop()");
 	}
     
+
+	private boolean isOnline() {
+		NetworkInfo netInfo = ((ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+		
+		return (netInfo != null) ? netInfo.isConnected() : false;
+	}
+
 	
 	public void onClick_buttonConnect(View theView) {
+
+		// TODO: Make this check proactive and disable the button and/or
+		//       do the check in the WiFi comms service?
+		if (!isOnline()) {
+			new AlertDialog.Builder(this).setMessage("No wireless connection available.").show();
+			return;
+		}
 		
 		if (commsService != null) {
 			try {
