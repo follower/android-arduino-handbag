@@ -236,6 +236,7 @@ public class HandbagWiFiCommsService extends Service {
 					
 				case MSG_UI_TEST_NETWORK:
 					Log.d(this.getClass().getSimpleName(), "    MSG_UI_TEST_NETWORK");					
+					// TODO: Retrieve host name/port from message rather than prefs?
 					if (parseService != null) {
 						//doSocketTest();
 						new TestSocketTask().execute();
