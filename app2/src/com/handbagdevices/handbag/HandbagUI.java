@@ -26,7 +26,6 @@ public class HandbagUI extends Activity {
 	static final int MSG_UI_TEST_MESSAGE = 2;
 	static final int MSG_UI_TEST_STRING_MESSAGE = 3;
 	
-	
 	Messenger parseService = null;
 	boolean parseServiceIsBound = false;
 	
