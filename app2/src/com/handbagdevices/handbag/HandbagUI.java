@@ -249,6 +249,7 @@ public class HandbagUI extends Activity {
 	@Override
 	protected void onStop() {
 		Log.d(this.getClass().getSimpleName(), "Entered onStop()");		
+		
 		super.onStop();
 
 		try {
