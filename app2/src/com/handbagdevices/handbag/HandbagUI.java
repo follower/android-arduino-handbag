@@ -323,6 +323,7 @@ public class HandbagUI extends Activity {
 
 		hideMainStage();
 		
+		// TODO: Need to solve "leaked connection" errors before re-enabling this:
 		//super.onBackPressed();
 	}
 }
