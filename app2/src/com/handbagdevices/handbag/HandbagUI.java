@@ -14,6 +14,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -134,6 +136,8 @@ public class HandbagUI extends Activity {
         	EditText widgetHostName = (EditText) findViewById(R.id.hostName);
         	widgetHostName.setText(pref_network_host_name);
         }
+
+		attachPrefsSaver("network_host_name", R.id.hostName);
         
         
         String pref_network_host_port = appPrefs.getString("network_host_port", "");
@@ -143,6 +147,9 @@ public class HandbagUI extends Activity {
         	widgetHostPort.setText(pref_network_host_port);        	
         }
     	
+		// TODO: Set default if empty?
+		attachPrefsSaver("network_host_port", R.id.hostPort);
+
     }
 
     
@@ -222,27 +229,6 @@ public class HandbagUI extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
-		SharedPreferences.Editor prefs = appPrefs.edit();
-		
-		
-		EditText widgetHostName = (EditText) findViewById(R.id.hostName);
-		
-		if (widgetHostName.length() > 0) {
-			// TODO: Save this when edited instead?
-			prefs.putString("network_host_name", widgetHostName.getText().toString());
-		}
-		
-		
-		EditText widgetHostPort = (EditText) findViewById(R.id.hostPort);
-		if (widgetHostPort.length() > 0) {
-			// TODO: Set default if empty?
-			// TODO: Save this when edited instead?
-			prefs.putString("network_host_port", widgetHostPort.getText().toString());
-		}
-		
-		
-		prefs.commit();
 	}
 
 
@@ -271,6 +257,25 @@ public class HandbagUI extends Activity {
 		Log.d(this.getClass().getSimpleName(), "Exited onStop()");
 	}
     
+	private void attachPrefsSaver(final String prefsName, int id) {
+
+		EditText widget = (EditText) findViewById(id);
+		if (widget != null) {
+			widget.addTextChangedListener(new TextWatcher() {
+				
+				public void onTextChanged(CharSequence s, int start, int before, int count) {
+					// TODO: Only save valid values? (e.g. support a supplied validation function?)
+					//       And/or only save on "Done"/lose focus instead?
+					appPrefs.edit().putString(prefsName, s.toString()).commit();
+				}
+				
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+				public void afterTextChanged(Editable s) {}
+			});
+		}
+
+	}
+	
 	private boolean showingMainStage = false;
 
 	private void displayMainStage() {
