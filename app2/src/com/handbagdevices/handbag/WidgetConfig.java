@@ -5,6 +5,8 @@ import java.lang.UnsupportedOperationException;
 
 abstract class WidgetConfig {
 
+	int remoteWidgetId;
+
 	abstract void displaySelf(ViewGroup parent);
 	
 	public static WidgetConfig fromArray(String[] theArray) {

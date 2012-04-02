@@ -61,7 +61,7 @@ public class HandbagUI extends Activity {
 
 				case MSG_UI_TEST_STRING_MESSAGE:
 					
-					WidgetConfig newWidget = LabelWidget.fromArray(null);
+					WidgetConfig newWidget = LabelWidget.fromArray(new String[] {"1","0", "0", "w00t!"});
 					
 					newWidget.displaySelf((ViewGroup) findViewById(R.id.mainstage));						
 					

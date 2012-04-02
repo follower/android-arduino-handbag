@@ -11,8 +11,15 @@ public class LabelWidget extends WidgetConfig {
 	final static int LABEL_ARRAY_OFFSET_ALIGNMENT = 2;
 	final static int LABEL_ARRAY_OFFSET_TEXT = 3;
 
-	private LabelWidget() {
-		// TODO Auto-generated method stub
+	int fontSize;
+	int alignment;
+	String text;
+
+	private LabelWidget(int widgetId, int theFontSize, int widgetAlignment, String labelText) {
+		remoteWidgetId = widgetId;
+		fontSize = theFontSize;
+		alignment = widgetAlignment;
+		text = labelText;
 	}
 	
 	
@@ -26,13 +33,24 @@ public class LabelWidget extends WidgetConfig {
 
 		parent.addView(label);
 
-		label.setText("Hello");
+		label.setText(text);
+
+		if (fontSize > 0) {
+			label.setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, fontSize);
+		}
+
+		if (alignment > 0) {
+			label.setGravity(alignment);
+		}
 		
 	}
 
 	// @Hides
 	public static WidgetConfig fromArray(String[] theArray) {
-		return new LabelWidget();
+		return new LabelWidget(Integer.valueOf(theArray[LABEL_ARRAY_OFFSET_ID]),
+							   Integer.valueOf(theArray[LABEL_ARRAY_OFFSET_FONT_SIZE]),
+							   Integer.valueOf(theArray[LABEL_ARRAY_OFFSET_ALIGNMENT]),
+							   theArray[LABEL_ARRAY_OFFSET_TEXT]);
 	}
 
 }
