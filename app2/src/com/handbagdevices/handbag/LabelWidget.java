@@ -16,6 +16,8 @@ public class LabelWidget extends WidgetConfig {
 		
 		Log.d(this.getClass().getSimpleName(), "parent: " + parent);
 		
+		// TODO: Add check for existing widget.
+
 		TextView label = new TextView(parent.getContext());
 
 		parent.addView(label);
