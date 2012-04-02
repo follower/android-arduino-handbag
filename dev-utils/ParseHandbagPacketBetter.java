@@ -30,8 +30,6 @@ class ParseHandbagPacketBetter {
 
 	    String token = sc.next();
 
-	    //System.out.println(">> " + token);
-
 	    switch (token.charAt(0)) {
 
 	        case '\n': // Fall through
@@ -43,7 +41,6 @@ class ParseHandbagPacketBetter {
 		case '[':
 		    sc.useDelimiter("]");
 		    int chars_to_read = sc.nextInt();
-		    //System.out.println(chars_to_read);
 		    sc.useDelimiter("");
 		    sc.next(); // Skip the trailing "]". TODO: Avoid this?
 		    field.setLength(0);
@@ -57,7 +54,6 @@ class ParseHandbagPacketBetter {
 		    break;
 	    }
 
-	    // System.out.println("{" + theField + "}");
 	}
 	System.out.println(all_fields.toString());
     }
