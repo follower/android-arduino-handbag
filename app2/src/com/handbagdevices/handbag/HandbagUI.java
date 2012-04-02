@@ -18,6 +18,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.os.Handler;
 
@@ -59,6 +60,11 @@ public class HandbagUI extends Activity {
 					break;
 
 				case MSG_UI_TEST_STRING_MESSAGE:
+					
+					WidgetConfig newWidget = LabelWidget.fromArray(null);
+					
+					newWidget.displaySelf((ViewGroup) findViewById(R.id.mainstage));						
+					
 					new AlertDialog.Builder(HandbagUI.this).setMessage(msg.getData().getString(null)).show();
 					break;
 				
