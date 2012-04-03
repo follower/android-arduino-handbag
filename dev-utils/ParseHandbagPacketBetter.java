@@ -5,56 +5,81 @@ import java.util.*;
 
 class ParseHandbagPacketBetter {
 
-    public static void main(String [ ] args) {
+    private Reader input;
 
-	String data = "abc;[12]abcdefghijkl;123;[5]a;b\nc\n";
-
-	StringReader input = new StringReader(data);
-
-	StringBuilder field = new StringBuilder();
-
-	List<String> all_fields = new ArrayList<String>(); 
+    private Scanner scanner;
 
 
-	Scanner sc = new Scanner(input);
+    private StringBuilder currentFieldContent = new StringBuilder();
+
+    private List<String> fieldsInPacket = new ArrayList<String>(); 
+
+
+    ParseHandbagPacketBetter(Reader theInput) {
+	input = theInput;
+	scanner = new Scanner(input);
+    }
+
+    public String[] getNextPacket() {
+	boolean packetComplete = false;
+	String token;
+
+	currentFieldContent.setLength(0);
+	fieldsInPacket.clear();
 
 	while (true) {
 
 	    // TODO: Fix this so we don't end up getting a character
 	    //       at a time... (I think from the last '?' character in the regex?)
-	    sc.useDelimiter("(?=\\[|;|\n)?");
+	    scanner.useDelimiter("(?=\\[|;|\n)?");
 
-	    if (!sc.hasNext()) {
+	    if ((!scanner.hasNext()) || (packetComplete)) {
 		break;
 	    }
 
-	    String token = sc.next();
+	    // TODO: Handle blocking (here & elsewhere)?
+	    token = scanner.next();
 
 	    switch (token.charAt(0)) {
 
 	        case '\n': // Fall through
+		    packetComplete = true;
 		case ';':
-		    all_fields.add(field.toString());
-		    field.setLength(0);
+		    fieldsInPacket.add(currentFieldContent.toString());
+		    currentFieldContent.setLength(0);
 		    break;
 
 		case '[':
-		    sc.useDelimiter("]");
-		    int chars_to_read = sc.nextInt();
-		    sc.useDelimiter("");
-		    sc.next(); // Skip the trailing "]". TODO: Avoid this?
-		    field.setLength(0);
-		    for (int i = 0; i < chars_to_read; i++) {
-			field.append(sc.next());
+		    scanner.useDelimiter("]");
+		    int stringLength = scanner.nextInt();
+		    scanner.useDelimiter("");
+		    scanner.next(); // Skip the trailing "]". TODO: Avoid this?
+		    for (int i = 0; i < stringLength; i++) {
+			currentFieldContent.append(scanner.next());
 		    }
 		    break;
 
 		default:
-		    field.append(token);
+		    currentFieldContent.append(token);
 		    break;
 	    }
 
 	}
-	System.out.println(all_fields.toString());
+
+	// TODO: Handle incomplete packets.
+
+	return fieldsInPacket.toArray(new String[] {});
+    }
+
+    public static void main(String [ ] args) {
+
+	String data = "abc;[12]abcdefghijkl;123;[5]a;b\nc\n[3]a;2;something something\ngarbageafterpacketend";
+
+
+	ParseHandbagPacketBetter it = new ParseHandbagPacketBetter(new StringReader(data));
+
+
+	System.out.println(Arrays.toString(it.getNextPacket()));
+	System.out.println(Arrays.toString(it.getNextPacket()));
     }
 }
