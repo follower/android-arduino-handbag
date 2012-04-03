@@ -138,13 +138,6 @@ public class HandbagWiFiCommsService extends Service {
 
 					Log.d("Got", "available: " + dataInStream.available());
 
-/*
-					StringBuilder wowJavaSucksForStrings = new StringBuilder();
-					
-					while (dataInStream.available() > 0) {
-						wowJavaSucksForStrings.append((char) dataInStream.read());
-					}
-*/
 					wowJavaSucksForStrings = new java.util.Scanner(dataInStream).useDelimiter("\\A").next();
 					
 					Log.d("Got", "result: " + wowJavaSucksForStrings); // TODO: Read as bytes?
