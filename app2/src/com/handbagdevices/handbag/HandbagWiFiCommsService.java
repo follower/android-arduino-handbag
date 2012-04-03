@@ -135,7 +135,7 @@ public class HandbagWiFiCommsService extends Service {
 			if ((dataOutStream != null) && (dataInStream != null)) {
 				try {
 					dataOutStream.writeBytes("HELLO SERVER. I CAN HAZ PAGE?\n\n");
-					//Thread.sleep(1000); // 
+
 					Log.d("Got", "available: " + dataInStream.available());
 
 /*
