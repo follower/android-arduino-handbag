@@ -34,7 +34,7 @@ class PacketParser {
 	    scanner.useDelimiter("(?=\\[|;|\n)?");
 
 	    if ((!scanner.hasNext()) || (packetComplete)) {
-		break;
+	    	break;
 	    }
 
 	    // TODO: Handle blocking (here & elsewhere)?
