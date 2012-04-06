@@ -6,10 +6,10 @@ import android.widget.TextView;
 
 public class LabelWidget extends WidgetConfig {
 
-	final static int LABEL_ARRAY_OFFSET_ID = 0;
-	final static int LABEL_ARRAY_OFFSET_FONT_SIZE = 1;
-	final static int LABEL_ARRAY_OFFSET_ALIGNMENT = 2;
-	final static int LABEL_ARRAY_OFFSET_TEXT = 3;
+	final static int LABEL_ARRAY_OFFSET_ID = 2;
+	final static int LABEL_ARRAY_OFFSET_FONT_SIZE = 3;
+	final static int LABEL_ARRAY_OFFSET_ALIGNMENT = 4;
+	final static int LABEL_ARRAY_OFFSET_TEXT = 5;
 
 	int fontSize;
 	int alignment;

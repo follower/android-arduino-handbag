@@ -69,11 +69,10 @@ public class HandbagUI extends Activity {
 					break;
 				
 				case MSG_UI_TEST_ARRAY_MESSAGE:
-					newWidget = LabelWidget.fromArray(new String[] {"1","0", "0", "w00t!"});
+					newWidget = LabelWidget.fromArray(msg.getData().getStringArray(null));
 
 					newWidget.displaySelf((ViewGroup) findViewById(R.id.mainstage));
 
-					new AlertDialog.Builder(HandbagUI.this).setMessage(Arrays.toString(msg.getData().getStringArray(null))).show();
 					break;
 
 				default:
