@@ -1,5 +1,7 @@
 package com.handbagdevices.handbag;
 
+import java.util.Arrays;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -28,6 +30,7 @@ public class HandbagUI extends Activity {
 	static final int MSG_UI_ACTIVITY_REGISTERED = 1;
 	static final int MSG_UI_TEST_MESSAGE = 2;
 	static final int MSG_UI_TEST_STRING_MESSAGE = 3;
+	static final int MSG_UI_TEST_ARRAY_MESSAGE = 4;
 	
 	Messenger parseService = null;
 	boolean parseServiceIsBound = false;
@@ -70,6 +73,14 @@ public class HandbagUI extends Activity {
 					new AlertDialog.Builder(HandbagUI.this).setMessage(msg.getData().getString(null)).show();
 					break;
 				
+				case MSG_UI_TEST_ARRAY_MESSAGE:
+					newWidget = LabelWidget.fromArray(new String[] {"1","0", "0", "w00t!"});
+
+					newWidget.displaySelf((ViewGroup) findViewById(R.id.mainstage));
+
+					new AlertDialog.Builder(HandbagUI.this).setMessage(Arrays.toString(msg.getData().getStringArray(null))).show();
+					break;
+
 				default:
 					super.handleMessage(msg);
 			}
