@@ -36,15 +36,15 @@ public class HandbagWiFiCommsService extends Service {
 	Messenger uiActivity = null; // Orders us around
 	Messenger parseService = null; // Receives our data, sends us its data.
 	
-	private class TestSocketTask extends AsyncTask<Void, Void, String> {
+	private class TestSocketTask extends AsyncTask<Void, Void, String[]> {
 
 		@Override
-		protected String doInBackground(Void... params) {
+		protected String[] doInBackground(Void... params) {
 			return doSocketTest();
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String[] result) {
 			super.onPostExecute(result);
 
 			if (!shutdownRequested) {
@@ -52,9 +52,9 @@ public class HandbagWiFiCommsService extends Service {
 
 				// TODO: Do this properly send to parse service...
 				try {
-					Message msg = Message.obtain(null, HandbagUI.MSG_UI_TEST_STRING_MESSAGE);
+					Message msg = Message.obtain(null, HandbagUI.MSG_UI_TEST_ARRAY_MESSAGE);
 					Bundle bundle = new Bundle();
-					bundle.putString(null, result);
+					bundle.putStringArray(null, result);
 					msg.setData(bundle);
 					
 					uiActivity.send(msg);
@@ -68,13 +68,13 @@ public class HandbagWiFiCommsService extends Service {
 
 	};
 	
-	String doSocketTest() {
+	String[] doSocketTest() {
 		Socket socket = null;
 		
 		DataOutputStream dataOutStream = null;
 		DataInputStream dataInStream = null;
 		
-		String wowJavaSucksForStrings = "";
+		String[] newPacket = null;
 		
 		// ---------
 		// TODO: Should really handle this differently--like when first registered?
@@ -142,11 +142,9 @@ public class HandbagWiFiCommsService extends Service {
 
 					PacketParser parser = new PacketParser(new InputStreamReader(dataInStream));
 
-					String[] newPacket = parser.getNextPacket();
+					newPacket = parser.getNextPacket();
 
-					wowJavaSucksForStrings = Arrays.toString(newPacket); 
-
-					Log.d(this.getClass().getSimpleName(), "Got result: " + wowJavaSucksForStrings);
+					Log.d(this.getClass().getSimpleName(), "Got result: " + Arrays.toString(newPacket));
 					
 				} catch (IOException e) {
 					Log.d(this.getClass().getSimpleName(), "IOException when sending/reading data.");
@@ -175,7 +173,7 @@ public class HandbagWiFiCommsService extends Service {
 			}
 		}
 		
-		return wowJavaSucksForStrings;
+		return newPacket;
 		
 	}
 	
