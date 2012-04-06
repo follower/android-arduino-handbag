@@ -39,6 +39,8 @@ public class HandbagUI extends Activity {
 	class IncomingUiHandler extends Handler {
 		@Override
 		public void handleMessage(Message msg) {
+			WidgetConfig newWidget;
+
 			switch (msg.what) {
 				case MSG_UI_ACTIVITY_REGISTERED:
 					Log.d(this.getClass().getSimpleName(), "received: MSG_UI_ACTIVITY_REGISTERED");
@@ -61,7 +63,7 @@ public class HandbagUI extends Activity {
 
 				case MSG_UI_TEST_STRING_MESSAGE:
 					
-					WidgetConfig newWidget = LabelWidget.fromArray(new String[] {"1","0", "0", "w00t!"});
+					newWidget = LabelWidget.fromArray(new String[] {"1","0", "0", "w00t!"});
 					
 					newWidget.displaySelf((ViewGroup) findViewById(R.id.mainstage));						
 					
