@@ -31,7 +31,7 @@ class PacketParser {
 
 	    // TODO: Fix this so we don't end up getting a character
 	    //       at a time... (I think from the last '?' character in the regex?)
-	    scanner.useDelimiter("(?=\\[|;|\n)?");
+	    scanner.useDelimiter("((?=\\[|;|\n))?");
 
 	    if ((!scanner.hasNext()) || (packetComplete)) {
 	    	break;
