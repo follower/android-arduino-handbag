@@ -16,7 +16,7 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
         """
         print "Client: %s" % str((self.request.getpeername()))
 
-        data = ["widget", "label", 20, 1, "My Label;\nHere, forever."]
+        data = ["widget", "label", 1, 0, 0, "My Label;\nHere, forever."]
 
         return self.request.sendall(createPacket(data))
 
