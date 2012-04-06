@@ -3,8 +3,10 @@ package com.handbagdevices.handbag;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 import android.app.Service;
 import android.content.Intent;
@@ -138,9 +140,14 @@ public class HandbagWiFiCommsService extends Service {
 
 					Log.d("Got", "available: " + dataInStream.available());
 
-					wowJavaSucksForStrings = new java.util.Scanner(dataInStream).useDelimiter("\\A").next();
+					PacketParser parser = new PacketParser(new InputStreamReader(dataInStream));
+
+					String[] newPacket = parser.getNextPacket();
+
+					wowJavaSucksForStrings = Arrays.toString(newPacket); 
+
+					Log.d(this.getClass().getSimpleName(), "Got result: " + wowJavaSucksForStrings);
 					
-					Log.d("Got", "result: " + wowJavaSucksForStrings); // TODO: Read as bytes?
 				} catch (IOException e) {
 					Log.d(this.getClass().getSimpleName(), "IOException when sending/reading data.");
 					e.printStackTrace();
