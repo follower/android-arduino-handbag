@@ -84,8 +84,8 @@ public class HandbagWiFiCommsService extends Service {
 		String hostName = appPrefs.getString("network_host_name", "");
 		
 		if (hostName.isEmpty()) {
-			Log.d(this.getClass().getSimpleName(), "No hostname provided.");
-			return "[No hostname provided]"; // Do something else?
+			Log.e(this.getClass().getSimpleName(), "No hostname provided.");
+			return null; // TODO: Do something else
 		}
 		
 		String hostPortAsString = appPrefs.getString("network_host_port", "");
