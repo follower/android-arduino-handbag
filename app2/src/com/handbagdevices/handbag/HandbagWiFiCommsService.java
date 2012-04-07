@@ -47,8 +47,12 @@ public class HandbagWiFiCommsService extends Service {
 		protected void onPostExecute(String[] result) {
 			super.onPostExecute(result);
 
-			if (!shutdownRequested) {
-				// Only continue if we haven't been told to shutdown.
+			if ((!shutdownRequested) && (result != null)) {
+				// Only continue if we haven't been told to shutdown
+				// and request was successful.
+
+				// TODO: Notify caller of (reason for) unsuccessful request
+				//       and/or leave message handler to check for null?
 
 				// TODO: Do this properly send to parse service...
 				try {
