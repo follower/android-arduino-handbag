@@ -149,9 +149,6 @@ public class HandbagWiFiCommsService extends Service {
 				} catch (IOException e) {
 					Log.d(this.getClass().getSimpleName(), "IOException when sending/reading data.");
 					e.printStackTrace();
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
 				} 
 			}
 			
