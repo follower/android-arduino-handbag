@@ -264,6 +264,12 @@ public class HandbagUI extends Activity {
 			// Service crashed so just ignore it
 		}
 		
+		try {
+			commsService.send(Message.obtain(null, HandbagParseService.MSG_UI_SHUTDOWN_REQUEST));
+		} catch (RemoteException e) {
+			// Service crashed so just ignore it
+		}
+
 /*
         // For some reason this causes a "Service not registered" error:
          * 
