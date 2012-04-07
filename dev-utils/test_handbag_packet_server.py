@@ -5,6 +5,8 @@ import SocketServer
 
 import socket
 
+import random
+
 from generate_handbag_packet import createPacket
 
 widgetId = 1
@@ -20,7 +22,7 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
 
         print "Client: %s" % str((self.request.getpeername()))
 
-        data = ["widget", "label", widgetId, 0, 0, "My Label;\nHere, forever."]
+        data = ["widget", "label", widgetId, random.randint(0, 40), 0, "My Label;\nHere, forever."]
 
         widgetId+=1
 
