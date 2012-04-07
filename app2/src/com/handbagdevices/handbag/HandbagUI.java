@@ -1,7 +1,5 @@
 package com.handbagdevices.handbag;
 
-import java.util.Arrays;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
