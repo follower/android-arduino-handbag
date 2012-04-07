@@ -30,6 +30,7 @@ public class LabelWidget extends WidgetConfig {
 		// TODO: Add check for existing widget.
 
 		TextView label = new TextView(parent.getContext());
+		label.setId(WIDGET_ID_OFFSET + remoteWidgetId); // TODO: Make this use a function to get the ID?
 
 		parent.addView(label);
 

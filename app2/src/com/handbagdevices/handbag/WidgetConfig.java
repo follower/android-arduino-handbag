@@ -7,6 +7,9 @@ abstract class WidgetConfig {
 
 	int remoteWidgetId;
 
+	// WIDGET_ID_OFFSET + remoteWidgetId = Android UI widget ID
+	static final int WIDGET_ID_OFFSET = 7200;
+
 	abstract void displaySelf(ViewGroup parent);
 	
 	public static WidgetConfig fromArray(String[] theArray) {
