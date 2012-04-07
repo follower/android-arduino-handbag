@@ -42,6 +42,8 @@ public class HandbagUI extends Activity {
 		public void handleMessage(Message msg) {
 			WidgetConfig newWidget;
 
+			// TODO: Only continue if a shutdown hasn't been ordered? (Can we stop this handler directly?)
+			
 			switch (msg.what) {
 				case MSG_UI_ACTIVITY_REGISTERED:
 					Log.d(this.getClass().getSimpleName(), "received: MSG_UI_ACTIVITY_REGISTERED");
