@@ -7,6 +7,8 @@ import socket
 
 from generate_handbag_packet import createPacket
 
+widgetId = 1
+
 class PacketServerHandler(SocketServer.BaseRequestHandler):
     """
     """
@@ -14,9 +16,13 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         """
         """
+        global widgetId
+
         print "Client: %s" % str((self.request.getpeername()))
 
-        data = ["widget", "label", 1, 0, 0, "My Label;\nHere, forever."]
+        data = ["widget", "label", widgetId, 0, 0, "My Label;\nHere, forever."]
+
+        widgetId+=1
 
         return self.request.sendall(createPacket(data))
 
