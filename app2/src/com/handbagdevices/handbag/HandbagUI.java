@@ -316,6 +316,7 @@ public class HandbagUI extends Activity {
 			setContentView(R.layout.main);
 			showingMainStage = false;
 			populateFromPrefs();
+			// TODO: Stop comms activity?
 		}
 	}
 	
