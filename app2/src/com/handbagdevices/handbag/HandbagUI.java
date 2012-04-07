@@ -72,7 +72,13 @@ public class HandbagUI extends Activity {
 					// TODO: Should really check it's a label widget.
 					newWidget = LabelWidget.fromArray(msg.getData().getStringArray(null));
 
-					newWidget.displaySelf((ViewGroup) findViewById(R.id.mainstage));
+					ViewGroup mainstage = (ViewGroup) findViewById(R.id.mainstage);
+					
+					// If we can't find mainstage it's probably because the
+					// active view has changed since the request was made.
+					if (mainstage != null) {
+						newWidget.displaySelf(mainstage);
+					}
 
 					break;
 
