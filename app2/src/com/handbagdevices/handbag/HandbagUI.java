@@ -338,15 +338,16 @@ public class HandbagUI extends Activity {
 
 		displayMainStage();
 
-		// TODO: Provide some sort of status feedback.
-		if (commsService != null) {
-			try {
-				commsService.send(Message.obtain(null, HandbagWiFiCommsService.MSG_UI_TEST_NETWORK));
-			} catch (RemoteException e) {
-				Log.d(this.getClass().getSimpleName(), "RemoteException on network test.");
-			}
-		}
-		
+        // TODO: Provide some sort of status feedback if any of this fails.
+        Message msg = getMessageForConnect();
+        if ((commsService != null) && (msg != null)) {
+            try {
+                commsService.send(msg);
+            } catch (RemoteException e) {
+                Log.d(this.getClass().getSimpleName(), "RemoteException on network connection.");
+            }
+        }
+
 	}
 
 
