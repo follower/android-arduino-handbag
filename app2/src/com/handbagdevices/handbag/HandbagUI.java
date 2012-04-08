@@ -90,9 +90,9 @@ public class HandbagUI extends Activity {
 
 	// Services we connect to will use this to communicate with us.
     final Messenger ourMessenger = new Messenger(new IncomingUiHandler());
-    
-	
-	private ServiceConnection connParseService = new ServiceConnection() {
+
+
+    private ServiceConnection connParseService = new ServiceConnection() {
 
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			// Store the object we will use to communicate with the service.
@@ -111,7 +111,8 @@ public class HandbagUI extends Activity {
 
 	};
 
-	private ServiceConnection connCommsService = new ServiceConnection() {
+
+    private ServiceConnection connCommsService = new ServiceConnection() {
 
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			// Store the object we will use to communicate with the service.
