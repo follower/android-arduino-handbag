@@ -27,8 +27,10 @@ public class HandbagWiFiCommsService extends Service {
 
 
 	static final int MSG_PARSE_SERVICE_REGISTERED = 502;
-	
-	
+
+    static final int MSG_UI_CONNECT_TO_TARGET = 503;
+
+
 	// Flag that should be checked
 	private boolean shutdownRequested = false;
 
@@ -241,8 +243,13 @@ public class HandbagWiFiCommsService extends Service {
 						new TestSocketTask().execute();
 					}
 					break;
-					
-			
+
+
+                case MSG_UI_CONNECT_TO_TARGET:
+                    Log.d(this.getClass().getSimpleName(), "    MSG_UI_CONNECT_TO_TARGET");
+                    break;
+
+
 				case HandbagParseService.MSG_UI_SHUTDOWN_REQUEST: // TODO: Move this constant into UI class?
 					Log.d(this.getClass().getSimpleName(), "    MSG_UI_SHUTDOWN_REQUEST");
 
