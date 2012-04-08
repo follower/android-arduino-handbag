@@ -32,10 +32,10 @@ public class HandbagWiFiCommsService extends Service {
 	// Flag that should be checked
 	private boolean shutdownRequested = false;
 
-	// Used to communicate with the UI Activity & Communication Service 
+	// Used to communicate with the UI Activity & Communication Service
 	Messenger uiActivity = null; // Orders us around
 	Messenger parseService = null; // Receives our data, sends us its data.
-	
+
 	private class TestSocketTask extends AsyncTask<Void, Void, String[]> {
 
 		@Override
@@ -60,58 +60,58 @@ public class HandbagWiFiCommsService extends Service {
 					Bundle bundle = new Bundle();
 					bundle.putStringArray(null, result);
 					msg.setData(bundle);
-					
+
 					uiActivity.send(msg);
 				} catch (RemoteException e) {
 					// UI Activity client is dead so no longer try to access it.
 					uiActivity = null;
 				}
 			}
-			
+
 		}
 
 	};
-	
+
 	String[] doSocketTest() {
 		Socket socket = null;
-		
+
 		DataOutputStream dataOutStream = null;
 		DataInputStream dataInStream = null;
-		
+
 		String[] newPacket = null;
-		
+
 		// ---------
 		// TODO: Should really handle this differently--like when first registered?
 		//       (Also, these won't have been updated until the app paused...)
 		SharedPreferences appPrefs = getSharedPreferences("handbag", MODE_PRIVATE); // Add MODE_MULTI_PROCESS ?
-		
+
 		String hostName = appPrefs.getString("network_host_name", "");
-		
+
 		if (hostName.isEmpty()) {
 			Log.e(this.getClass().getSimpleName(), "No hostname provided.");
 			return null; // TODO: Do something else
 		}
-		
+
 		String hostPortAsString = appPrefs.getString("network_host_port", "");
-		
+
 		Log.d(this.getClass().getSimpleName(), "Port as string: " + hostPortAsString);
-		
+
 		if (hostPortAsString.isEmpty()) {
 			hostPortAsString = "0";
 		}
-		
+
 		Integer hostPort = Integer.valueOf(hostPortAsString);
-		
+
 		if (hostPort == 0) {
 			hostPort = 0xba9;
 		}
-		
+
 		Log.d(this.getClass().getSimpleName(), "Host: " + hostName +" Port: " + hostPort);
-		
+
 		// ---------
-		
+
 		// TODO: Check network available
-		
+
 		try {
 			//socket = new Socket("www.google.com", 80);
 			//socket = new Socket("74.125.237.100", 80);
@@ -122,9 +122,9 @@ public class HandbagWiFiCommsService extends Service {
 		} catch (IOException e) {
 			Log.d(this.getClass().getSimpleName(), "IOException when creating Socket."); // Note: Requires internet permission ***
 		}
-		
+
 		Log.d(this.getClass().getSimpleName(), "socket: " + socket);
-		
+
 		if (socket != null) {
 			try {
 				dataOutStream = new DataOutputStream(socket.getOutputStream());
@@ -136,7 +136,7 @@ public class HandbagWiFiCommsService extends Service {
 			Log.d(this.getClass().getSimpleName(), "dataOutStream: " + dataOutStream);
 			Log.d(this.getClass().getSimpleName(), "dataInStream: " + dataInStream);
 
-			
+
 			// TODO: Redo all this with one catch for IOException & use finally to close socket?
 			if ((dataOutStream != null) && (dataInStream != null)) {
 				try {
@@ -149,13 +149,13 @@ public class HandbagWiFiCommsService extends Service {
 					newPacket = parser.getNextPacket();
 
 					Log.d(this.getClass().getSimpleName(), "Got result: " + Arrays.toString(newPacket));
-					
+
 				} catch (IOException e) {
 					Log.d(this.getClass().getSimpleName(), "IOException when sending/reading data.");
 					e.printStackTrace();
-				} 
+				}
 			}
-			
+
 			if (socket!= null) { // TODO: Can this happen here?
 				try {
 					socket.close();
@@ -163,7 +163,7 @@ public class HandbagWiFiCommsService extends Service {
 					Log.d(this.getClass().getSimpleName(), "IOException when closing Socket.");
 				}
 			}
-			
+
 			try {
 				dataOutStream.close();
 				dataInStream.close();
@@ -173,15 +173,15 @@ public class HandbagWiFiCommsService extends Service {
 				Log.d(this.getClass().getSimpleName(), "IOException when closing data streams.");
 			}
 		}
-		
+
 		return newPacket;
-		
+
 	}
-	
 
 
-	
-	
+
+
+
 	// Used to receive messages from client(s)
 	public class IncomingWiFiCommsServiceHandler extends Handler {
 
@@ -190,51 +190,51 @@ public class HandbagWiFiCommsService extends Service {
 			Log.d(this.getClass().getSimpleName(), "Tid (wifi):" + android.os.Process.myTid());
 
 			Log.d(this.getClass().getSimpleName(), "WiFi Comms Service received message:");
-			
+
 			switch (msg.what) {
 
 				case HandbagParseService.MSG_UI_ACTIVITY_REGISTER: // TODO: Move this constant into UI class?
 					// TODO: Handle receiving this more than once?
 					Log.d(this.getClass().getSimpleName(), "    MSG_UI_ACTIVITY_REGISTER");
 					uiActivity = msg.replyTo;
-					
+
 					shutdownRequested = false;
-					
+
 					try {
 						uiActivity.send(Message.obtain(null, HandbagUI.MSG_UI_ACTIVITY_REGISTERED)); // TODO: Change to specify who was registered with. ***
 					} catch (RemoteException e) {
 						// UI Activity client is dead so no longer try to access it.
 						uiActivity = null;
 					}
-					
+
 					if (uiActivity != null) {
 						//startTestMessages();
-						
+
 						// Can't do this here because a callback counts as a main thread?
 						//doSocketTest();
-						
+
 					}
-					
+
 					break;
 
-					
+
 				case HandbagParseService.MSG_PARSE_SERVICE_REGISTER: // TODO: Move this constant into UI class?
 					// TODO: Handle receiving this more than once?
 					Log.d(this.getClass().getSimpleName(), "    MSG_PARSE_SERVICE_REGISTER");
 					parseService = msg.replyTo;
-					
+
 					try {
 						parseService.send(Message.obtain(null, MSG_PARSE_SERVICE_REGISTERED));
 					} catch (RemoteException e) {
 						// UI Activity client is dead so no longer try to access it.
 						parseService = null;
 					}
-					
+
 					break;
-					
-					
+
+
 				case MSG_UI_TEST_NETWORK:
-					Log.d(this.getClass().getSimpleName(), "    MSG_UI_TEST_NETWORK");					
+					Log.d(this.getClass().getSimpleName(), "    MSG_UI_TEST_NETWORK");
 					// TODO: Retrieve host name/port from message rather than prefs?
 					if (parseService != null) {
 						//doSocketTest();
@@ -245,23 +245,23 @@ public class HandbagWiFiCommsService extends Service {
 			
 				case HandbagParseService.MSG_UI_SHUTDOWN_REQUEST: // TODO: Move this constant into UI class?
 					Log.d(this.getClass().getSimpleName(), "    MSG_UI_SHUTDOWN_REQUEST");
-					
+
 					// Set a flag so repeating sub-tasks will stop themselves.
 					shutdownRequested  = true;
 					// TODO: Be more proactive and stop them here instead?
 					break;
-				
+
 				default:
-					Log.d(this.getClass().getSimpleName(), "    (unknown)");					
-					super.handleMessage(msg);					
+					Log.d(this.getClass().getSimpleName(), "    (unknown)");
+					super.handleMessage(msg);
 			}
 		}
-		
+
 	}
-	
+
 	// Clients will use this to communicate with us.
     final Messenger ourMessenger = new Messenger(new IncomingWiFiCommsServiceHandler());
-	
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		// Return our `messenger` instance to enable clients to send us messages.
