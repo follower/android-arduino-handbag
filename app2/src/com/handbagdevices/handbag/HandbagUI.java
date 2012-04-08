@@ -350,6 +350,35 @@ public class HandbagUI extends Activity {
 	}
 
 
+    private Message getMessageForConnect() {
+        Message msg;
+
+        String hostName = appPrefs.getString("network_host_name", "");
+
+        if (hostName.isEmpty()) {
+            Log.e(this.getClass().getSimpleName(), "No hostname provided.");
+            return null; // TODO: Throw exception instead?
+        }
+
+        Integer hostPort = Integer.valueOf(appPrefs.getString("network_host_port", "0"));
+
+        if (hostPort == 0) {
+            hostPort = 0xba9; // Default port
+        }
+
+        Log.d(this.getClass().getSimpleName(), "Host: " + hostName + " Port: " + hostPort);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("hostName", hostName);
+        bundle.putInt("hostPort", hostPort);
+
+        msg = Message.obtain(null, HandbagWiFiCommsService.MSG_UI_CONNECT_TO_TARGET);
+        msg.setData(bundle);
+
+        return msg;
+    }
+
+
 	@Override
 	public void onBackPressed() {
 
