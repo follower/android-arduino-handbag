@@ -29,6 +29,7 @@ public class HandbagWiFiCommsService extends Service {
 	static final int MSG_PARSE_SERVICE_REGISTERED = 502;
 
     static final int MSG_UI_CONNECT_TO_TARGET = 503;
+    static final int MSG_UI_DISCONNECT_FROM_TARGET = 504;
 
 
 	// Flag that should be checked
@@ -37,6 +38,9 @@ public class HandbagWiFiCommsService extends Service {
 	// Used to communicate with the UI Activity & Communication Service
 	Messenger uiActivity = null; // Orders us around
 	Messenger parseService = null; // Receives our data, sends us its data.
+
+    NetworkConnection targetNetworkConnection;
+
 
 	private class TestSocketTask extends AsyncTask<Void, Void, String[]> {
 
@@ -258,6 +262,17 @@ public class HandbagWiFiCommsService extends Service {
 
                 case MSG_UI_CONNECT_TO_TARGET:
                     Log.d(this.getClass().getSimpleName(), "    MSG_UI_CONNECT_TO_TARGET");
+                    connectToTarget(msg.getData());
+                    // TODO: Send some sort of response?
+                    break;
+
+
+                case MSG_UI_DISCONNECT_FROM_TARGET:
+                    Log.d(this.getClass().getSimpleName(), "    MSG_UI_DISCONNECT_FROM_TARGET");
+                    if (targetNetworkConnection != null) {
+                        Log.d(this.getClass().getSimpleName(), "    Cancelling target connection.");
+                        targetNetworkConnection.cancel(false);
+                    }
                     break;
 
 
@@ -267,6 +282,11 @@ public class HandbagWiFiCommsService extends Service {
 					// Set a flag so repeating sub-tasks will stop themselves.
 					shutdownRequested  = true;
 					// TODO: Be more proactive and stop them here instead?
+
+                    if (targetNetworkConnection != null) {
+                        Log.d(this.getClass().getSimpleName(), "    Cancelling target connection.");
+                        targetNetworkConnection.cancel(false);
+                    }
 					break;
 
 				default:
@@ -275,9 +295,195 @@ public class HandbagWiFiCommsService extends Service {
 			}
 		}
 
+        private void connectToTarget(Bundle data) {
+            String hostName = data.getString("hostName");
+            Integer hostPort = data.getInt("hostPort");
+
+            Log.d(this.getClass().getSimpleName(), "Host: " + hostName + " Port: " + hostPort);
+
+            targetNetworkConnection = new NetworkConnection(hostName, hostPort);
+
+            targetNetworkConnection.connect();
+
+        }
+
 	}
 
-	// Clients will use this to communicate with us.
+	// TODO: Pull this class into separate file?
+    public class NetworkConnection extends AsyncTask<Void, String[], Integer> {
+
+        private String hostName;
+        private int hostPort;
+
+        private Socket socket = null;
+
+        private DataOutputStream dataOutStream;
+        private DataInputStream dataInStream;
+
+        private PacketParser parser;
+
+
+        public NetworkConnection(String hostName, int hostPort) {
+            super();
+            this.hostName = hostName;
+            this.hostPort = hostPort;
+        }
+
+
+        private void connect() {
+            this.execute();
+        }
+
+
+        private boolean setUp() {
+
+            // TODO: Check network available
+
+            try {
+                // Note: Requires internet permission ***
+                socket = new Socket(hostName, hostPort);
+            } catch (UnknownHostException e) {
+                Log.d(this.getClass().getSimpleName(), "Unknown Host.");
+            } catch (IOException e) {
+                Log.d(this.getClass().getSimpleName(), "IOException when creating socket.");
+            }
+
+            Log.d(this.getClass().getSimpleName(), "Socket: " + socket);
+
+            // TODO: Handle differently if socket open fails?
+            if (socket != null) {
+                try {
+                    dataInStream = new DataInputStream(socket.getInputStream());
+                    dataOutStream = new DataOutputStream(socket.getOutputStream());
+                } catch (IOException e) {
+                    Log.d(this.getClass().getSimpleName(), "IOException when creating data streams.");
+                }
+
+                Log.d(this.getClass().getSimpleName(), "dataInStream: " + dataInStream);
+                Log.d(this.getClass().getSimpleName(), "dataOutStream: " + dataOutStream);
+
+                if ((dataInStream != null) && (dataOutStream != null)) {
+                    parser = new PacketParser(new InputStreamReader(dataInStream));
+                }
+            }
+
+            return ((socket != null) && (dataInStream != null) && (dataOutStream != null));
+        }
+
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            String[] newPacket;
+            int result = -1;
+
+            if (setUp()) {
+                result = 0;
+
+                while (true) {
+                    if (this.isCancelled()) {
+                        Log.d(this.getClass().getSimpleName(), "Connection canceled.");
+                        break;
+                    }
+
+                    // TODO: Handle writing output stream also.
+                    // Note: This call blocks for data. // TODO: At least I thought so...
+                    // TODO: Handle disconnect.
+                    newPacket = parser.getNextPacket();
+
+                    if (newPacket.length != 0) {
+                        Log.d(this.getClass().getSimpleName(), "Got result: " + Arrays.toString(newPacket));
+
+                        publishProgress(newPacket);
+                    } else {
+                        try {
+                            // TODO: Figure out why neither of these return true with the Python test server.
+                            if (!socket.isConnected()) {
+                                Log.d(this.getClass().getSimpleName(), "Socket is no longer connected.");
+                                break;
+                            }
+                            if (socket.isClosed()) {
+                                Log.d(this.getClass().getSimpleName(), "Socket is closed.");
+                                break;
+                            }
+                            // TODO: Don't do this...
+                            Thread.sleep(250);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            // TODO: Handle properly
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            cleanUp();
+
+            return result; // TODO: Return something more useful?
+        }
+
+
+        private void deliverPacket(String[] packet) {
+            // TODO: Do this properly...
+            if ((!shutdownRequested) && (packet != null)) {
+                // Only continue if we haven't been told to shutdown
+                // and request was successful.
+
+                // TODO: Notify caller of (reason for) unsuccessful request
+                //       and/or leave message handler to check for null?
+
+                // TODO: Do this properly send to parse service...
+                try {
+                    Message msg = Message.obtain(null, HandbagUI.MSG_UI_TEST_ARRAY_MESSAGE);
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArray(null, packet);
+                    msg.setData(bundle);
+
+                    uiActivity.send(msg);
+                } catch (RemoteException e) {
+                    // UI Activity client is dead so no longer try to access it.
+                    uiActivity = null;
+                }
+            }
+
+        }
+
+
+        @Override
+        protected void onProgressUpdate(String[]... values) {
+            deliverPacket(values[0]);
+        }
+
+
+        private void loggedClose(Socket theSocket, String socketName) { // TODO: Determine name automatically?
+            /*
+               To avoid the following boilerplate:
+             */
+
+            if (theSocket != null) {
+                try {
+                    // Note: Don't need to close associated streams as docs say:
+                    //       "Closing this socket will also close the socket's InputStream and OutputStream."
+                    //       <http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html#close()>
+                    theSocket.close();
+                } catch (IOException e) {
+                    Log.d(this.getClass().getSimpleName(), "IOException when closing: " + socketName);
+                }
+            }
+        }
+
+
+        private void cleanUp() {
+            loggedClose(socket, "socket");
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            // TODO: Do something useful? e.g. send message to UI/data this etc?
+        }
+    }
+
+    // Clients will use this to communicate with us.
     final Messenger ourMessenger = new Messenger(new IncomingWiFiCommsServiceHandler());
 
 	@Override
