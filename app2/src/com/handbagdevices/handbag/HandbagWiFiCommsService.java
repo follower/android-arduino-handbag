@@ -64,6 +64,17 @@ public class HandbagWiFiCommsService extends Service {
 					msg.setData(bundle);
 
 					uiActivity.send(msg);
+
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						return;
+					}
+
+					new TestSocketTask().execute();
+
 				} catch (RemoteException e) {
 					// UI Activity client is dead so no longer try to access it.
 					uiActivity = null;
