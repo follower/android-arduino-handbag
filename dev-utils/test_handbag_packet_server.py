@@ -30,6 +30,8 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
 
 if __name__ == "__main__":
 
+    socket.setdefaulttimeout(0.5)
+
     # Note: This method of getting the local IP address may not work
     #       in all situations.
     HOST, PORT = socket.gethostbyname(socket.gethostname()), 0xba9
