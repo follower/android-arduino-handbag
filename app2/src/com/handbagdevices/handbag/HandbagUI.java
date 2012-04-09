@@ -316,9 +316,23 @@ public class HandbagUI extends Activity {
 			setContentView(R.layout.main);
 			showingMainStage = false;
 			populateFromPrefs();
-			// TODO: Stop comms activity?
+
+            // TODO: Move this functionality elsewhere?
+            disconnectFromTarget();
 		}
 	}
+
+
+    private void disconnectFromTarget() {
+        if (commsService != null) {
+            try {
+                commsService.send(Message.obtain(null, HandbagWiFiCommsService.MSG_UI_DISCONNECT_FROM_TARGET));
+            } catch (RemoteException e) {
+                // Service crashed so just ignore it
+            }
+        }
+    }
+
 
 	private boolean isOnline() {
 		NetworkInfo netInfo = ((ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
