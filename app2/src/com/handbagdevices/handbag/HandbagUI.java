@@ -338,6 +338,7 @@ public class HandbagUI extends Activity {
 
 		displayMainStage();
 
+        // TODO: Move this into separate routine
         // TODO: Provide some sort of status feedback if any of this fails.
         Message msg = getMessageForConnect();
         if ((commsService != null) && (msg != null)) {
