@@ -22,11 +22,17 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
 
         print "Client: %s" % str((self.request.getpeername()))
 
-        data = ["widget", "label", widgetId, random.randint(0, 40), 0, "My Label;\nHere, forever."]
+        for i in range(5):
+            data = ["widget", "label", widgetId, random.randint(0, 40), 0, "My Label;\nHere, forever."]
 
-        widgetId+=1
+            widgetId+=1
 
-        return self.request.sendall(createPacket(data))
+            self.request.sendall(createPacket(data))
+
+        self.request.shutdown(socket.SHUT_RDWR)
+        self.request.close()
+
+
 
 if __name__ == "__main__":
 
