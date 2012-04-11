@@ -4,6 +4,8 @@ import android.util.Log;
 import android.content.Context;
 import android.speech.tts.*;
 
+// TODO: Handle situation where the TTS support isn't fully installed.
+
 public class SpeechFeature extends FeatureConfig implements TextToSpeech.OnInitListener {
 
     final static int SPEECH_ARRAY_OFFSET_ACTION = 2;
