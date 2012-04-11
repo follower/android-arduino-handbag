@@ -426,24 +426,19 @@ public class HandbagWiFiCommsService extends Service {
 
         private void deliverPacket(String[] packet) {
             // TODO: Do this properly...
-            if ((!shutdownRequested) && (packet != null)) {
+            if (!shutdownRequested) {
                 // Only continue if we haven't been told to shutdown
-                // and request was successful.
 
-                // TODO: Notify caller of (reason for) unsuccessful request
-                //       and/or leave message handler to check for null?
-
-                // TODO: Do this properly send to parse service...
                 try {
-                    Message msg = Message.obtain(null, HandbagUI.MSG_UI_TEST_ARRAY_MESSAGE);
+                    Message msg = Message.obtain(null, MSG_COMMS_PACKET_RECEIVED);
                     Bundle bundle = new Bundle();
                     bundle.putStringArray(null, packet);
                     msg.setData(bundle);
 
-                    uiActivity.send(msg);
+                    parseService.send(msg);
                 } catch (RemoteException e) {
-                    // UI Activity client is dead so no longer try to access it.
-                    uiActivity = null;
+                    // Parse service client is dead so no longer try to access it.
+                    parseService = null;
                 }
             }
 
