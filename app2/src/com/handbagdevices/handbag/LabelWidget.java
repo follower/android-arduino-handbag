@@ -46,7 +46,7 @@ public class LabelWidget extends WidgetConfig {
 		if (alignment > 0) {
 			label.setGravity(alignment);
 		}
-		
+
 	}
 
 	// @Hides
