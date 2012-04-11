@@ -27,13 +27,15 @@ public class LabelWidget extends WidgetConfig {
     public void displaySelf(ViewGroup parent) { // TODO: Accept view/layout but cast to viewgroup?
 
 		Log.d(this.getClass().getSimpleName(), "parent: " + parent);
-		
-		// TODO: Add check for existing widget.
 
-		TextView label = new TextView(parent.getContext());
-		label.setId(WIDGET_ID_OFFSET + remoteWidgetId); // TODO: Make this use a function to get the ID?
+        TextView label = (TextView) parent.findViewById(WIDGET_ID_OFFSET + remoteWidgetId);
 
-		parent.addView(label);
+        if (label == null) {
+            label = new TextView(parent.getContext());
+            label.setId(WIDGET_ID_OFFSET + remoteWidgetId); // TODO: Make this use a function to get the ID?
+
+            parent.addView(label);
+        }
 
 		label.setText(text);
 
