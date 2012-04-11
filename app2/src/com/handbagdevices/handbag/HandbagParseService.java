@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -171,9 +172,14 @@ public class HandbagParseService extends Service {
 				case HandbagWiFiCommsService.MSG_PARSE_SERVICE_REGISTERED:
 					Log.d(this.getClass().getSimpleName(), "received: MSG_PARSE_SERVICE_REGISTERED");
 					break;
-					
-					
-					
+
+
+                case HandbagWiFiCommsService.MSG_COMMS_PACKET_RECEIVED:
+                    Log.d(this.getClass().getSimpleName(), "received: MSG_COMMS_PACKET_RECEIVED");
+                    processPacketContent(msg.getData().getStringArray(null));
+                    break;
+
+
 //				case MSG_COMMS_SERVICE_REGISTER:
 //					// TODO: Handle receiving this more than once?
 //					Log.d(this.getClass().getSimpleName(), "    MSG_COMM_SERVICE_REGISTER");
@@ -218,5 +224,38 @@ public class HandbagParseService extends Service {
 		Log.d(this.getClass().getSimpleName(), "onBind entered");
 		return ourMessenger.getBinder();
 	}
+
+
+    private static final int PACKET_OFFSET_PACKET_TYPE = 0;
+
+    private static final String PACKET_TYPE_WIDGET = "widget";
+
+
+
+    public void processPacketContent(String[] packet) {
+
+        // TODO: Check packet length.
+
+        if (packet[PACKET_OFFSET_PACKET_TYPE].equals(PACKET_TYPE_WIDGET)) {
+
+            // TODO: Pass around the Message object to save re-doing this?
+            Message msg = Message.obtain(null, HandbagUI.MSG_UI_RECEIVED_WIDGET_PACKET);
+            Bundle bundle = new Bundle();
+            bundle.putStringArray(null, packet);
+            msg.setData(bundle);
+
+            try {
+                uiActivity.send(msg);
+            } catch (RemoteException e) {
+                // UI Activity client is probably dead so no longer try to access it.
+                Log.d(this.getClass().getSimpleName(), "Failed to send packet to UI.");
+            }
+
+        } else {
+            Log.d(this.getClass().getSimpleName(), "Unknown packet type: " + packet[PACKET_OFFSET_PACKET_TYPE]);
+        }
+
+
+    }
 
 }
