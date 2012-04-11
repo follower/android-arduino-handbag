@@ -29,6 +29,10 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
 
             self.request.sendall(createPacket(data))
 
+        data = ["widget", "dialog", "I dialogued with you!"]
+
+        self.request.sendall(createPacket(data))
+
         self.request.shutdown(socket.SHUT_RDWR)
         self.request.close()
 
