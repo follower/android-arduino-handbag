@@ -21,10 +21,11 @@ public class LabelWidget extends WidgetConfig {
 		alignment = widgetAlignment;
 		text = labelText;
 	}
-	
-	
-	public void displaySelf(ViewGroup parent) { // TODO: Accept view/layout but cast to viewgroup?
-		
+
+
+	@Override
+    public void displaySelf(ViewGroup parent) { // TODO: Accept view/layout but cast to viewgroup?
+
 		Log.d(this.getClass().getSimpleName(), "parent: " + parent);
 		
 		// TODO: Add check for existing widget.
