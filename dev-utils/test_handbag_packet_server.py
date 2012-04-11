@@ -7,6 +7,8 @@ import socket
 
 import random
 
+import time
+
 from generate_handbag_packet import createPacket
 
 widgetId = 1
@@ -22,12 +24,26 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
 
         print "Client: %s" % str((self.request.getpeername()))
 
-        for i in range(5):
+        for i in range(4):
             data = ["widget", "label", widgetId, random.randint(0, 40), 0, "My Label;\nHere, forever."]
 
             widgetId+=1
 
             self.request.sendall(createPacket(data))
+
+        for i in range(21):
+            data = ["widget", "label", widgetId, 50, 0x01, i]
+            self.request.sendall(createPacket(data))
+            time.sleep(0.1)
+
+        widgetId+=1
+
+        for i in range(0, 101, 5):
+            data = ["widget", "progress", widgetId, i]
+            self.request.sendall(createPacket(data))
+            time.sleep(0.05)
+
+        widgetId+=1
 
         data = ["widget", "dialog", "I dialogued with you!"]
 
