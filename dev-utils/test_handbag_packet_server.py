@@ -45,6 +45,17 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
 
         widgetId+=1
 
+        data = ["feature", "speech", "speak", "Terrain! Terrain! Pull up! Pull up!"]
+
+        self.request.sendall(createPacket(data))
+
+        # Note: Because of the lack of TTS connection reuse this doesn't
+        #       really work currently.
+        time.sleep(2)
+
+        data = ["feature", "speech", "speak", "Just kidding! Hello from Handbag."]
+        self.request.sendall(createPacket(data))
+
         data = ["widget", "dialog", "I dialogued with you!"]
 
         self.request.sendall(createPacket(data))
