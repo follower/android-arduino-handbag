@@ -1,5 +1,9 @@
 package com.handbagdevices.handbag;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -229,7 +233,19 @@ public class HandbagParseService extends Service {
     private static final int PACKET_OFFSET_PACKET_TYPE = 0;
 
     private static final String PACKET_TYPE_WIDGET = "widget";
+    private static final String PACKET_TYPE_FEATURE = "feature";
 
+
+    // TODO: Move the feature type dispatch into separate class?
+    private static final String FEATURE_TYPE_SPEECH = "speech";
+
+    private static final int PACKET_OFFSET_FEATURE_TYPE = 1;
+
+    private static final Map<String, String> MAP_FEATURE_TO_CLASS = new HashMap<String, String>();
+
+    static {
+        MAP_FEATURE_TO_CLASS.put(FEATURE_TYPE_SPEECH, "SpeechFeature");
+    };
 
 
     public void processPacketContent(String[] packet) {
@@ -251,11 +267,51 @@ public class HandbagParseService extends Service {
                 Log.d(this.getClass().getSimpleName(), "Failed to send packet to UI.");
             }
 
+        } else if (packet[PACKET_OFFSET_PACKET_TYPE].equals(PACKET_TYPE_FEATURE)) {
+            processFeaturePacket(packet);
         } else {
             Log.d(this.getClass().getSimpleName(), "Unknown packet type: " + packet[PACKET_OFFSET_PACKET_TYPE]);
         }
 
 
+    }
+
+
+    private void processFeaturePacket(String[] packet) {
+
+        // TODO: Create the feature object once and then use it for all subsequent actions?
+
+        FeatureConfig feature = null;
+
+        String featureClassName = MAP_FEATURE_TO_CLASS.get(packet[PACKET_OFFSET_FEATURE_TYPE]);
+
+        if (featureClassName != null) {
+
+            // TODO: Find a better way to add the package name to make the fully qualified name?
+            featureClassName = this.getPackageName() + "." + featureClassName;
+
+            try {
+                feature = (FeatureConfig) Class.forName(featureClassName).getMethod("fromArray", Context.class, String[].class).invoke(null, getApplicationContext(), packet);
+            } catch (NoSuchMethodException e) {
+                Log.e(this.getClass().getSimpleName(), "fromArray method not found in feature class: " + featureClassName);
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                Log.e(this.getClass().getSimpleName(), "no class found of name: " + featureClassName);
+            } catch (IllegalArgumentException e) {
+                Log.e(this.getClass().getSimpleName(), "IllegalArgumentException occurred instantiating: " + featureClassName);
+            } catch (IllegalAccessException e) {
+                Log.e(this.getClass().getSimpleName(), "IllegalAccessException occurred instantiating: " + featureClassName);
+            } catch (InvocationTargetException e) {
+                Log.e(this.getClass().getSimpleName(), "InvocationTargetException occurred instantiating: " + featureClassName);
+            }
+
+            if (feature != null) {
+                feature.doAction();
+            }
+
+        } else {
+            Log.d(this.getClass().getSimpleName(), "Unknown feature type: " + packet[PACKET_OFFSET_FEATURE_TYPE]);
+        }
     }
 
 }
