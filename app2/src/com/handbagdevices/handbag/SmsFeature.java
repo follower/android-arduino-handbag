@@ -77,6 +77,7 @@ public class SmsFeature extends FeatureConfig {
 
         Log.d(this.getClass().getSimpleName(), "Sending to: " + destinationAddress + " (" + contact + ")  Message: " + text);
 
+        // TODO: Display a toast or something when this succeeds?
         manager.sendTextMessage(destinationAddress, null, text, null, null);
     }
 
