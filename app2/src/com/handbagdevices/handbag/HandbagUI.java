@@ -1,5 +1,9 @@
 package com.handbagdevices.handbag;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -83,6 +87,11 @@ public class HandbagUI extends Activity {
 					}
 
 					break;
+
+
+                case MSG_UI_RECEIVED_WIDGET_PACKET:
+                    handleWidgetPacket(msg.getData().getStringArray(null));
+                    break;
 
 				default:
 					super.handleMessage(msg);
@@ -405,4 +414,59 @@ public class HandbagUI extends Activity {
 		// TODO: Need to solve "leaked connection" errors before re-enabling this:
 		//super.onBackPressed();
 	}
+
+
+    private static final String WIDGET_TYPE_LABEL = "label";
+    private static final String WIDGET_TYPE_BUTTON = "button";
+
+    private static final int PACKET_OFFSET_WIDGET_TYPE = 1;
+
+    private static final Map<String, String> MAP_WIDGET_TO_CLASS = new HashMap<String, String>();
+
+    static {
+        MAP_WIDGET_TO_CLASS.put(WIDGET_TYPE_LABEL, "LabelWidget");
+        MAP_WIDGET_TO_CLASS.put(WIDGET_TYPE_BUTTON, "ButtonWidget");
+    };
+
+
+    private void handleWidgetPacket(String[] packet) {
+
+        WidgetConfig widget = null;
+
+        String widgetClassName = MAP_WIDGET_TO_CLASS.get(packet[PACKET_OFFSET_WIDGET_TYPE]);
+
+        if (widgetClassName != null) {
+
+            // TODO: Find a better way to add the package name to make the fully qualified name?
+            widgetClassName = this.getPackageName() + "." + widgetClassName;
+
+            try {
+                widget = (WidgetConfig) Class.forName(widgetClassName).getMethod("fromArray", String[].class).invoke(null, (Object) packet);
+            } catch (NoSuchMethodException e) {
+                Log.e(this.getClass().getSimpleName(), "fromArray method not found in widget class: " + widgetClassName);
+            } catch (ClassNotFoundException e) {
+                Log.e(this.getClass().getSimpleName(), "no class found of name: " + widgetClassName);
+            } catch (IllegalArgumentException e) {
+                Log.e(this.getClass().getSimpleName(), "IllegalArgumentException occurred instantiating: " + widgetClassName);
+            } catch (IllegalAccessException e) {
+                Log.e(this.getClass().getSimpleName(), "IllegalAccessException occurred instantiating: " + widgetClassName);
+            } catch (InvocationTargetException e) {
+                Log.e(this.getClass().getSimpleName(), "InvocationTargetException occurred instantiating: " + widgetClassName);
+            }
+
+            if (widget != null) {
+                ViewGroup mainstage = (ViewGroup) findViewById(R.id.mainstage);
+
+                // If we can't find mainstage it's probably because the
+                // active view has changed since the request was made.
+                if (mainstage != null) {
+                    widget.displaySelf(mainstage);
+                }
+            }
+
+        } else {
+            Log.d(this.getClass().getSimpleName(), "Unknown widget type: " + packet[PACKET_OFFSET_WIDGET_TYPE]);
+        }
+
+    }
 }
