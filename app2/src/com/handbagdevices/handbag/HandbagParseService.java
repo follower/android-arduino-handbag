@@ -12,6 +12,8 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
+// TODO: Rename this because its purpose has changed a bit?
+
 public class HandbagParseService extends Service {
 	
 	// Messages from UI activity
