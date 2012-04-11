@@ -8,9 +8,14 @@ public class SpeechFeature extends FeatureConfig implements TextToSpeech.OnInitL
 
     final static int SPEECH_ARRAY_OFFSET_ACTION = 2;
     final static int SPEECH_ARRAY_OFFSET_TEXT = 3;
+    final static int SPEECH_ARRAY_OFFSET_PITCH = 4;
+    final static int SPEECH_ARRAY_OFFSET_RATE = 5;
 
     private String action;
     private String text;
+
+    private float pitch;
+    private float speechRate;
 
     private TextToSpeech tts;
 
@@ -19,9 +24,12 @@ public class SpeechFeature extends FeatureConfig implements TextToSpeech.OnInitL
 
     // TODO: Do something when the application is destroyed to shutdown TTS engine...
 
-    public SpeechFeature(Context context, String action, String text) {
+    public SpeechFeature(Context context, String action, String text, float pitch, float speechRate) {
         this.action = action;
         this.text = text;
+
+        this.pitch = pitch;
+        this.speechRate = speechRate;
 
         tts = new TextToSpeech(context, this);
     }
@@ -37,7 +45,14 @@ public class SpeechFeature extends FeatureConfig implements TextToSpeech.OnInitL
         Log.d(this.getClass().getSimpleName(), "Speech action: " + action + " Text: " + text);
 
         if (action.equals("speak")) {
-            // TODO: Add this back in once we init properly.
+            // TODO: Have a different "use default" value?
+            if (pitch != 1.0) {
+                tts.setPitch(pitch);
+            }
+            if (speechRate != 1.0) {
+                tts.setSpeechRate(speechRate);
+            }
+
             tts.speak(text, TextToSpeech.QUEUE_ADD, null);
         } else {
             Log.d(this.getClass().getSimpleName(), "Unknown speech action: " + action);
@@ -47,7 +62,8 @@ public class SpeechFeature extends FeatureConfig implements TextToSpeech.OnInitL
 
 
     public static FeatureConfig fromArray(Context context, String[] theArray) {
-        return new SpeechFeature(context, theArray[SPEECH_ARRAY_OFFSET_ACTION], theArray[SPEECH_ARRAY_OFFSET_TEXT]);
+        return new SpeechFeature(context, theArray[SPEECH_ARRAY_OFFSET_ACTION], theArray[SPEECH_ARRAY_OFFSET_TEXT],
+                Float.valueOf(theArray[SPEECH_ARRAY_OFFSET_PITCH]), Float.valueOf(theArray[SPEECH_ARRAY_OFFSET_RATE]));
     }
 
 

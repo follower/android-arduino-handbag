@@ -45,7 +45,7 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
 
         widgetId+=1
 
-        data = ["feature", "speech", "speak", "Terrain! Terrain! Pull up! Pull up!"]
+        data = ["feature", "speech", "speak", "Terrain! Terrain! Pull up! Pull up!", 1.0, 1.0]
 
         self.request.sendall(createPacket(data))
 
@@ -53,7 +53,7 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
         #       really work currently.
         time.sleep(2)
 
-        data = ["feature", "speech", "speak", "Just kidding! Hello from Handbag."]
+        data = ["feature", "speech", "speak", "Just kidding! Hello from Handbag.", 1.0, 1.0]
         self.request.sendall(createPacket(data))
 
         data = ["widget", "dialog", "I dialogued with you!"]
