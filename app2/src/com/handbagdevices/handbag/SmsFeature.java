@@ -78,6 +78,8 @@ public class SmsFeature extends FeatureConfig {
         Log.d(this.getClass().getSimpleName(), "Sending to: " + destinationAddress + " (" + contact + ")  Message: " + text);
 
         // TODO: Display a toast or something when this succeeds?
+        // Note: This does not store the message in the sent folder.
+        // TODO: Optionally store messages in sent folder?
         manager.sendTextMessage(destinationAddress, null, text, null, null);
     }
 
