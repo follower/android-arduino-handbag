@@ -238,6 +238,7 @@ public class HandbagParseService extends Service {
 
     // TODO: Move the feature type dispatch into separate class?
     private static final String FEATURE_TYPE_SPEECH = "speech";
+    private static final String FEATURE_TYPE_SMS = "sms";
 
     private static final int PACKET_OFFSET_FEATURE_TYPE = 1;
 
@@ -245,6 +246,7 @@ public class HandbagParseService extends Service {
 
     static {
         MAP_FEATURE_TO_CLASS.put(FEATURE_TYPE_SPEECH, "SpeechFeature");
+        MAP_FEATURE_TO_CLASS.put(FEATURE_TYPE_SMS, "SmsFeature");
     };
 
 

@@ -60,6 +60,13 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
 
         self.request.sendall(createPacket(data))
 
+        # TODO: Attach this to a button
+        data = ["feature", "sms", "send", "Me", "Hello from Handbag!"]
+
+        # Don't send this by default
+        #self.request.sendall(createPacket(data))
+
+
         self.request.shutdown(socket.SHUT_RDWR)
         self.request.close()
 
