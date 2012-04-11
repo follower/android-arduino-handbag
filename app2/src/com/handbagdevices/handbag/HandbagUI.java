@@ -419,6 +419,7 @@ public class HandbagUI extends Activity {
     private static final String WIDGET_TYPE_LABEL = "label";
     private static final String WIDGET_TYPE_BUTTON = "button";
     private static final String WIDGET_TYPE_DIALOG = "dialog";
+    private static final String WIDGET_TYPE_PROGRESS_BAR = "progress";
 
     private static final int PACKET_OFFSET_WIDGET_TYPE = 1;
 
@@ -427,6 +428,7 @@ public class HandbagUI extends Activity {
     static {
         MAP_WIDGET_TO_CLASS.put(WIDGET_TYPE_LABEL, "LabelWidget");
         MAP_WIDGET_TO_CLASS.put(WIDGET_TYPE_DIALOG, "DialogWidget");
+        MAP_WIDGET_TO_CLASS.put(WIDGET_TYPE_PROGRESS_BAR, "ProgressBarWidget");
         MAP_WIDGET_TO_CLASS.put(WIDGET_TYPE_BUTTON, "ButtonWidget");
     };
 
