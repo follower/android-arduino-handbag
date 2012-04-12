@@ -377,6 +377,42 @@ public class HandbagUI extends Activity {
 	}
 
 
+    public void onClick_buttonStartTestServer(View theView) {
+
+        // Note: This code uses Fully Qualified Names to avoid having
+        //       to have imports--since this code is only intended to be
+        //       temporary.
+
+        android.os.AsyncTask<String, Void, Void> serverThread = new android.os.AsyncTask<String, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(String... params) {
+                java.net.ServerSocket server = null;
+                java.net.Socket client = null;
+
+                try {
+                    server = new java.net.ServerSocket(0xba9); // Note: localhost only
+                    server.setReuseAddress(true);
+                    client = server.accept();
+
+                    client.getOutputStream().write(params[0].getBytes());
+
+                    client.close();
+
+                    server.close();
+                } catch (java.io.IOException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+        };
+
+        serverThread.execute(((EditText) findViewById(R.id.textToSend)).getText().toString());
+
+    }
+
     private Message getMessageForConnect() {
         Message msg;
 

@@ -45,4 +45,21 @@
         android:onClick="onClick_buttonConnect"
         android:text="@string/buttonConnect" />
 
+    <Button
+        android:id="@+id/buttonStartTestServer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="40dp"
+        android:onClick="onClick_buttonStartTestServer"
+        android:text="Start Test Server" />
+
+    <EditText
+        android:id="@+id/textToSend"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:text="widget;label;1;35;1;A Handbag label!\nfeature;speech;speak;Hello from Handbag!;1.0;1.0\nwidget;progress;2;50\nwidget;dialog;alert!\nfeature;sms;send;Me;A message!\n" />
+
 </LinearLayout>
