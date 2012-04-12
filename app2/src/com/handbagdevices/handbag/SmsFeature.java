@@ -77,10 +77,15 @@ public class SmsFeature extends FeatureConfig {
 
         Log.d(this.getClass().getSimpleName(), "Sending to: " + destinationAddress + " (" + contact + ")  Message: " + text);
 
-        // TODO: Display a toast or something when this succeeds?
-        // Note: This does not store the message in the sent folder.
-        // TODO: Optionally store messages in sent folder?
-        manager.sendTextMessage(destinationAddress, null, text, null, null);
+        try {
+            // TODO: Display a toast or something when this succeeds?
+            // Note: This does not store the message in the sent folder.
+            // TODO: Optionally store messages in sent folder?
+            manager.sendTextMessage(destinationAddress, null, text, null, null);
+        } catch (NullPointerException e) {
+            // Seems to occur when SMS can't be sent (e.g. no service?)
+            e.printStackTrace();
+        }
     }
 
 
