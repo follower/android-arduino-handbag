@@ -13,7 +13,7 @@ from generate_handbag_packet import createPacket
 
 widgetId = 1
 
-class PacketServerHandler(SocketServer.BaseRequestHandler):
+class PacketServerHandler(SocketServer.StreamRequestHandler):
     """
     """
     
@@ -29,43 +29,42 @@ class PacketServerHandler(SocketServer.BaseRequestHandler):
 
             widgetId+=1
 
-            self.request.sendall(createPacket(data))
+            self.wfile.write(createPacket(data))
 
         for i in range(21):
             data = ["widget", "label", widgetId, 50, 0x01, i]
-            self.request.sendall(createPacket(data))
+            self.wfile.write(createPacket(data))
             time.sleep(0.1)
 
         widgetId+=1
 
         for i in range(0, 101, 5):
             data = ["widget", "progress", widgetId, i]
-            self.request.sendall(createPacket(data))
+            self.wfile.write(createPacket(data))
             time.sleep(0.05)
 
         widgetId+=1
 
         data = ["feature", "speech", "speak", "Terrain! Terrain! Pull up! Pull up!", 1.0, 1.0]
 
-        self.request.sendall(createPacket(data))
+        self.wfile.write(createPacket(data))
 
         # Note: Because of the lack of TTS connection reuse this doesn't
         #       really work currently.
         time.sleep(2)
 
         data = ["feature", "speech", "speak", "Just kidding! Hello from Handbag.", 1.0, 1.0]
-        self.request.sendall(createPacket(data))
+        self.wfile.write(createPacket(data))
 
         data = ["widget", "dialog", "I dialogued with you!"]
 
-        self.request.sendall(createPacket(data))
+        self.wfile.write(createPacket(data))
 
         # TODO: Attach this to a button
         data = ["feature", "sms", "send", "Me", "Hello from Handbag!"]
 
         # Don't send this by default
-        #self.request.sendall(createPacket(data))
-
+        #self.wfile.write(createPacket(data))
 
         self.request.shutdown(socket.SHUT_RDWR)
         self.request.close()
