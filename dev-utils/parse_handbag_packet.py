@@ -3,14 +3,16 @@
 
 import sys
 
+from StringIO import StringIO
+
 if __name__ == "__main__":
 
-    data = "abc;[12]abcdefghijkl;123;[5]a;b\nc\n"
-
     if (len(sys.argv) > 1) and sys.argv[1] == "-":
-        data = sys.stdin.read()
+        inputStream = sys.stdin
+    else:
+        inputStream = StringIO("abc;[12]abcdefghijkl;123;[5]a;b\nc\n")
 
-    offset = -1
+    charRead = ""
 
     field = ""
 
@@ -22,46 +24,47 @@ if __name__ == "__main__":
 
     while 1:
 
-        offset += 1
+        # TODO: Handle less data returned etc?
+        charRead = inputStream.read(1)
 
-        #print offset, state, `field`, `data[offset:]`
+        #print state, `field`, `charRead`
 
         if state == "firstchar":
-            if data[offset] == "[":
+            if charRead == "[":
                 chars_to_read = 0
 
                 # Read length & string here
 
                 while 1:
-                    offset += 1
+                    charRead = inputStream.read(1)
 
-                    if data[offset] == "]":
-                        offset += 1 # Skip the ']'
+                    if charRead == "]":
                         break
 
                     # TODO: Bail if not digits?
-                    chars_to_read = (10 * chars_to_read) + int(data[offset])
+                    chars_to_read = (10 * chars_to_read) + int(charRead)
 
+                # TODO: Read in one go?
                 for i in range(chars_to_read):
-                    field += data[offset]
-                    offset += 1
+                    field += inputStream.read(1)
 
                  # TODO: Bail if not end of field or end of packet?
+                charRead = inputStream.read(1)
 
             state = "normal"
 
         if state == "normal":
 
-            if (data[offset] == '\n') or (data[offset] == ';'):
+            if (charRead == '\n') or (charRead == ';'):
                 all_fields.append(field);
                 field = ""
                 state = "firstchar"
 
-                if (data[offset] == '\n'):
+                if (charRead == '\n'):
                     break
 
             else:
-                field += data[offset]
+                field += charRead
     
     print all_fields
 
