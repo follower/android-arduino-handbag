@@ -31,6 +31,14 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
             self.wfile.write(createPacket(data))
 
+        while 1:
+            try:
+                c = self.rfile.read(1)
+            except socket.timeout:
+                print "."
+                break
+            print c,
+
         for i in range(21):
             data = ["widget", "label", widgetId, 50, 0x01, i]
             self.wfile.write(createPacket(data))
