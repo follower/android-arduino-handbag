@@ -11,6 +11,8 @@ import time
 
 from generate_handbag_packet import createPacket
 
+from parse_handbag_packet import PacketParser
+
 widgetId = 1
 
 class PacketServerHandler(SocketServer.StreamRequestHandler):
@@ -24,6 +26,8 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
         print "Client: %s" % str((self.request.getpeername()))
 
+        parser = PacketParser(self.rfile)
+
         for i in range(4):
             data = ["widget", "label", widgetId, random.randint(0, 40), 0, "My Label;\nHere, forever."]
 
@@ -31,13 +35,14 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
             self.wfile.write(createPacket(data))
 
+        # TODO: Keep connection open and handle this in an "event loop".
         while 1:
             try:
-                c = self.rfile.read(1)
+                packet = parser.nextPacket()
             except socket.timeout:
-                print "."
                 break
-            print c,
+            else:
+                print packet
 
         for i in range(21):
             data = ["widget", "label", widgetId, 50, 0x01, i]
