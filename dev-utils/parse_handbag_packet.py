@@ -23,6 +23,8 @@ class PacketParser:
         """
         """
 
+        # TODO: Tidy all this up & make it more Pythonic...
+
         charRead = ""
 
         field = ""
