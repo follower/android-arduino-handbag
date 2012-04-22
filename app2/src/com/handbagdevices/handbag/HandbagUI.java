@@ -509,4 +509,19 @@ public class HandbagUI extends Activity {
         }
 
     }
+
+
+    private void sendPacket(String[] packet) {
+        try {
+            Message msg = Message.obtain(null, HandbagWiFiCommsService.MSG_COMMS_SEND_PACKET);
+            Bundle bundle = new Bundle();
+            bundle.putStringArray(null, packet);
+            msg.setData(bundle);
+
+            commsService.send(msg);
+        } catch (RemoteException e) {
+            // Comms service client is dead so no longer try to access it.
+            commsService = null;
+        }
+    }
 }
