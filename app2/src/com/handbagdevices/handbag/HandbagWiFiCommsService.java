@@ -32,6 +32,7 @@ public class HandbagWiFiCommsService extends Service {
     static final int MSG_UI_DISCONNECT_FROM_TARGET = 504;
 
     static final int MSG_COMMS_PACKET_RECEIVED = 505;
+    static final int MSG_COMMS_SEND_PACKET = 506;
 
 
 	// Flag that should be checked
