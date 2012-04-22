@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import android.app.Service;
 import android.content.Intent;
@@ -324,6 +326,9 @@ public class HandbagWiFiCommsService extends Service {
         private DataInputStream dataInStream;
 
         private PacketParser parser;
+
+        // TODO: Change to using same approach for received packets?
+        public BlockingQueue<String[]> packetsToSendQueue = new LinkedBlockingQueue<String[]>();
 
 
         public NetworkConnection(String hostName, int hostPort) {
