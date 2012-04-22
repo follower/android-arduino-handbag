@@ -272,6 +272,13 @@ public class HandbagWiFiCommsService extends Service {
                     break;
 
 
+                case MSG_COMMS_SEND_PACKET:
+                    Log.d(this.getClass().getSimpleName(), "    MSG_COMMS_SEND_PACKET");
+                    sendPacketToTarget(msg.getData().getStringArray(null));
+                    // TODO: Return some sort of response?
+                    break;
+
+
                 case MSG_UI_DISCONNECT_FROM_TARGET:
                     Log.d(this.getClass().getSimpleName(), "    MSG_UI_DISCONNECT_FROM_TARGET");
                     if (targetNetworkConnection != null) {
@@ -495,5 +502,10 @@ public class HandbagWiFiCommsService extends Service {
 		Log.d(this.getClass().getSimpleName(), "onBind entered");
 		return ourMessenger.getBinder();
 	}
+
+
+    public void sendPacketToTarget(String[] packet) {
+        targetNetworkConnection.packetsToSendQueue.add(packet);
+    }
 
 }
