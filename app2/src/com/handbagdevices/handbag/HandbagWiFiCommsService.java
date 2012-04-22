@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Service;
 import android.content.Intent;
@@ -409,25 +410,36 @@ public class HandbagWiFiCommsService extends Service {
                         Log.d(this.getClass().getSimpleName(), "Got result: " + Arrays.toString(newPacket));
 
                         publishProgress(newPacket);
-                    } else {
-                        try {
-                            // TODO: Figure out why neither of these return true with the Python test server.
-                            if (!socket.isConnected()) {
-                                Log.d(this.getClass().getSimpleName(), "Socket is no longer connected.");
-                                break;
-                            }
-                            if (socket.isClosed()) {
-                                Log.d(this.getClass().getSimpleName(), "Socket is closed.");
-                                break;
-                            }
-                            // TODO: Don't do this...
-                            Thread.sleep(250);
-                        } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
-                            // TODO: Handle properly
-                            e.printStackTrace();
-                        }
                     }
+
+                    try {
+                        // TODO: Figure out why neither of these return true with the Python test server.
+                        if (!socket.isConnected()) {
+                            Log.d(this.getClass().getSimpleName(), "Socket is no longer connected.");
+                            break;
+                        }
+                        if (socket.isClosed()) {
+                            Log.d(this.getClass().getSimpleName(), "Socket is closed.");
+                            break;
+                        }
+                        // Note: This favours receiving over sending.
+                        String[] packetToSend = this.packetsToSendQueue.poll(250, TimeUnit.MILLISECONDS);
+
+                        if (packetToSend != null) {
+                            Log.d(this.getClass().getSimpleName(), "Sending packet. ");
+                            dataOutStream.writeBytes(PacketGenerator.fromArray(packetToSend));
+                            dataOutStream.flush();
+                        }
+
+                    } catch (IOException e) {
+                        // TODO: Handle properly?
+                        Log.d(this.getClass().getSimpleName(), "IOException sending packet.");
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        // TODO: Handle properly?
+                        Log.d(this.getClass().getSimpleName(), "InterruptedException sending packet.");
+                    }
+
                 }
             }
 
