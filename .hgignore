@@ -5,3 +5,6 @@ syntax: glob
 */gen/*
 
 releases/*
+
+# Java generated files (from manual compilation)
+*.class
