@@ -5,7 +5,7 @@ import java.util.*;
 
 class PacketParser {
 
-    private Reader input;
+    private InputStream input;
 
     private Scanner scanner;
 
@@ -15,7 +15,7 @@ class PacketParser {
     private List<String> fieldsInPacket = new ArrayList<String>();
 
 
-    PacketParser(Reader theInput) {
+    PacketParser(InputStream theInput) {
 	input = theInput;
 	scanner = new Scanner(input);
     }

@@ -3,7 +3,6 @@ package com.handbagdevices.handbag;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -167,7 +166,7 @@ public class HandbagWiFiCommsService extends Service {
 
 					Log.d("Got", "available: " + dataInStream.available());
 
-					PacketParser parser = new PacketParser(new InputStreamReader(dataInStream));
+                    PacketParser parser = new PacketParser(dataInStream);
 
 					newPacket = parser.getNextPacket();
 
@@ -379,7 +378,7 @@ public class HandbagWiFiCommsService extends Service {
                 Log.d(this.getClass().getSimpleName(), "dataOutStream: " + dataOutStream);
 
                 if ((dataInStream != null) && (dataOutStream != null)) {
-                    parser = new PacketParser(new InputStreamReader(dataInStream));
+                    parser = new PacketParser(dataInStream);
                 }
             }
 
