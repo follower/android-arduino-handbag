@@ -12,7 +12,7 @@ class PacketParser {
 
     private StringBuilder currentFieldContent = new StringBuilder();
 
-    private List<String> fieldsInPacket = new ArrayList<String>(); 
+    private List<String> fieldsInPacket = new ArrayList<String>();
 
 
     PacketParser(Reader theInput) {
