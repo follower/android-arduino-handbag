@@ -11,7 +11,7 @@ class PacketGenerator {
     	if (content.startsWith("[")
     	    || content.contains(";")
     	    || content.contains("\n")) {
-    	    // TODO: Explictly create formatter instance?
+            // TODO: Explicitly create formatter instance?
     	    //       (Due to comment in String.format docs:
     	    //       "...somewhat costly in terms of memory and
     	    //       time...if you rely on it for formatting a large
