@@ -383,6 +383,8 @@ public class HandbagWiFiCommsService extends Service {
                 }
             }
 
+            // TODO: Do handshake/version check when first connected?
+
             return ((socket != null) && (dataInStream != null) && (dataOutStream != null));
         }
 
