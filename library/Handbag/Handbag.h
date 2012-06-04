@@ -1,8 +1,6 @@
 #ifndef __HANDBAG_H__
 #define __HANDBAG_H__
 
-#include <Max3421e.h>
-#include <Usb.h>
 #include <AndroidAccessory.h>
 
 #define CALLBACK(varname) void (*varname)()

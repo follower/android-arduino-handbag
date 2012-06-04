@@ -145,7 +145,7 @@ int HandbagApp::begin(CALLBACK(theSetupUICallback)) {
 
   setupUICallback = theSetupUICallback;
   
-  accessory.powerOn();
+  accessory.begin();
 }
 
 
@@ -155,6 +155,8 @@ void HandbagApp::refresh() {
   byte msg[3];
 
   // TODO: Ensure we're not called too often? (Original had 'delay(10)'.)
+
+  accessory.refresh();
 
   if (accessory.isConnected()) {
     if (!uiIsSetup) {
