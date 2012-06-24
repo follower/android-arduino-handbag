@@ -98,6 +98,11 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         self.wfile.write(createPacket(data))
 
 
+    def loop(self):
+        """
+        """
+
+
     def handle(self):
         """
         """
@@ -135,7 +140,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
                     print packet
 
                 ## Call user code
-                # TODO: It.
+                self.loop()
 
         except socket.error, e:
 
