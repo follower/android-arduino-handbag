@@ -497,6 +497,9 @@ public class HandbagUI extends Activity {
             }
 
             if (widget != null) {
+
+                widget.setParentActivity(this); // TODO: Do better/properly?
+
                 ViewGroup mainstage = (ViewGroup) findViewById(R.id.mainstage);
 
                 // If we can't find mainstage it's probably because the

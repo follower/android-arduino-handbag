@@ -19,5 +19,11 @@ abstract class WidgetConfig {
 		// this static method.
 		throw new UnsupportedOperationException();
 	}
-	
+
+    // TODO: Do all this properly to provide "callback" method?.
+    protected HandbagUI activity = null;
+    protected void setParentActivity(HandbagUI activity) {
+        this.activity = activity;
+    }
+
 }
