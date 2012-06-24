@@ -303,7 +303,7 @@ public class HandbagWiFiCommsService extends Service {
 
                     if (targetNetworkConnection != null) {
                         Log.d(this.getClass().getSimpleName(), "    Cancelling target connection.");
-                        targetNetworkConnection.cancel(false);
+                        targetNetworkConnection.cancel(true); // TODO: Handle like MSG_UI_DISCONNECT_FROM_TARGET above.
                     }
 					break;
 
