@@ -16,13 +16,14 @@ from generate_handbag_packet import createPacket
 
 from parse_handbag_packet import PacketParser
 
-widgetId = 1
 
 class PacketServerHandler(SocketServer.StreamRequestHandler):
     """
     """
 
     _parser = None
+
+    _widgetId = None
 
 
     def _getNumBytesAvailable(self):
@@ -77,12 +78,31 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         return packet
 
 
+    def setupUI(self):
+        """
+        """
+        # TODO: Override this when subclassed.
+
+        # TODO: Remove this test code
+
+        # TODO: Use helper methods
+        data = ["widget", "label", self._widgetId, 30, 0, "My Label;\nHere, forever."]
+        self._widgetId+=1
+
+        self.wfile.write(createPacket(data))
+
+
+        data = ["widget", "button", self._widgetId, 0, 0, "Push It!"]
+        self._widgetId+=1
+
+        self.wfile.write(createPacket(data))
+
+
     def handle(self):
         """
         """
-        global widgetId # Change to local?
 
-        widgetId = 1
+        self._widgetId = 1
 
         print "Client: %s" % str((self.request.getpeername()))
 
@@ -94,20 +114,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
         try:
 
-            data = ["widget", "label", widgetId, 30, 0, "My Label;\nHere, forever."]
-            widgetId+=1
-
-
-            self.wfile.write(createPacket(data))
-
-
-
-            data = ["widget", "button", widgetId, 0, 0, "Push It!"]
-
-            widgetId+=1
-
-            self.wfile.write(createPacket(data))
-
+            self.setupUI()
 
             while True:
 
