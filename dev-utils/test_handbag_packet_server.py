@@ -135,6 +135,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
     def testButton(self):
         """
         """
+        self.showDialog("Button pressed!")
         print "Button pressed!"
 
 
