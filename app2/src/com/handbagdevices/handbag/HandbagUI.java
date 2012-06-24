@@ -513,7 +513,7 @@ public class HandbagUI extends Activity {
     }
 
 
-    private void sendPacket(String[] packet) {
+    protected void sendPacket(String[] packet) {
         try {
             Message msg = Message.obtain(null, HandbagWiFiCommsService.MSG_COMMS_SEND_PACKET);
             Bundle bundle = new Bundle();
