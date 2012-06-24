@@ -21,7 +21,62 @@ widgetId = 1
 class PacketServerHandler(SocketServer.StreamRequestHandler):
     """
     """
-    
+
+    _parser = None
+
+
+    def _getNumBytesAvailable(self):
+        """
+
+        (Non-blocking)
+
+        Returns: number of bytes available or -1 when connection has been closed
+        """
+
+        numBytesAvailable = 0
+
+        if select.select([self.request],[],[],0.1)[0]:
+            try:
+                numBytesAvailable = len(self.request.recv(1024, socket.MSG_PEEK))
+            except socket.timeout:
+                # TODO: Treat timeout as an error?
+                pass
+            else:
+                if numBytesAvailable == 0:
+                    # When this happens it means the connection has closed
+                    # TODO: Throw exception on connection closed?
+                    numBytesAvailable = -1
+
+        return numBytesAvailable
+
+
+    def _getNextPacket(self):
+        """
+
+        Returns: A packet or [] (timeout/no data) or None (connection closed)
+        """
+
+        packet = []
+
+        # Non-blocking check for data available
+        numBytesAvailable = self._getNumBytesAvailable()
+
+        if numBytesAvailable == -1:
+
+            # TODO: Throw exception on connection closed?
+            packet = None
+
+        elif numBytesAvailable > 0:
+
+            try:
+                packet = self._parser.nextPacket()
+            except socket.timeout:
+                # TODO: Treat timeout as an error?
+                pass
+
+        return packet
+
+
     def handle(self):
         """
         """
@@ -33,7 +88,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
         print self.__dict__
 
-        parser = PacketParser(self.rfile)
+        self._parser = PacketParser(self.rfile)
 
         # TODO: Do handshake/version check?
 
@@ -56,27 +111,24 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
             while True:
 
+                ## Idle (shouldn't be needed once we use non-blocking I/O on Android)
                 self.wfile.write(createPacket(["idle"])) # TODO: properly
 
-                if select.select([self.request],[],[],0.1)[0]:
-                    try:
-                        t = len(self.request.recv(1024, socket.MSG_PEEK))
-                    except socket.timeout:
-                        print "timeout"
-                        pass # should break?
-                    else:
-                        print t
-                        if t==0:
-                            print "nothing there"
-                            break
-                        else:
-                            try:
-                                packet = parser.nextPacket()
-                            except socket.timeout:
-                                print "."
-                                #break
-                            else:
-                                print packet
+                ## Get and Process next packet
+                packet = self._getNextPacket()
+
+                if packet is None:
+
+                    # Remote disconnected
+                    break
+
+                elif packet:
+
+                    # TODO: Process packet
+                    print packet
+
+                ## Call user code
+                # TODO: It.
 
         except socket.error, e:
 
