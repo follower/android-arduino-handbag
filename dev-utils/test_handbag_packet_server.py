@@ -80,7 +80,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         return packet
 
 
-    def addLabel(self, fontSize, alignment, labelText):
+    def addLabel(self, labelText, fontSize = 0, alignment = 0):
         """
         """
         self._widgetId+=1
@@ -92,7 +92,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         return self._widgetId
 
 
-    def addButton(self, fontSize, alignment, labelText, callback):
+    def addButton(self, labelText, callback, fontSize = 0, alignment = 0):
         """
         """
         self._widgetId+=1
@@ -131,11 +131,11 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
         # TODO: Remove this test code
 
-        self.addLabel(30, 0, "My Label;\nHere, forever.")
+        self.addLabel("My Label;\nHere, forever.", 30, 0)
 
-        self.addButton(0, 0, "Push It!", self.testButton)
+        self.addButton("Push It!", self.testButton)
 
-        self.addButton(0, 0, "Say Something", self.testSayButton)
+        self.addButton("Say Something", self.testSayButton)
 
 
     def loop(self):
