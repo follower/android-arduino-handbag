@@ -150,10 +150,24 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
         self.changeButton_WidgetId = self.addButton("Change me", self.testChangeButton)
 
+        self.counterLabel_WidgetId = self.addLabel("0.00", 50, 1)
+
+        self.nextChange = 0
+        self.counter = 0.00
+
 
     def loop(self):
         """
         """
+
+        # TODO: Override this when subclassed.
+
+        # TODO: Remove this test code
+
+        if self.nextChange <= time.time():
+            self.counter+=0.01
+            self.setText(self.counterLabel_WidgetId, "%.2f" %self.counter)
+            self.nextChange = time.time() + 1
 
 
     def testButton(self):
