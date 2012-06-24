@@ -62,38 +62,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
             self.wfile.write(createPacket(data))
 
 
-            #---
-            # import select
-            # print select.select([self.rfile],[self.rfile],[self.rfile],0)
-            # print select.select([self.wfile],[self.wfile],[self.wfile],0)
-            # print select.select([self.request],[self.request],[self.request],0)
-            #---
-
-
             while True:
-
-                # if select.select([self.rfile],[],[],0)[0]:
-
-                #     try:
-                #         packet = parser.nextPacket()
-                #     except socket.timeout:
-                #         print "."
-                #         #break
-                #     else:
-                #         print packet
-
-                # #time.sleep(5)
-                # time.sleep(1)
-                # time.sleep(1) # timing issue...
-
-                #print "-"
-
-                #---
-                # print select.select([self.rfile],[self.rfile],[self.rfile],0)
-                # print select.select([self.wfile],[self.wfile],[self.wfile],0)
-                # print select.select([self.request],[self.request],[self.request],0)
-                #print select.select([self.request],[],[],0)
-                #select.select([self.request],[],[],0) #gah...
 
                 self.wfile.write(createPacket(["idle"])) # TODO: properly
 
@@ -116,23 +85,6 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
                                 #break
                             else:
                                 print packet
-
-
-                # TODO: Only do this if read is available
-                # try:
-                #     t = len(self.request.recv(1024, socket.MSG_PEEK))
-                # except socket.timeout:
-                #     pass # should break?
-                # else:
-                #     print t
-                #     if t==0:
-                #         break
-
-
-                #print self.wfile.read()
-
-                #---
-
 
         except socket.error, e:
 
