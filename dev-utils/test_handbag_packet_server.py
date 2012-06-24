@@ -183,7 +183,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
                 try:
                     self.wfile.close()
                 except socket.error, e:
-                    print "Error on remote disconnect cleanup: " + e
+                    print "Error on remote disconnect cleanup: %s" % e
             else:
                 raise e
 
