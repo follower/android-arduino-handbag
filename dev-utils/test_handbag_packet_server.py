@@ -3,6 +3,9 @@
 
 import SocketServer
 
+import select
+
+import errno
 import socket
 
 import random
@@ -22,11 +25,142 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
     def handle(self):
         """
         """
-        global widgetId
+        global widgetId # Change to local?
+
+        widgetId = 1
 
         print "Client: %s" % str((self.request.getpeername()))
 
+        print self.__dict__
+
         parser = PacketParser(self.rfile)
+
+        # TODO: Do handshake/version check?
+
+        try:
+
+            #---
+            # import select
+            # print select.select([self.rfile],[self.rfile],[self.rfile],0)
+            # print select.select([self.wfile],[self.wfile],[self.wfile],0)
+            # print select.select([self.request],[self.request],[self.request],0)
+            #---
+
+
+            data = ["widget", "label", widgetId, 30, 0, "My Label;\nHere, forever."]
+            widgetId+=1
+
+
+            self.wfile.write(createPacket(data))
+
+
+
+            data = ["widget", "button", widgetId, 0, 0, "Push It!"]
+
+            widgetId+=1
+
+            self.wfile.write(createPacket(data))
+
+
+            #---
+            # import select
+            # print select.select([self.rfile],[self.rfile],[self.rfile],0)
+            # print select.select([self.wfile],[self.wfile],[self.wfile],0)
+            # print select.select([self.request],[self.request],[self.request],0)
+            #---
+
+
+            while True:
+
+                # if select.select([self.rfile],[],[],0)[0]:
+
+                #     try:
+                #         packet = parser.nextPacket()
+                #     except socket.timeout:
+                #         print "."
+                #         #break
+                #     else:
+                #         print packet
+
+                # #time.sleep(5)
+                # time.sleep(1)
+                # time.sleep(1) # timing issue...
+
+                #print "-"
+
+                #---
+                # print select.select([self.rfile],[self.rfile],[self.rfile],0)
+                # print select.select([self.wfile],[self.wfile],[self.wfile],0)
+                # print select.select([self.request],[self.request],[self.request],0)
+                #print select.select([self.request],[],[],0)
+                #select.select([self.request],[],[],0) #gah...
+
+                self.wfile.write(createPacket(["idle"])) # TODO: properly
+
+                if select.select([self.request],[],[],0.1)[0]:
+                    try:
+                        t = len(self.request.recv(1024, socket.MSG_PEEK))
+                    except socket.timeout:
+                        print "timeout"
+                        pass # should break?
+                    else:
+                        print t
+                        if t==0:
+                            print "nothing there"
+                            break
+                        else:
+                            try:
+                                packet = parser.nextPacket()
+                            except socket.timeout:
+                                print "."
+                                #break
+                            else:
+                                print packet
+
+
+                # TODO: Only do this if read is available
+                # try:
+                #     t = len(self.request.recv(1024, socket.MSG_PEEK))
+                # except socket.timeout:
+                #     pass # should break?
+                # else:
+                #     print t
+                #     if t==0:
+                #         break
+
+
+                #print self.wfile.read()
+
+                #---
+
+
+        except socket.error, e:
+
+            print e
+
+            if e[0] in [errno.EPIPE, errno.ECONNRESET]:
+                print "Remote disconnect"
+                try:
+                    self.wfile.close()
+                except socket.error, e:
+                    print "Error on remote disconnect cleanup: " + e
+            else:
+                raise e
+
+        finally:
+            # problem with borken pipe?
+            try:
+                self.request.shutdown(socket.SHUT_RDWR)
+                self.request.close()
+            except socket.error, e:
+                if e[0] == errno.ENOTCONN: # "Socket is not connected"
+                    print "Can't shutdown/close remote already disconnected"
+                else:
+                    raise e
+
+        print "bye"
+
+        return
 
         for i in range(4):
             data = ["widget", "label", widgetId, random.randint(0, 40), 0, "My Label;\nHere, forever."]
