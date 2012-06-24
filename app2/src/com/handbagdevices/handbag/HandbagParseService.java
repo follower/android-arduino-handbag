@@ -252,6 +252,8 @@ public class HandbagParseService extends Service {
 
     public void processPacketContent(String[] packet) {
 
+        // TODO: Add "config" as a field to "widget"s?
+
         // TODO: Check packet length.
 
         if (packet[PACKET_OFFSET_PACKET_TYPE].equals(PACKET_TYPE_WIDGET)) {
