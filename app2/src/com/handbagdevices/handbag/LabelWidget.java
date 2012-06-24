@@ -24,6 +24,26 @@ public class LabelWidget extends WidgetConfig {
 	}
 
 
+    protected void configureAsTextView(TextView label) {
+        /*
+           Does standard configuration of TextView subclasses
+           (e.g. font size, alignment, content.)
+
+         */
+
+        label.setText(text);
+
+        if (fontSize > 0) {
+            label.setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, fontSize);
+        }
+
+        if (alignment > 0) {
+            label.setGravity(alignment);
+        }
+
+    }
+
+
 	@Override
     public void displaySelf(ViewGroup parent) { // TODO: Accept view/layout but cast to viewgroup?
 
@@ -38,15 +58,7 @@ public class LabelWidget extends WidgetConfig {
             parent.addView(label);
         }
 
-		label.setText(text);
-
-		if (fontSize > 0) {
-			label.setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, fontSize);
-		}
-
-		if (alignment > 0) {
-			label.setGravity(alignment);
-		}
+        configureAsTextView(label);
 
 	}
 
