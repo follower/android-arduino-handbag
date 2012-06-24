@@ -15,7 +15,8 @@ public class LabelWidget extends WidgetConfig {
 	int alignment;
 	String text;
 
-	private LabelWidget(int widgetId, int theFontSize, int widgetAlignment, String labelText) {
+
+    protected LabelWidget(int widgetId, int theFontSize, int widgetAlignment, String labelText) {
 		remoteWidgetId = widgetId;
 		fontSize = theFontSize;
 		alignment = widgetAlignment;
