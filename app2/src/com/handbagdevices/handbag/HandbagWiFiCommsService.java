@@ -405,7 +405,9 @@ public class HandbagWiFiCommsService extends Service {
                     // TODO: Handle writing output stream also.
                     // Note: This call blocks for data. // TODO: At least I thought so...
                     // TODO: Handle disconnect.
+                    Log.d(this.getClass().getSimpleName(), "pre getNextPacket()");
                     newPacket = parser.getNextPacket();
+                    Log.d(this.getClass().getSimpleName(), "post getNextPacket()");
 
                     if (newPacket.length != 0) {
                         Log.d(this.getClass().getSimpleName(), "Got result: " + Arrays.toString(newPacket));
