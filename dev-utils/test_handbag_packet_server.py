@@ -151,6 +151,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
             while True:
 
                 ## Idle (shouldn't be needed once we use non-blocking I/O on Android)
+                time.sleep(0.5)
                 self.wfile.write(createPacket(["idle"])) # TODO: properly
 
                 ## Get and Process next packet
