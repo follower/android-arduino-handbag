@@ -11,7 +11,7 @@ abstract class WidgetConfig {
 	static final int WIDGET_ID_OFFSET = 7200;
 
 	abstract void displaySelf(ViewGroup parent);
-	
+
 	public static WidgetConfig fromArray(String[] theArray) {
 		// This is a work around for Java not having static methods in Interfaces
 		// and not having overridable static methods in Abstract Classes.
