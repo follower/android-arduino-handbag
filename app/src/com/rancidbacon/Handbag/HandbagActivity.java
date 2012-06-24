@@ -277,6 +277,7 @@ public class HandbagActivity extends Activity implements Runnable {
 		while (ret >= 0) {
 			try {
 				ret = mInputStream.read(buffer);
+				Log.d(TAG, "Received: " + buffer);
 			} catch (IOException e) {
 				break;
 			}
@@ -361,6 +362,7 @@ public class HandbagActivity extends Activity implements Runnable {
 		if (mOutputStream != null && buffer[1] != -1) {
 			try {
 				mOutputStream.write(buffer);
+				Log.d(TAG, "Sent (command): " + buffer);
 			} catch (IOException e) {
 				Log.e(TAG, "write failed", e);
 			}
