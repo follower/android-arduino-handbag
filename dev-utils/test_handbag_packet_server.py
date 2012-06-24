@@ -94,6 +94,15 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         return self._widgetId
 
 
+    def setText(self, widgetId, labelText, fontSize = 0, alignment = 0):
+        """
+        """
+
+        data = ["widget", "label", widgetId, fontSize, alignment, labelText]
+
+        self.wfile.write(createPacket(data))
+
+
     def addButton(self, labelText, callback, fontSize = 0, alignment = 0):
         """
         """
