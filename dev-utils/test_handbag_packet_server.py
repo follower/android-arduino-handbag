@@ -25,6 +25,8 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
     _widgetId = None
 
+    _buttons = None # TODO: Make this `_widgets` instead?
+
 
     def _getNumBytesAvailable(self):
         """
@@ -78,6 +80,32 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         return packet
 
 
+    def addLabel(self, fontSize, alignment, labelText):
+        """
+        """
+        self._widgetId+=1
+
+        data = ["widget", "label", self._widgetId, fontSize, alignment, labelText]
+
+        self.wfile.write(createPacket(data))
+
+        return self._widgetId
+
+
+    def addButton(self, fontSize, alignment, labelText, callback):
+        """
+        """
+        self._widgetId+=1
+
+        data = ["widget", "button", self._widgetId, fontSize, alignment, labelText]
+
+        self.wfile.write(createPacket(data))
+
+        self._buttons[self._widgetId] = {"callback": callback}
+
+        return self._widgetId
+
+
     def setupUI(self):
         """
         """
@@ -85,17 +113,9 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
         # TODO: Remove this test code
 
-        # TODO: Use helper methods
-        data = ["widget", "label", self._widgetId, 30, 0, "My Label;\nHere, forever."]
-        self._widgetId+=1
+        self.addLabel(30, 0, "My Label;\nHere, forever.")
 
-        self.wfile.write(createPacket(data))
-
-
-        data = ["widget", "button", self._widgetId, 0, 0, "Push It!"]
-        self._widgetId+=1
-
-        self.wfile.write(createPacket(data))
+        self.addButton(0, 0, "Push It!", self.testButton)
 
 
     def loop(self):
@@ -103,11 +123,18 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         """
 
 
+    def testButton():
+        """
+        """
+        print "Button pressed!"
+
+
     def handle(self):
         """
         """
 
-        self._widgetId = 1
+        self._widgetId = 0
+        self._buttons = {}
 
         print "Client: %s" % str((self.request.getpeername()))
 
