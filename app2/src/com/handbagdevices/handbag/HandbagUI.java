@@ -473,8 +473,6 @@ public class HandbagUI extends Activity {
 
         WidgetConfig widget = null;
 
-        sendPacket(new String[] { "foo" }); // TODO: Do properly (Only here for test purposes).
-
         String widgetClassName = MAP_WIDGET_TO_CLASS.get(packet[PACKET_OFFSET_WIDGET_TYPE]);
 
         if (widgetClassName != null) {
