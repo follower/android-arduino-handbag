@@ -80,6 +80,8 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         return packet
 
 
+    # TODO: Refactor all these helper methods
+
     def addLabel(self, labelText, fontSize = 0, alignment = 0):
         """
         """
