@@ -115,6 +115,15 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         self.wfile.write(createPacket(data))
 
 
+    def speakText(self, textToSay, pitch = 1.0, speechRate = 1.0):
+        """
+        """
+
+        data = ["feature", "speech", "speak", textToSay, str(pitch), str(speechRate)]
+
+        self.wfile.write(createPacket(data))
+
+
     def setupUI(self):
         """
         """
