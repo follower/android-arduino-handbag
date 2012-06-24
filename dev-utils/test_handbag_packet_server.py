@@ -39,14 +39,6 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
         try:
 
-            #---
-            # import select
-            # print select.select([self.rfile],[self.rfile],[self.rfile],0)
-            # print select.select([self.wfile],[self.wfile],[self.wfile],0)
-            # print select.select([self.request],[self.request],[self.request],0)
-            #---
-
-
             data = ["widget", "label", widgetId, 30, 0, "My Label;\nHere, forever."]
             widgetId+=1
 
