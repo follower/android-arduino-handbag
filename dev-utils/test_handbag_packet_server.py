@@ -135,6 +135,8 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
         self.addButton(0, 0, "Push It!", self.testButton)
 
+        self.addButton(0, 0, "Say Something", self.testSayButton)
+
 
     def loop(self):
         """
@@ -146,6 +148,12 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         """
         self.showDialog("Button pressed!")
         print "Button pressed!"
+
+
+    def testSayButton(self):
+        """
+        """
+        self.speakText("Hello from Python!")
 
 
     def handle(self):
