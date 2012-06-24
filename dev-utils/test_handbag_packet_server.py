@@ -44,10 +44,20 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
             else:
                 print packet
 
-        for i in range(21):
-            data = ["widget", "label", widgetId, 50, 0x01, i]
-            self.wfile.write(createPacket(data))
-            time.sleep(0.1)
+        try:
+            for i in range(21):
+                data = ["widget", "label", widgetId, 50, 0x01, i]
+                self.wfile.write(createPacket(data))
+                time.sleep(0.1)
+        except socket.error, e:
+            print e
+
+            try:
+                self.wfile.close()
+            except socket.error, e:
+                print e
+
+            return
 
         widgetId+=1
 
