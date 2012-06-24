@@ -106,6 +106,15 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         return self._widgetId
 
 
+    def showDialog(self, dialogText):
+        """
+        """
+
+        data = ["widget", "dialog", dialogText]
+
+        self.wfile.write(createPacket(data))
+
+
     def setupUI(self):
         """
         """
