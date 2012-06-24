@@ -123,7 +123,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         """
 
 
-    def testButton():
+    def testButton(self):
         """
         """
         print "Button pressed!"
@@ -164,7 +164,11 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
                 elif packet:
 
                     # TODO: Process packet
-                    print packet
+                    # TODO: Do all this properly
+                    if packet[0] == "widget" and packet[1] == "event" and packet[3] == "click":
+                        self._buttons[int(packet[2])]["callback"]()
+                    else:
+                        print packet
 
                 ## Call user code
                 self.loop()
