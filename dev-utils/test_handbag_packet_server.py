@@ -148,6 +148,8 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
         self.addButton("Say Something", self.testSayButton)
 
+        self.changeButton_WidgetId = self.addButton("Change me", self.testChangeButton)
+
 
     def loop(self):
         """
@@ -165,6 +167,13 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         """
         """
         self.speakText("Hello from Python!")
+
+
+    def testChangeButton(self):
+        """
+        """
+        import random
+        self.setText(self.changeButton_WidgetId, "I changed (%d)" % random.randint(0, 1001));
 
 
     def handle(self):
