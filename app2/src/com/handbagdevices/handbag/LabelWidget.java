@@ -49,6 +49,7 @@ public class LabelWidget extends WidgetConfig {
 
 	}
 
+
 	// @Hides
 	public static WidgetConfig fromArray(String[] theArray) {
 		return new LabelWidget(Integer.valueOf(theArray[LABEL_ARRAY_OFFSET_ID]),
