@@ -3,8 +3,6 @@ package com.handbagdevices.handbag;
 import java.io.*;
 import java.util.*;
 
-import android.util.Log;
-
 class PacketParser {
 
     private InputStreamReader input;
@@ -60,7 +58,7 @@ class PacketParser {
             // TODO: Handle blocking (here & elsewhere)?
             token = scanner.next();
 
-            Log.d(this.getClass().getSimpleName(), "Got token: " + token);
+            // Log.d(this.getClass().getSimpleName(), "Got token: " + token);
 
             switch (token.charAt(0)) {
 
