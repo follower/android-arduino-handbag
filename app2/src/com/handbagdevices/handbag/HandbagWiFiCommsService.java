@@ -408,7 +408,6 @@ public class HandbagWiFiCommsService extends Service {
                         break;
                     }
 
-                    // TODO: Handle writing output stream also.
                     // Note: If there is data available at the beginning of this
                     //       call it will block until the whole packet is read.
                     //       If there is no data available at the beginning of the call
