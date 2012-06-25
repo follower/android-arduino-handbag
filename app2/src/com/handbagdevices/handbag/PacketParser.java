@@ -76,6 +76,8 @@ class PacketParser {
                 Log.d(this.getClass().getSimpleName(), "  currentFieldContent length: " + currentFieldContent.length());
                 Log.d(this.getClass().getSimpleName(), "  fieldsInPacket size: " + fieldsInPacket.size());
                 if ((currentFieldContent.length() == 0) && (fieldsInPacket.size() == 0)) {
+                    // Note: This is required because the docs for Scanner say ~"If the underlying read() method
+                    //       throws an IOException then the scanner assumes that the end of the input has been reached."
                     scanner = new Scanner(input);
                 }
                 // TODO: Throw an error on a mid-packet timeout...
