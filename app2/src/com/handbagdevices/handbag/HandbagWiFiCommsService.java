@@ -434,8 +434,8 @@ public class HandbagWiFiCommsService extends Service {
                             Log.d(this.getClass().getSimpleName(), "Socket is closed.");
                             break;
                         }
-                        // Note: This favours receiving over sending.
-                        String[] packetToSend = this.packetsToSendQueue.poll(250, TimeUnit.MILLISECONDS);
+
+                        String[] packetToSend = this.packetsToSendQueue.poll(1, TimeUnit.MILLISECONDS);
 
                         if (packetToSend != null) {
                             Log.d(this.getClass().getSimpleName(), "Sending packet. ");
