@@ -413,9 +413,7 @@ public class HandbagWiFiCommsService extends Service {
                     //       If there is no data available at the beginning of the call
                     //       it returns immediately.
                     // TODO: Handle disconnect.
-                    Log.d(this.getClass().getSimpleName(), "pre getNextPacket()");
                     newPacket = parser.getNextPacket();
-                    Log.d(this.getClass().getSimpleName(), "post getNextPacket()");
 
                     if (newPacket.length != 0) {
                         Log.d(this.getClass().getSimpleName(), "Got result: " + Arrays.toString(newPacket));
