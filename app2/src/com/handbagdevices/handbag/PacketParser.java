@@ -7,7 +7,7 @@ import android.util.Log;
 
 class PacketParser {
 
-    private InputStream input;
+    private InputStreamReader input;
 
     private Scanner scanner;
 
@@ -18,7 +18,7 @@ class PacketParser {
 
 
     PacketParser(InputStream theInput) {
-        input = theInput;
+        input = new InputStreamReader(theInput);
         scanner = new Scanner(input);
     }
 
@@ -28,6 +28,24 @@ class PacketParser {
 
         currentFieldContent.setLength(0);
         fieldsInPacket.clear();
+
+
+        // TODO/NOTE: This doesn't avoid blocking mid-packet, only at the beginning.
+        //            We assume that if there is any data available then a complete
+        //            packet will be available in a "reasonable time frame".
+
+        boolean inputReady = false;
+
+        try {
+            inputReady = input.ready();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Leaves `inputReady` as previous value. i.e. false
+        }
+
+        if (!inputReady) {
+            return new String[] {};
+        }
 
         while (true) {
 
@@ -68,20 +86,6 @@ class PacketParser {
                     break;
             }
 
-        }
-
-        if (scanner.ioException() != null) {
-            if (scanner.ioException().getClass().equals(java.net.SocketTimeoutException.class)) {
-                Log.d(this.getClass().getSimpleName(), "Last exception: " + scanner.ioException());
-                Log.d(this.getClass().getSimpleName(), "  currentFieldContent length: " + currentFieldContent.length());
-                Log.d(this.getClass().getSimpleName(), "  fieldsInPacket size: " + fieldsInPacket.size());
-                if ((currentFieldContent.length() == 0) && (fieldsInPacket.size() == 0)) {
-                    // Note: This is required because the docs for Scanner say ~"If the underlying read() method
-                    //       throws an IOException then the scanner assumes that the end of the input has been reached."
-                    scanner = new Scanner(input);
-                }
-                // TODO: Throw an error on a mid-packet timeout...
-            }
         }
 
         // TODO: Handle incomplete packets.
