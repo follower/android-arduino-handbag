@@ -167,7 +167,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         if self.nextChange <= time.time():
             self.counter+=0.01
             self.setText(self.counterLabel_WidgetId, "%.2f" %self.counter)
-            self.nextChange = time.time() + 10
+            self.nextChange = time.time() + 1
 
 
     def testButton(self):
