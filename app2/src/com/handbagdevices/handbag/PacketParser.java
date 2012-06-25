@@ -70,6 +70,18 @@ class PacketParser {
 
         }
 
+        if (scanner.ioException() != null) {
+            if (scanner.ioException().getClass().equals(java.net.SocketTimeoutException.class)) {
+                Log.d(this.getClass().getSimpleName(), "Last exception: " + scanner.ioException());
+                Log.d(this.getClass().getSimpleName(), "  currentFieldContent length: " + currentFieldContent.length());
+                Log.d(this.getClass().getSimpleName(), "  fieldsInPacket size: " + fieldsInPacket.size());
+                if ((currentFieldContent.length() == 0) && (fieldsInPacket.size() == 0)) {
+                    scanner = new Scanner(input);
+                }
+                // TODO: Throw an error on a mid-packet timeout...
+            }
+        }
+
         // TODO: Handle incomplete packets.
 
         return fieldsInPacket.toArray(new String[] {});

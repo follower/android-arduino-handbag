@@ -374,6 +374,8 @@ public class HandbagWiFiCommsService extends Service {
             // TODO: Handle differently if socket open fails?
             if (socket != null) {
                 try {
+                    socket.setSoTimeout(1000); // We want failure to set the timeout to be fatal to avoid issues with
+                                              // blocking later.
                     dataInStream = new DataInputStream(socket.getInputStream());
                     dataOutStream = new DataOutputStream(socket.getOutputStream());
                 } catch (IOException e) {

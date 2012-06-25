@@ -167,7 +167,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         if self.nextChange <= time.time():
             self.counter+=0.01
             self.setText(self.counterLabel_WidgetId, "%.2f" %self.counter)
-            self.nextChange = time.time() + 1
+            self.nextChange = time.time() + 10
 
 
     def testButton(self):
@@ -210,10 +210,6 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
             self.setupUI()
 
             while True:
-
-                ## Idle (shouldn't be needed once we use non-blocking I/O on Android)
-                time.sleep(0.5)
-                self.wfile.write(createPacket(["idle"])) # TODO: properly
 
                 ## Get and Process next packet
                 packet = self._getNextPacket()
