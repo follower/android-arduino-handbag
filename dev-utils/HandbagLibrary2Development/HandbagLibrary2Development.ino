@@ -97,8 +97,7 @@ void loop() {
 
     addLabel(client, "Further words", 35, 1);
 
-    client.write("widget;dialog;Hello!\n");
-    delay(100);
+    showDialog(client, "Hello Dialog!");
 
     addLabel(client, "[\nhello there;\n]", 35, 1);
 
