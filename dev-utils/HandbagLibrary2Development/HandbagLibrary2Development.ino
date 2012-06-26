@@ -26,9 +26,7 @@ void sendField(Print& strm, const char *fieldData, boolean isFinalField = false)
 
 unsigned int lastWidgetId = 0;
 
-unsigned int addLabel(Print& strm, const char *labelText, byte fontSize = 0, byte alignment = 0) {
-
-  unsigned int widgetId = ++lastWidgetId;
+void setText(Print& strm, int widgetId, const char *labelText, byte fontSize = 0, byte alignment = 0) {
 
   sendField(strm, "widget");
 
@@ -45,6 +43,15 @@ unsigned int addLabel(Print& strm, const char *labelText, byte fontSize = 0, byt
   strm.write(";");
 
   sendField(strm, labelText, true);
+
+}
+
+unsigned int addLabel(Print& strm, const char *labelText, byte fontSize = 0, byte alignment = 0) {
+
+  unsigned int widgetId = ++lastWidgetId;
+
+  // Note: Takes advantage that widgets are auto-created if the Id is new.
+  setText(strm, widgetId, labelText, fontSize, alignment);
 
   return widgetId;
 
