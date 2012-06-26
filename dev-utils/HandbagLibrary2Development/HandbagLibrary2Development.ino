@@ -34,6 +34,14 @@ void loop() {
     Serial.println("sent");
 
     while (client.connected()) {
+
+      server.write("widget;label;3;35;1;");
+      server.print(analogRead(A0));
+      server.write("\n");
+      delay(100);
+
+      delay(1000);
+
       if (client.available() > 0) {
         client.read();
       }
