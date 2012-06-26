@@ -67,6 +67,7 @@ void showDialog(Print& strm, const char *messageText) {
 
 }
 
+
 #include <SPI.h>
 #include <Ethernet.h>
 
