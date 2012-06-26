@@ -17,7 +17,7 @@ void sendField(Print& strm, const char *fieldData, boolean isFinalField = false)
   // TODO: Handle this better?
   if (isFinalField) {
     strm.write("\n");
-    delay(100);
+    delay(100); // TODO: Move elsewhere?
   } else {
     strm.write(";");
   }
