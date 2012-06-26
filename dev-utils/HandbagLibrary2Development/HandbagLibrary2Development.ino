@@ -7,10 +7,14 @@ IPAddress ip(169, 254, 254, 169);
 EthernetServer server(0xba9);
 
 void setup() {
+
+  Serial.begin(9600);
+
   Ethernet.begin(mac, ip);
 
   server.begin();
 
+  Serial.println("start");
 }
 
 void loop() {
@@ -18,26 +22,30 @@ void loop() {
 
   if (client) {
 
-    //server.write("widget;label;1;35;1;A Label!\nwidget;dialog;Hello!\n");
+    Serial.println("connected.");
+
     server.write("widget;label;1;35;1;A Label!\n");
     delay(100);    
     server.write("widget;label;2;35;1;Further words\n");
     delay(100);    
     server.write("widget;dialog;Hello!\n");
     delay(100);
-    client.stop();
-    
-/*    
+
+    Serial.println("sent");
+
     while (client.connected()) {
       if (client.available() > 0) {
-  
-        char thisChar = client.read();
-  
-        server.write(thisChar);
+        client.read();
       }
+      delay(10);
     }
-*/  
+
+    Serial.println("not connected");
+
+    client.stop();
+
+    Serial.println("stop.");
 
   }
-  
+
 }
