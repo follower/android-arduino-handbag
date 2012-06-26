@@ -57,6 +57,15 @@ unsigned int addLabel(Print& strm, const char *labelText, byte fontSize = 0, byt
 
 }
 
+void showDialog(Print& strm, const char *messageText) {
+
+  sendField(strm, "widget");
+
+  sendField(strm, "dialog");
+
+  sendField(strm, messageText, true);
+
+}
 
 #include <SPI.h>
 #include <Ethernet.h>
