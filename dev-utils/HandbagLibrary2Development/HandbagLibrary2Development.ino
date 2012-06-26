@@ -1,6 +1,8 @@
 #include <string.h>
 #include <Print.h>
 
+#define BASIC_CALLBACK(varname) void (*varname)()
+
 class HandbagProtocolMixIn {
 
 private:
@@ -8,6 +10,8 @@ private:
 
 protected:
   Print *strm; // TODO: Make a reference to avoid needing "->" use? // TODO: Ensure strm isn't NULL.
+
+  BASIC_CALLBACK(setupUICallback);
 
   void reset() { // TODO: Rename?
     lastWidgetId = 0;
@@ -109,6 +113,14 @@ public:
     client = EthernetClient();
   }
 
+  int begin(BASIC_CALLBACK(setupUICallback)) {
+    this->setupUICallback = setupUICallback;
+
+    server.begin();
+
+    return 1;
+  }
+
   void refresh() {
     /*
      */
@@ -126,7 +138,10 @@ public:
 
         strm = &client;
 
-        addLabel("Hello World.", 35, 1);
+        if (setupUICallback != NULL) {
+          // NOTE: This *must* only be called after 'strm' is valid.
+          setupUICallback();
+        }
 
         uiIsSetup = true;
       }
@@ -155,13 +170,21 @@ EthernetServer server(0xba9);
 
 Handbag2 Handbag(server);
 
+
+void setupUI() {
+  /*
+   */
+  Handbag.addLabel("Hello, again!");
+}
+
+
 void setup() {
 
   Serial.begin(9600);
 
   Ethernet.begin(mac, ip);
 
-  server.begin();
+  Handbag.begin(setupUI);
 
   Serial.println("start");
 }
