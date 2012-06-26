@@ -1,78 +1,92 @@
 #include <string.h>
 #include <Print.h>
 
-void sendField(Print& strm, const char *fieldData, boolean isFinalField = false) {
-  if ((fieldData == NULL)) {
-    return;
+class HandbagProtocolMixIn {
+
+private:
+  unsigned int lastWidgetId;
+
+protected:
+  Print *strm; // TODO: Make a reference to avoid needing "->" use?
+
+  void reset() {
+    lastWidgetId = 0;
+
+    // TODO: Add other items?
   }
 
-  if ((fieldData[0] == '[') || (strpbrk(fieldData, ";\n") != NULL)) {
-    strm.write("[");
-    strm.print(strlen(fieldData));
-    strm.write("]");
+  void sendField(const char *fieldData, boolean isFinalField = false) {
+    if ((fieldData == NULL)) {
+      return;
+    }
+
+    if ((fieldData[0] == '[') || (strpbrk(fieldData, ";\n") != NULL)) {
+      strm->write("[");
+      strm->print(strlen(fieldData));
+      strm->write("]");
+    }
+
+    strm->write(fieldData);
+
+    // TODO: Handle this better?
+    if (isFinalField) {
+      strm->write("\n");
+      delay(100); // TODO: Move elsewhere?
+    } else {
+      strm->write(";");
+    }
+
   }
 
-  strm.write(fieldData);
 
-  // TODO: Handle this better?
-  if (isFinalField) {
-    strm.write("\n");
-    delay(100); // TODO: Move elsewhere?
-  } else {
-    strm.write(";");
+  void setText(int widgetId, const char *labelText, byte fontSize = 0, byte alignment = 0) {
+
+    sendField("widget");
+
+    sendField("label");
+
+    // TODO: Handle other types in sendField?
+    strm->print(widgetId);
+    strm->write(";");
+
+    strm->print(fontSize);
+    strm->write(";");
+
+    strm->print(alignment);
+    strm->write(";");
+
+    sendField(labelText, true);
   }
 
-}
 
-unsigned int lastWidgetId = 0;
+  unsigned int addLabel(const char *labelText, byte fontSize = 0, byte alignment = 0) {
 
-void setText(Print& strm, int widgetId, const char *labelText, byte fontSize = 0, byte alignment = 0) {
+    unsigned int widgetId = ++lastWidgetId;
 
-  sendField(strm, "widget");
+    // Note: Takes advantage that widgets are auto-created if the Id is new.
+    setText(widgetId, labelText, fontSize, alignment);
 
-  sendField(strm, "label");
+    return widgetId;
+  }
 
-  // TODO: Handle other types in sendField?
-  strm.print(widgetId);
-  strm.write(";");
 
-  strm.print(fontSize);
-  strm.write(";");
+  void showDialog(const char *messageText) {
 
-  strm.print(alignment);
-  strm.write(";");
+    sendField("widget");
 
-  sendField(strm, labelText, true);
+    sendField("dialog");
 
-}
+    sendField(messageText, true);
+  }
 
-unsigned int addLabel(Print& strm, const char *labelText, byte fontSize = 0, byte alignment = 0) {
-
-  unsigned int widgetId = ++lastWidgetId;
-
-  // Note: Takes advantage that widgets are auto-created if the Id is new.
-  setText(strm, widgetId, labelText, fontSize, alignment);
-
-  return widgetId;
-
-}
-
-void showDialog(Print& strm, const char *messageText) {
-
-  sendField(strm, "widget");
-
-  sendField(strm, "dialog");
-
-  sendField(strm, messageText, true);
-
-}
+};
 
 
 #include <SPI.h>
 #include <Ethernet.h>
 
 
-class Handbag2 {
+class Handbag2 : private HandbagProtocolMixIn {
 
 private:
   EthernetServer& server;
@@ -106,7 +120,12 @@ public:
       if (!uiIsSetup) {
         // TODO: Initialise here
 
-        addLabel(client, "Hello World.", 35, 1);
+        // TODO: Reset widget ids etc.
+        reset();
+
+        strm = &client;
+
+        addLabel("Hello World.", 35, 1);
 
         uiIsSetup = true;
       }
