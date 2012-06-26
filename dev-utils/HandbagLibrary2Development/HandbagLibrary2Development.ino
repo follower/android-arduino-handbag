@@ -39,6 +39,7 @@ protected:
   }
 
 
+public:
   void setText(int widgetId, const char *labelText, byte fontSize = 0, byte alignment = 0) {
 
     sendField("widget");
@@ -86,7 +87,7 @@ protected:
 #include <Ethernet.h>
 
 
-class Handbag2 : private HandbagProtocolMixIn {
+class Handbag2 : public HandbagProtocolMixIn {
 
 private:
   EthernetServer& server;
