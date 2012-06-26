@@ -7,7 +7,7 @@ private:
   unsigned int lastWidgetId;
 
 protected:
-  Print *strm; // TODO: Make a reference to avoid needing "->" use?
+  Print *strm; // TODO: Make a reference to avoid needing "->" use? // TODO: Ensure strm isn't NULL.
 
   void reset() {
     lastWidgetId = 0;
