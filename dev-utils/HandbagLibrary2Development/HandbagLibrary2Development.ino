@@ -1,7 +1,7 @@
 #include <string.h>
 #include <Print.h>
 
-void sendField(Print& strm, const char *fieldData) {
+void sendField(Print& strm, const char *fieldData, boolean isFinalField = false) {
   if ((fieldData == NULL)) {
     return;
   }
@@ -14,8 +14,42 @@ void sendField(Print& strm, const char *fieldData) {
 
   strm.write(fieldData);
 
-  // TODO: Which terminator?
+  // TODO: Handle this better?
+  if (isFinalField) {
+    strm.write("\n");
+    delay(100);
+  } else {
+    strm.write(";");
+  }
+
 }
+
+unsigned int lastWidgetId = 0;
+
+unsigned int addLabel(Print& strm, const char *labelText, byte fontSize = 0, byte alignment = 0) {
+
+  unsigned int widgetId = ++lastWidgetId;
+
+  sendField(strm, "widget");
+
+  sendField(strm, "label");
+
+  // TODO: Handle other types in sendField?
+  strm.print(widgetId);
+  strm.write(";");
+
+  strm.print(fontSize);
+  strm.write(";");
+
+  strm.print(alignment);
+  strm.write(";");
+
+  sendField(strm, labelText, true);
+
+  return widgetId;
+
+}
+
 
 #include <SPI.h>
 #include <Ethernet.h>
@@ -43,25 +77,24 @@ void loop() {
 
     Serial.println("connected.");
 
-    server.write("widget;label;1;35;1;A Label!\n");
-    delay(100);    
-    server.write("widget;label;2;35;1;Further words\n");
-    delay(100);    
-    server.write("widget;dialog;Hello!\n");
+    addLabel(client, "A Label!", 35, 1);
+
+    addLabel(client, "Further words", 35, 1);
+
+    client.write("widget;dialog;Hello!\n");
     delay(100);
 
-    server.write("widget;label;5;35;1;");
-    sendField(server, "[\nhello there;\n]");
-    server.write("\n");
-    delay(100);
+    addLabel(client, "[\nhello there;\n]", 35, 1);
+
+    addLabel(client, "MORE", 100, 1);
 
     Serial.println("sent");
 
     while (client.connected()) {
 
-      server.write("widget;label;3;35;1;");
-      server.print(analogRead(A0));
-      server.write("\n");
+      client.write("widget;label;10;35;1;");
+      client.print(analogRead(A0));
+      client.write("\n");
       delay(100);
 
       delay(1000);
