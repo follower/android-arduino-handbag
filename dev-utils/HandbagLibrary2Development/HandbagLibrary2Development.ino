@@ -1,3 +1,22 @@
+#include <string.h>
+#include <Print.h>
+
+void sendField(Print& strm, const char *fieldData) {
+  if ((fieldData == NULL)) {
+    return;
+  }
+
+  if ((fieldData[0] == '[') || (strpbrk(fieldData, ";\n") != NULL)) {
+    strm.write("[");
+    strm.print(strlen(fieldData));
+    strm.write("]");
+  }
+
+  strm.write(fieldData);
+
+  // TODO: Which terminator?
+}
+
 #include <SPI.h>
 #include <Ethernet.h>
 
@@ -29,6 +48,11 @@ void loop() {
     server.write("widget;label;2;35;1;Further words\n");
     delay(100);    
     server.write("widget;dialog;Hello!\n");
+    delay(100);
+
+    server.write("widget;label;5;35;1;");
+    sendField(server, "[\nhello there;\n]");
+    server.write("\n");
     delay(100);
 
     Serial.println("sent");
