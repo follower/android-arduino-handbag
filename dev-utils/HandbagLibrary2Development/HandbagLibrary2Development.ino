@@ -95,14 +95,31 @@ void loop() {
 
     addLabel(client, "MORE", 100, 1);
 
+    unsigned int analogWidgetId = addLabel(client, "0", 35, 1);
+
     Serial.println("sent");
 
     while (client.connected()) {
 
-      client.write("widget;label;10;35;1;");
-      client.print(analogRead(A0));
-      client.write("\n");
-      delay(100);
+      unsigned int value = analogRead(A0);
+
+      // Hacky itoa for analog range:
+      char result[5];
+      byte offset = 0;
+      if (value > 1000) {
+        result[offset++] = '1';
+      }
+      if (value > 100) {
+        result[offset++] = ((value / 100) % 10) + '0';
+      }
+      if (value > 10) {
+        result[offset++] = ((value / 10) % 10) + '0';
+      }
+      result[offset++] = (value % 10) + '0';
+      result[offset++] = '\0';
+
+      setText(client, analogWidgetId, result);
+
 
       delay(1000);
 
