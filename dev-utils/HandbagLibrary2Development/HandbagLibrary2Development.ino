@@ -70,10 +70,69 @@ void showDialog(Print& strm, const char *messageText) {
 #include <SPI.h>
 #include <Ethernet.h>
 
+
+class Handbag2 {
+
+private:
+  EthernetServer& server;
+
+  EthernetClient client;
+
+  boolean uiIsSetup;
+
+public:
+  Handbag2(EthernetServer& server) : server(server) {
+    /*
+     */
+    // Ideally we'd use 'Server' instead but it doesn't have a 'available()' method
+    // we can use.
+    // Maybe we need to accept a 'Client' at a different stage...
+    // TODO: Handle all this better.
+
+    uiIsSetup = false;
+    client = EthernetClient();
+  }
+
+  void refresh() {
+    /*
+     */
+
+    if (!client) {
+      client = server.available();
+    }
+
+    if (client) {
+      if (!uiIsSetup) {
+        // TODO: Initialise here
+
+        addLabel(client, "Hello World.", 35, 1);
+
+        uiIsSetup = true;
+      }
+
+      if (client.connected()) {
+
+        // TODO: Process unread bytes
+        // TODO: Do this properly
+        while (client.available() > 0) {
+          client.read();
+        }
+
+      } else {
+        client.stop(); // TODO: Unnecessary and/or enough?
+        uiIsSetup = false;
+      }
+    }
+  }
+};
+
+
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 IPAddress ip(169, 254, 254, 169);
 
 EthernetServer server(0xba9);
+
+Handbag2 Handbag(server);
 
 void setup() {
 
@@ -87,6 +146,10 @@ void setup() {
 }
 
 void loop() {
+
+#if 1
+  Handbag.refresh();
+#else
   EthernetClient client = server.available();
 
   if (client) {
@@ -144,5 +207,5 @@ void loop() {
     Serial.println("stop.");
 
   }
-
+#endif
 }
