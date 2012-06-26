@@ -9,7 +9,7 @@ private:
 protected:
   Print *strm; // TODO: Make a reference to avoid needing "->" use? // TODO: Ensure strm isn't NULL.
 
-  void reset() {
+  void reset() { // TODO: Rename?
     lastWidgetId = 0;
 
     // TODO: Add other items?
