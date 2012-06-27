@@ -225,7 +225,7 @@ void setupUI() {
    */
   Handbag.addLabel("Hello, again!");
 
-  analogWidgetId = Handbag.addLabel("0", 50, 1);;
+  analogWidgetId = Handbag.addLabel("0", 50, 1);
 }
 
 
