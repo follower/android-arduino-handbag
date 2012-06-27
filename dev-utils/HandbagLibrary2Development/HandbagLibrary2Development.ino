@@ -116,6 +116,28 @@ public:
     sendField(messageText, true);
   }
 
+
+  void setProgressBar(unsigned int widgetId, int value) {
+    sendField("widget");
+
+    sendField("progress");
+
+    sendField(widgetId);
+
+    sendField(value, true);
+  }
+
+
+  unsigned int addProgressBar(int initialValue = 0) {
+
+    unsigned int widgetId = ++lastWidgetId;
+
+    // Note: Takes advantage that widgets are auto-created if the Id is new.
+    setProgressBar(widgetId, initialValue);
+
+    return widgetId;
+  }
+
 };
 
 
