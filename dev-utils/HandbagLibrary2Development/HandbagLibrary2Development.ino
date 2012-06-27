@@ -15,7 +15,7 @@
 
 class InteractiveWidget {
   // TODO: Store callback/widget type also?
-  unsigned int widgetId;
+  unsigned int widgetId; // TODO: Change name to just 'id'?
   union {
     BASIC_CALLBACK(basic_callback);
   };
