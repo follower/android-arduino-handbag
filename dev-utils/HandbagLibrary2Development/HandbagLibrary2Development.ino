@@ -432,6 +432,23 @@ unsigned int progressWidgetId;
 
 boolean saidSomething = false;
 
+const int ledPin = A5;
+
+
+void callbackDialog() {
+  /*
+   */
+  Handbag.showDialog("You pushed it!");
+}
+
+
+void callbackToggle() {
+  /*
+   */
+  digitalWrite(ledPin, !digitalRead(ledPin));
+}
+
+
 void setupUI() {
   /*
    */
@@ -440,6 +457,10 @@ void setupUI() {
   analogWidgetId = Handbag.addLabel("0", 50, 1);
 
   progressWidgetId = Handbag.addProgressBar();
+
+  Handbag.addButton("Push Me", callbackDialog);
+
+  Handbag.addButton("Toggle LED", callbackToggle);
 }
 
 
@@ -452,6 +473,8 @@ void setup() {
   Handbag.begin(setupUI);
 
   Serial.println("start");
+
+  pinMode(ledPin, OUTPUT);
 }
 
 
