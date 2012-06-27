@@ -253,6 +253,8 @@ unsigned int analogWidgetId;
 
 unsigned int progressWidgetId;
 
+boolean saidSomething = false;
+
 void setupUI() {
   /*
    */
@@ -301,6 +303,14 @@ void loop() {
   if (Handbag.isConnected()) {
     Handbag.setText(analogWidgetId, result);
     Handbag.setProgressBar(progressWidgetId, ((value*100UL)/1023));
+
+    if (!saidSomething) {
+      Handbag.speakText("Hello from Ardweeno!");
+      saidSomething = true;
+    }
+
+  } else {
+    saidSomething = false;
   }
 
   delay(100);
