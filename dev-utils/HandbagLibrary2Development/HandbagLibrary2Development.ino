@@ -7,10 +7,46 @@
 
 #define SCRATCH_BUFFER_SIZE 32 // TODO: Change size?
 
+// TODO: Increase this?
+// NOTE: This includes 1 location for a terminal marker (with Id 'TERMINAL_WIDGET_ID' i.e. 0).
+#define MAX_INTERACTIVE_WIDGETS 11 // "Interactive" means associated with a callback
+
+#define TERMINAL_WIDGET_ID 0
+
+class InteractiveWidget {
+  // TODO: Store callback/widget type also?
+  unsigned int widgetId;
+  union {
+    BASIC_CALLBACK(basic_callback);
+  };
+
+  friend class HandbagProtocolMixIn;
+};
+
 class HandbagProtocolMixIn {
 
 private:
   unsigned int lastWidgetId;
+
+  InteractiveWidget widgets[MAX_INTERACTIVE_WIDGETS]; // TODO: Change name?
+
+  // TODO: Support other call back types.
+  void storeWidgetInfo(unsigned int widgetId, BASIC_CALLBACK(basic_callback)) {
+    unsigned int offset = 0;
+
+    // TODO: Handle all this better?
+    // TODO: Just store this value instead?
+    while (widgets[offset].widgetId != TERMINAL_WIDGET_ID) {
+      offset++;
+    }
+
+    if ((offset + 1) < MAX_INTERACTIVE_WIDGETS) {
+      widgets[offset + 1].widgetId = TERMINAL_WIDGET_ID;
+
+      widgets[offset].widgetId = widgetId;
+      widgets[offset].basic_callback = basic_callback;
+    }
+  }
 
 protected:
   Stream *strm; // TODO: Make a reference to avoid needing "->" use? // TODO: Ensure strm isn't NULL.
@@ -20,6 +56,8 @@ protected:
 
   void reset() { // TODO: Rename?
     lastWidgetId = 0;
+
+    widgets[0].widgetId = TERMINAL_WIDGET_ID; // Mark as "last" widget
 
     // TODO: Add other items?
   }
