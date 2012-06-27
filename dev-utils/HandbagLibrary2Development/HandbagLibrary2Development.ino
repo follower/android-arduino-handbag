@@ -80,7 +80,7 @@ protected:
 
 
 public:
-  void setText(int widgetId, const char *labelText, byte fontSize = 0, byte alignment = 0) {
+  void setText(unsigned int widgetId, const char *labelText, byte fontSize = 0, byte alignment = 0) {
 
     sendField("widget");
 
