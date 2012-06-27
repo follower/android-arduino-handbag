@@ -138,6 +138,16 @@ public:
     return widgetId;
   }
 
+
+  void speakText(const char *textToSay /* TODO: Add pitch/rate support? */) {
+    sendField("feature");
+    sendField("speech");
+    sendField("speak");
+    sendField(textToSay);
+    sendField("1.0");
+    sendField("1.0", true);
+  }
+
 };
 
 
