@@ -286,9 +286,7 @@ public:
 
         // TODO: Process unread bytes
         // TODO: Do this properly
-        while (client.available() > 0) {
-          client.read();
-        }
+        processPacket();
 
       } else {
         client.stop(); // TODO: Unnecessary and/or enough?
