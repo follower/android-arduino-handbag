@@ -405,7 +405,7 @@ public class HandbagWiFiCommsService extends Service {
                 // TODO: Do proper handshake.
                 // Note: We have to send bytes first for an Arduino-based network device to detect us.
                 try {
-                    dataOutStream.writeBytes(PacketGenerator.fromArray(new String[] { "HB2\n" }));
+                    dataOutStream.writeBytes(PacketGenerator.fromArray(new String[] { "HB2" }));
                     dataOutStream.flush();
                 } catch (IOException e1) {
                     Log.d(this.getClass().getSimpleName(), "IOException sending initial handshake packet.");
