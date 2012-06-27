@@ -195,6 +195,33 @@ protected:
 
       packetComplete = false; // TODO: Initialise this elsewhere?
 
+      getFieldContent();
+
+      // TODO: Handle all this properly...
+      if (strcmp(scratchBuffer, "widget") == 0) {
+        // TODO: Handle packetComplete
+        getFieldContent();
+        if (strcmp(scratchBuffer, "event") == 0) {
+          getFieldContent();
+          unsigned int widgetId = atoi(scratchBuffer); // TODO: Check if this works with unsigned ok.
+
+          getFieldContent();
+          if (strcmp(scratchBuffer, "click") == 0) {
+            Serial.print("Click on: ");
+            Serial.println(widgetId);
+
+            // TODO: Just make this a "call callback routine"?
+            InteractiveWidget widget = getWidgetInfo(widgetId);
+
+            if ((widget.widgetId != TERMINAL_WIDGET_ID)
+                && widget.basic_callback != NULL) {
+                  widget.basic_callback();
+            }
+          }
+        }
+      }
+
+      // Skip remainder of packet...
       while (!packetComplete) {
         getFieldContent();
         // TODO: Handle strings with embedded nulls?
