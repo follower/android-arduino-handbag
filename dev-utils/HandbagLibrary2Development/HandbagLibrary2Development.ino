@@ -120,7 +120,7 @@ protected:
 
       if ((bufferOffset + 2) <= SCRATCH_BUFFER_SIZE) { // TODO: Verify this.
         scratchBuffer[bufferOffset++] = (char) newChar;
-        scratchBuffer[bufferOffset + 1] = 0;
+        scratchBuffer[bufferOffset] = 0;
       } else {
         // We drop the characters because we're now overflowing the buffer.
         // TODO: Indicate overflow?
