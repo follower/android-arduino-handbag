@@ -185,10 +185,15 @@ EthernetServer server(0xba9);
 Handbag2 Handbag(server);
 
 
+unsigned int analogWidgetId;
+
+
 void setupUI() {
   /*
    */
   Handbag.addLabel("Hello, again!");
+
+  analogWidgetId = Handbag.addLabel("0", 50, 1);;
 }
 
 
@@ -208,6 +213,30 @@ void loop() {
 
 #if 1
   Handbag.refresh();
+
+  unsigned int value = analogRead(A0);
+
+  // Hacky itoa for analog range:
+  char result[5];
+  byte offset = 0;
+  if (value > 1000) {
+    result[offset++] = '1';
+  }
+  if (value > 100) {
+    result[offset++] = ((value / 100) % 10) + '0';
+  }
+  if (value > 10) {
+    result[offset++] = ((value / 10) % 10) + '0';
+  }
+  result[offset++] = (value % 10) + '0';
+  result[offset++] = '\0';
+
+  if (Handbag.isConnected()) {
+    Handbag.setText(analogWidgetId, result);
+  }
+
+  delay(100);
+
 #else
   EthernetClient client = server.available();
 
