@@ -1,5 +1,5 @@
 #include <string.h>
-#include <Print.h>
+#include <Stream.h>
 
 #define BASIC_CALLBACK(varname) void (*varname)()
 
@@ -9,7 +9,7 @@ private:
   unsigned int lastWidgetId;
 
 protected:
-  Print *strm; // TODO: Make a reference to avoid needing "->" use? // TODO: Ensure strm isn't NULL.
+  Stream *strm; // TODO: Make a reference to avoid needing "->" use? // TODO: Ensure strm isn't NULL.
 
   BASIC_CALLBACK(setupUICallback);
 
