@@ -20,6 +20,25 @@ protected:
     // TODO: Add other items?
   }
 
+
+  void sendSeparator(boolean isFinalField = false) {
+    /*
+
+       Sends field separator or packet terminator if final field.
+
+     */
+
+    // TODO: Handle this better?
+    if (isFinalField) {
+      strm->write("\n");
+      delay(100); // TODO: Move elsewhere?
+    } else {
+      strm->write(";");
+    }
+
+  }
+
+
   void sendField(const char *fieldData, boolean isFinalField = false) {
     if ((fieldData == NULL)) {
       return;
@@ -33,13 +52,8 @@ protected:
 
     strm->write(fieldData);
 
-    // TODO: Handle this better?
-    if (isFinalField) {
-      strm->write("\n");
-      delay(100); // TODO: Move elsewhere?
-    } else {
-      strm->write(";");
-    }
+    sendSeparator(isFinalField);
+  }
 
   }
 
