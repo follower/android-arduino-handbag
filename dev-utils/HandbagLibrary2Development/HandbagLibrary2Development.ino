@@ -13,6 +13,7 @@ protected:
 
   BASIC_CALLBACK(setupUICallback);
 
+
   void reset() { // TODO: Rename?
     lastWidgetId = 0;
 
