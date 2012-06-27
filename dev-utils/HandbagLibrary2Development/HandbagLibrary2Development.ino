@@ -3,6 +3,8 @@
 
 #define BASIC_CALLBACK(varname) void (*varname)()
 
+#define SCRATCH_BUFFER_SIZE 32 // TODO: Change size?
+
 class HandbagProtocolMixIn {
 
 private:
@@ -79,7 +81,76 @@ protected:
   }
 
 
+  // TODO: Indicate when truncated. Indicate packet complete.
+  boolean packetComplete; // TODO: Combine this plus overflow etc in a field structure?
+
+  // TODO: Provide way to supply an larger, separate buffer.
+
+  // TODO: Handle length-prefixed fields
+  int getFieldContent() {
+
+    int bufferOffset = 0;
+
+    packetComplete = false; // TODO: Check previous "complete" was handled?
+
+    scratchBuffer[bufferOffset] = 0;
+
+    // TODO: Include time-out?
+
+    // TODO: Handle overflow by truncation or byte access or multiple calls?
+
+    while (true) {
+      int newChar = strm->read();
+
+      if (newChar == -1) {
+        // TODO: Handle differently?
+        delay(10);
+        continue;
+      }
+
+      if ((newChar == ';') || (newChar == '\n')) { // end of field and/or packet
+
+        // TODO: Put NUL terminator here?
+
+        if (newChar == '\n') {
+          packetComplete = true;
+        }
+        break;
+      }
+
+      if ((bufferOffset + 2) <= SCRATCH_BUFFER_SIZE) { // TODO: Verify this.
+        scratchBuffer[bufferOffset++] = (char) newChar;
+        scratchBuffer[bufferOffset + 1] = 0;
+      } else {
+        // We drop the characters because we're now overflowing the buffer.
+        // TODO: Indicate overflow?
+      }
+
+    }
+
+    return bufferOffset; // TODO: Ensure correct.
+  }
+
+
+  void processPacket() {
+
+    if (strm->available() > 0) {
+
+      packetComplete = false; // TODO: Initialise this elsewhere?
+
+      while (!packetComplete) {
+        getFieldContent();
+        // TODO: Handle strings with embedded nulls?
+        Serial.println(scratchBuffer);
+      }
+
+    }
+
+  }
+
 public:
+  char scratchBuffer[SCRATCH_BUFFER_SIZE];
+
   void setText(unsigned int widgetId, const char *labelText, byte fontSize = 0, byte alignment = 0) {
 
     sendField("widget");
