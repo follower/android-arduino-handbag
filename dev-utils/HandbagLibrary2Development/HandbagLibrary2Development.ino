@@ -1,6 +1,8 @@
 #include <string.h>
 #include <Stream.h>
 
+// Basic callback is a no-argument, no return value callback.
+// TODO: Rename?
 #define BASIC_CALLBACK(varname) void (*varname)()
 
 #define SCRATCH_BUFFER_SIZE 32 // TODO: Change size?
