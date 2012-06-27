@@ -224,6 +224,30 @@ public:
   }
 
 
+  unsigned int addButton(const char *labelText, BASIC_CALLBACK(callback)) {
+
+    // TODO: Refactor all this...
+
+    unsigned int widgetId = ++lastWidgetId;
+
+    storeWidgetInfo(widgetId, callback);
+
+    sendField("widget");
+
+    sendField("button");
+
+    sendField(widgetId);
+
+    sendField(0);
+
+    sendField(0);
+
+    sendField(labelText, true);
+
+    return widgetId;
+  }
+
+
   unsigned int addLabel(const char *labelText, byte fontSize = 0, byte alignment = 0) {
 
     unsigned int widgetId = ++lastWidgetId;
