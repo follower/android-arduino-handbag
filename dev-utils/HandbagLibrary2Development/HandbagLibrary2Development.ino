@@ -65,6 +65,13 @@ protected:
   }
 
 
+  void sendField(const unsigned int data, boolean isFinalField = false) {
+    strm->print(data);
+
+    sendSeparator(isFinalField);
+  }
+
+
   void sendField(const byte data, boolean isFinalField = false) {
     strm->print(data);
 
