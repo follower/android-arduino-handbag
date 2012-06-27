@@ -241,6 +241,7 @@ Handbag2 Handbag(server);
 
 unsigned int analogWidgetId;
 
+unsigned int progressWidgetId;
 
 void setupUI() {
   /*
@@ -248,6 +249,8 @@ void setupUI() {
   Handbag.addLabel("Hello, again!");
 
   analogWidgetId = Handbag.addLabel("0", 50, 1);
+
+  progressWidgetId = Handbag.addProgressBar();
 }
 
 
@@ -287,6 +290,7 @@ void loop() {
 
   if (Handbag.isConnected()) {
     Handbag.setText(analogWidgetId, result);
+    Handbag.setProgressBar(progressWidgetId, ((value*100UL)/1023));
   }
 
   delay(100);
