@@ -77,15 +77,11 @@ public:
 
     sendField("label");
 
-    // TODO: Handle other types in sendField?
-    strm->print(widgetId);
-    strm->write(";");
+    sendField(widgetId);
 
-    strm->print(fontSize);
-    strm->write(";");
+    sendField(fontSize);
 
-    strm->print(alignment);
-    strm->write(";");
+    sendField(alignment);
 
     sendField(labelText, true);
   }
