@@ -48,6 +48,23 @@ private:
     }
   }
 
+
+  InteractiveWidget getWidgetInfo(unsigned int widgetId) {
+    /*
+     */
+    unsigned int offset = 0;
+
+    while ((widgets[offset].widgetId != TERMINAL_WIDGET_ID)
+           && (widgets[offset].widgetId != widgetId)) {
+      offset++;
+    }
+
+    // TODO: Handle "not found" better?
+
+    return widgets[offset];
+  }
+
+
 protected:
   Stream *strm; // TODO: Make a reference to avoid needing "->" use? // TODO: Ensure strm isn't NULL.
 
