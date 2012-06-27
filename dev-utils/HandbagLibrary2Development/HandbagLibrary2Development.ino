@@ -39,6 +39,8 @@ protected:
   }
 
 
+  // TODO: Make these methods private?
+  // TODO: Subclass Print somehow to avoid the repetition?
   void sendField(const char *fieldData, boolean isFinalField = false) {
     if ((fieldData == NULL)) {
       return;
