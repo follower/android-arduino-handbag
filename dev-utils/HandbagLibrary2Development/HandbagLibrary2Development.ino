@@ -229,6 +229,8 @@ protected:
           unsigned int widgetId = atoi(scratchBuffer); // TODO: Check if this works with unsigned ok.
 
           getFieldContent();
+
+          // TODO: Refactor all this...
           if (strcmp(scratchBuffer, "click") == 0) {
             Serial.print("Click on: ");
             Serial.println(widgetId);
@@ -239,6 +241,19 @@ protected:
             if ((widget.widgetId != TERMINAL_WIDGET_ID)
                 && widget.basic_callback != NULL) {
                   widget.basic_callback();
+            }
+          } else if (strcmp(scratchBuffer, "input") == 0) {
+            Serial.print("Input from: ");
+            Serial.println(widgetId);
+
+            getFieldContent();
+
+            // TODO: Just make this a "call callback routine"?
+            InteractiveWidget widget = getWidgetInfo(widgetId);
+
+            if ((widget.widgetId != TERMINAL_WIDGET_ID)
+                && widget.text_callback != NULL) {
+                  widget.text_callback(scratchBuffer);
             }
           }
         }
