@@ -309,6 +309,27 @@ public:
   }
 
 
+  // TODO: Allow a different/larger buffer to be supplied.
+  unsigned int addTextInput(TEXT_CALLBACK(callback)) {
+    /*
+       Note: The string supplied to the callback must be copied if it
+             is used after the callback exits.
+     */
+
+    unsigned int widgetId = ++lastWidgetId;
+
+    storeWidgetInfo(widgetId, callback);
+
+    sendField("widget");
+
+    sendField("textinput");
+
+    sendField(widgetId, true);
+
+    return widgetId;
+  }
+
+
   void showDialog(const char *messageText) {
 
     sendField("widget");
