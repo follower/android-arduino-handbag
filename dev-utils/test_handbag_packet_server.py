@@ -27,6 +27,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
     _buttons = None # TODO: Make this `_widgets` instead?
 
+    _textCallbacks = None # TODO: Merge with the above?
 
     def _getNumBytesAvailable(self):
         """
@@ -117,6 +118,18 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         return self._widgetId
 
 
+    def addTextInput(self, callback):
+        self._widgetId+=1
+
+        data = ["widget", "textinput", self._widgetId]
+
+        self.wfile.write(createPacket(data))
+
+        self._textCallbacks[self._widgetId] = {"callback": callback}
+
+        return self._widgetId
+
+
     def showDialog(self, dialogText):
         """
         """
@@ -196,6 +209,7 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
         self._widgetId = 0
         self._buttons = {}
+        self._textCallbacks = {}
 
         print "Client: %s" % str((self.request.getpeername()))
 
@@ -223,8 +237,13 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
                     # TODO: Process packet
                     # TODO: Do all this properly
-                    if packet[0] == "widget" and packet[1] == "event" and packet[3] == "click":
-                        self._buttons[int(packet[2])]["callback"]()
+                    if packet[0] == "widget" and packet[1] == "event":
+                        if packet[3] == "click":
+                            self._buttons[int(packet[2])]["callback"]()
+                        elif packet[3] == "input":
+                            self._textCallbacks[int(packet[2])]["callback"](packet[4])
+                        else:
+                            print packet
                     else:
                         print packet
 
