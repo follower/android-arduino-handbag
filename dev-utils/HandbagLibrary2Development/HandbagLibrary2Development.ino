@@ -493,6 +493,9 @@ unsigned int analogWidgetId;
 
 unsigned int progressWidgetId;
 
+unsigned int changeLabelWidgetId;
+
+
 boolean saidSomething = false;
 
 const int ledPin = A5;
@@ -512,6 +515,11 @@ void callbackToggle() {
 }
 
 
+void callbackText(char *text) {
+  Handbag.setText(changeLabelWidgetId, text);
+}
+
+
 void setupUI() {
   /*
    */
@@ -524,6 +532,10 @@ void setupUI() {
   Handbag.addButton("Push Me", callbackDialog);
 
   Handbag.addButton("Toggle LED", callbackToggle);
+
+  changeLabelWidgetId = Handbag.addLabel("Change Me", 0, 1);
+
+  Handbag.addTextInput(callbackText);
 }
 
 
