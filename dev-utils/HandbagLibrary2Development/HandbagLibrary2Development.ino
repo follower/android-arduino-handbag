@@ -232,6 +232,7 @@ protected:
 
           // TODO: Refactor all this...
           if (strcmp(scratchBuffer, "click") == 0) {
+
             Serial.print("Click on: ");
             Serial.println(widgetId);
 
@@ -242,7 +243,9 @@ protected:
                 && widget.basic_callback != NULL) {
                   widget.basic_callback();
             }
+
           } else if (strcmp(scratchBuffer, "input") == 0) {
+
             Serial.print("Input from: ");
             Serial.println(widgetId);
 
@@ -256,6 +259,7 @@ protected:
                   widget.text_callback(scratchBuffer);
             }
           }
+
         }
       }
 
