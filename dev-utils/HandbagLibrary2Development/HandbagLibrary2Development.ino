@@ -5,6 +5,10 @@
 // TODO: Rename?
 #define BASIC_CALLBACK(varname) void (*varname)()
 
+// Text callback is a single character string argument, no return value callback.
+#define TEXT_CALLBACK(varname) void (*varname)(char *) // TODO: Change to const?
+
+
 #define SCRATCH_BUFFER_SIZE 32 // TODO: Change size?
 
 // TODO: Increase this?
@@ -18,6 +22,7 @@ class InteractiveWidget {
   unsigned int widgetId; // TODO: Change name to just 'id'?
   union {
     BASIC_CALLBACK(basic_callback);
+    TEXT_CALLBACK(text_callback);
   };
 
   friend class HandbagProtocolMixIn;
@@ -45,6 +50,24 @@ private:
 
       widgets[offset].widgetId = widgetId;
       widgets[offset].basic_callback = basic_callback;
+    }
+  }
+
+  // TODO: Refactor to remove duplication with above.
+  void storeWidgetInfo(unsigned int widgetId, TEXT_CALLBACK(text_callback)) {
+    unsigned int offset = 0;
+
+    // TODO: Handle all this better?
+    // TODO: Just store this value instead?
+    while (widgets[offset].widgetId != TERMINAL_WIDGET_ID) {
+      offset++;
+    }
+
+    if ((offset + 1) < MAX_INTERACTIVE_WIDGETS) {
+      widgets[offset + 1].widgetId = TERMINAL_WIDGET_ID;
+
+      widgets[offset].widgetId = widgetId;
+      widgets[offset].text_callback = text_callback;
     }
   }
 
