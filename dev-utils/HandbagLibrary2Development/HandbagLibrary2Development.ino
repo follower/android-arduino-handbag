@@ -215,26 +215,73 @@ protected:
 
   // TODO: Provide way to supply an larger, separate buffer.
 
-  // TODO: Handle length-prefixed fields
   int getFieldContent() {
 
-    int bufferOffset = 0;
+    resetBuffer();
+
+    boolean isFirstChar = true;
 
     packetComplete = false; // TODO: Check previous "complete" was handled?
 
-    scratchBuffer[bufferOffset] = 0;
 
     // TODO: Include time-out?
 
     // TODO: Handle overflow by truncation or byte access or multiple calls?
 
     while (true) {
-      int newChar = strm->read();
+      int newChar = readChar();
 
-      if (newChar == -1) {
-        // TODO: Handle differently?
-        delay(10);
-        continue;
+      if (newChar < 0) {
+        // TODO: Handle errors better.
+        break;
+      }
+
+      if (isFirstChar && (newChar == '[')) {
+        // Handle length-prefixed field
+        unsigned int numCharsToRead = 0;
+
+        int theChar;
+
+        // TODO: Handle mal-formed, too large & other failure states better?
+        // Get the length value
+        while (true) {
+
+          theChar = readChar();
+
+          if (theChar < 0) {
+            // TODO: Handle errors better.
+            break;
+          }
+
+          if (theChar == ']') {
+            break;
+          }
+
+          // TODO: Bail if not digits?
+          numCharsToRead = (10 * numCharsToRead) + (theChar - '0');
+        }
+
+        for (unsigned int count = 0; count < numCharsToRead; count++) {
+          theChar = readChar();
+
+          if (theChar < 0) {
+            // TODO: Handle errors better.
+            break;
+          }
+
+          storeCharInBuffer((char) theChar); // TODO: Flag overflow?
+        }
+
+        // TODO: Bail if not end of field or end of packet?
+        newChar = readChar();
+
+        if (newChar < 0) {
+          // TODO: Handle errors better.
+          break;
+        }
+
+        // Drop through to normal handling
+
       }
 
       if ((newChar == ';') || (newChar == '\n')) { // end of field and/or packet
@@ -247,14 +294,9 @@ protected:
         break;
       }
 
-      if ((bufferOffset + 2) <= SCRATCH_BUFFER_SIZE) { // TODO: Verify this.
-        scratchBuffer[bufferOffset++] = (char) newChar;
-        scratchBuffer[bufferOffset] = 0;
-      } else {
-        // We drop the characters because we're now overflowing the buffer.
-        // TODO: Indicate overflow?
-      }
+      storeCharInBuffer((char) newChar); // TODO: Flag overlow?
 
+      isFirstChar = false; // TODO: Put this somewhere else?
     }
 
     return bufferOffset; // TODO: Ensure correct.
