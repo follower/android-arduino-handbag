@@ -1,7 +1,10 @@
 package com.handbagdevices.handbag;
 
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnKeyListener;
 import android.widget.EditText;
 
 // TODO: Extend LabelWidget instead so we can get the same formatting options?
@@ -28,7 +31,29 @@ public class TextInputWidget extends WidgetConfig {
 
         parent.addView(widget);
 
-        // TODO: Handle changes ***
+        widget.setOnKeyListener(new OnKeyListener() {
+
+            // TODO: Ensure this works everywhere--the docs say apparently soft keyboards don't have to trigger this.
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                Log.d(this.getClass().getSimpleName(), "text input enter pressed: " + remoteWidgetId);
+
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
+                    // TODO: Send properly rather than accessing activity method directly (or accept callback tunnel from activity)?
+                    activity.sendPacket(new String[] { "widget", "event",
+                                                       Integer.toString(remoteWidgetId),
+                                                       "input",
+                                                       ((EditText) v).getText().toString()
+                                                       }); // TODO: Do properly.
+
+                    return true;
+                }
+                return false;
+            }
+
+        });
+
     }
 
     // @Hides
