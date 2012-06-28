@@ -88,6 +88,55 @@ private:
   }
 
 
+  int readChar() {
+    /*
+
+        Provides a blocking read.
+
+        Returns: >= 0 - character
+                 < 0 - an error
+     */
+
+    // TODO: Include time-out?
+
+    int theChar = -1;
+
+    while ((theChar = strm->read()) == -1) {
+        delay(10);
+     }
+
+    return theChar;
+  }
+
+
+  int bufferOffset;
+
+  boolean resetBuffer() {
+    // TODO: Handle this differently (for other buffers especially)?
+    bufferOffset = 0;
+    scratchBuffer[bufferOffset] = 0;
+
+    return true;
+  }
+
+
+  boolean storeCharInBuffer(const char theChar) {
+
+    boolean wasStoredOk = false;
+
+    if ((bufferOffset + 2) <= SCRATCH_BUFFER_SIZE) { // TODO: Verify this.
+      scratchBuffer[bufferOffset++] = theChar;
+      scratchBuffer[bufferOffset] = 0;
+
+      wasStoredOk = true;
+    } else {
+      // We drop the characters to avoid overflowing the buffer.
+    }
+
+    return wasStoredOk;
+  }
+
+
 protected:
   Stream *strm; // TODO: Make a reference to avoid needing "->" use? // TODO: Ensure strm isn't NULL.
 
