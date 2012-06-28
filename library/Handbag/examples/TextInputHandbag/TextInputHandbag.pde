@@ -20,8 +20,7 @@ AndroidAccessory acc("rancidbacon.com",
 		     "Handbag",
 		     "Handbag (Arduino Board)",
 		     "0.1",
-		     "http://rancidbacon.com",
-		     "0000000000000001");
+		     "http://HandbagDevices.com/#i");
 
 HandbagApp Handbag(acc);
 
