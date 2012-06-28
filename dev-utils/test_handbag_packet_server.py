@@ -163,6 +163,10 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
 
         self.changeButton_WidgetId = self.addButton("Change me", self.testChangeButton)
 
+        self.changeLabel_WidgetId = self.addLabel("Change me", 0, 1)
+
+        self.addTextInput(self.testTextInput)
+
         self.counterLabel_WidgetId = self.addLabel("0.00", 50, 1)
 
         self.nextChange = 0
@@ -201,6 +205,12 @@ class PacketServerHandler(SocketServer.StreamRequestHandler):
         """
         import random
         self.setText(self.changeButton_WidgetId, "I changed (%d)" % random.randint(0, 1001));
+
+
+    def testTextInput(self, text):
+        """
+        """
+        self.setText(self.changeLabel_WidgetId, text)
 
 
     def handle(self):
