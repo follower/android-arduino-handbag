@@ -10,6 +10,8 @@ Android application based on DemoKit example, see code for license details.
 
 For more details see:
 
+    <http://HandbagDevices.com/>
+
     <http://www.labradoc.com/i/follower/p/android-arduino-handbag>
 
 Source repository:
