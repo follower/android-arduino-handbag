@@ -6,15 +6,13 @@
    
    Requirements:
    
-     * Arduino Uno or similar
+     * Arduino Uno with USB Host shield or Arduino Mega ADK or...
      
-     * USB Host shield and associated library
+     * Handbag library (this example is part of it) from <http://HandbagDevices.com/>
      
-     * Handbag library (this example is part of it)
+     * Handbag for Android app installed on your phone/tablet from <http://HandbagDevices.com/>
      
-     * Handbag App for Android installed on your phone/tablet from <http://rancidbacon.com/files/Handbag001/Handbag.apk>
-     
-     * AndroidAccessory library from <http://developer.android.com/guide/topics/usb/adk.html#installing>
+     * UsbHost library with AndroidAccessory class via <http://HandbagDevices.com/>
 
      * (Optional) LED connected to digital pin 4.
      
@@ -45,6 +43,8 @@
    
    See also:
    
+      <http://HandbagDevices.com/>
+
       <http://www.labradoc.com/i/follower/p/android-arduino-handbag>
       
  */
