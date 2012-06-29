@@ -21,8 +21,6 @@
       
  */
 
-#include <Max3421e.h>
-#include <Usb.h>
 #include <AndroidAccessory.h>
 
 #define USE_SHIFT_LCD 0
