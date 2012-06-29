@@ -6,7 +6,7 @@ the HandBag App for Android and Handbag library for Arduino.
 
 My original code or modifications licensed under the LGPL 2.0.
 
-Android application based on DemoKit example, see code for license details.
+Original Android application based on DemoKit example, see code for license details.
 
 For more details see:
 
