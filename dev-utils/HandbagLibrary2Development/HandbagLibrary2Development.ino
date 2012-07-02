@@ -756,7 +756,6 @@ void setup() {
 
 void loop() {
 
-#if 1
   Handbag.refresh();
 
   unsigned int value = analogRead(A0);
@@ -791,63 +790,4 @@ void loop() {
 
   delay(100);
 
-#else
-  EthernetClient client = server.available();
-
-  if (client) {
-
-    Serial.println("connected.");
-
-    addLabel(client, "A Label!", 35, 1);
-
-    addLabel(client, "Further words", 35, 1);
-
-    showDialog(client, "Hello Dialog!");
-
-    addLabel(client, "[\nhello there;\n]", 35, 1);
-
-    addLabel(client, "MORE", 100, 1);
-
-    unsigned int analogWidgetId = addLabel(client, "0", 35, 1);
-
-    Serial.println("sent");
-
-    while (client.connected()) {
-
-      unsigned int value = analogRead(A0);
-
-      // Hacky itoa for analog range:
-      char result[5];
-      byte offset = 0;
-      if (value > 1000) {
-        result[offset++] = '1';
-      }
-      if (value > 100) {
-        result[offset++] = ((value / 100) % 10) + '0';
-      }
-      if (value > 10) {
-        result[offset++] = ((value / 10) % 10) + '0';
-      }
-      result[offset++] = (value % 10) + '0';
-      result[offset++] = '\0';
-
-      setText(client, analogWidgetId, result);
-
-
-      delay(1000);
-
-      if (client.available() > 0) {
-        client.read();
-      }
-      delay(10);
-    }
-
-    Serial.println("not connected");
-
-    client.stop();
-
-    Serial.println("stop.");
-
-  }
-#endif
 }
