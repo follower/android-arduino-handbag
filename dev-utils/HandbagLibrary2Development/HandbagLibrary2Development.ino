@@ -19,7 +19,7 @@
 
 class InteractiveWidget {
   // TODO: Store callback/widget type also?
-  unsigned int widgetId; // TODO: Change name to just 'id'?
+  unsigned int id;
   union {
     BASIC_CALLBACK(basic_callback);
     TEXT_CALLBACK(text_callback);
@@ -41,14 +41,14 @@ private:
 
     // TODO: Handle all this better?
     // TODO: Just store this value instead?
-    while (widgets[offset].widgetId != TERMINAL_WIDGET_ID) {
+    while (widgets[offset].id != TERMINAL_WIDGET_ID) {
       offset++;
     }
 
     if ((offset + 1) < MAX_INTERACTIVE_WIDGETS) {
-      widgets[offset + 1].widgetId = TERMINAL_WIDGET_ID;
+      widgets[offset + 1].id = TERMINAL_WIDGET_ID;
 
-      widgets[offset].widgetId = widgetId;
+      widgets[offset].id = widgetId;
       widgets[offset].basic_callback = basic_callback;
     }
   }
@@ -59,14 +59,14 @@ private:
 
     // TODO: Handle all this better?
     // TODO: Just store this value instead?
-    while (widgets[offset].widgetId != TERMINAL_WIDGET_ID) {
+    while (widgets[offset].id != TERMINAL_WIDGET_ID) {
       offset++;
     }
 
     if ((offset + 1) < MAX_INTERACTIVE_WIDGETS) {
-      widgets[offset + 1].widgetId = TERMINAL_WIDGET_ID;
+      widgets[offset + 1].id = TERMINAL_WIDGET_ID;
 
-      widgets[offset].widgetId = widgetId;
+      widgets[offset].id = widgetId;
       widgets[offset].text_callback = text_callback;
     }
   }
@@ -77,8 +77,8 @@ private:
      */
     unsigned int offset = 0;
 
-    while ((widgets[offset].widgetId != TERMINAL_WIDGET_ID)
-           && (widgets[offset].widgetId != widgetId)) {
+    while ((widgets[offset].id != TERMINAL_WIDGET_ID)
+           && (widgets[offset].id != widgetId)) {
       offset++;
     }
 
@@ -146,7 +146,7 @@ protected:
   void reset() { // TODO: Rename?
     lastWidgetId = 0;
 
-    widgets[0].widgetId = TERMINAL_WIDGET_ID; // Mark as "last" widget
+    widgets[0].id = TERMINAL_WIDGET_ID; // Mark as "last" widget
 
     // TODO: Add other items?
   }
@@ -330,7 +330,7 @@ protected:
             // TODO: Just make this a "call callback routine"?
             InteractiveWidget widget = getWidgetInfo(widgetId);
 
-            if ((widget.widgetId != TERMINAL_WIDGET_ID)
+            if ((widget.id != TERMINAL_WIDGET_ID)
                 && widget.basic_callback != NULL) {
                   widget.basic_callback();
             }
@@ -345,7 +345,7 @@ protected:
             // TODO: Just make this a "call callback routine"?
             InteractiveWidget widget = getWidgetInfo(widgetId);
 
-            if ((widget.widgetId != TERMINAL_WIDGET_ID)
+            if ((widget.id != TERMINAL_WIDGET_ID)
                 && widget.text_callback != NULL) {
                   widget.text_callback(scratchBuffer);
             }
