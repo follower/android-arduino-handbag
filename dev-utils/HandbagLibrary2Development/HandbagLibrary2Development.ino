@@ -45,6 +45,7 @@ private:
     TEXT_CALLBACK(text_callback);
   };
 
+
 public:
 
   unsigned int id;
