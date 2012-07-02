@@ -624,6 +624,34 @@ void callbackText(char *text) {
   Handbag.setText(changeLabelWidgetId, text);
 }
 
+#define SMS_RECIPIENT_BUFFER_SIZE 16
+#define SMS_MSG_BUFFER_SIZE 32
+
+char smsRecipient[SMS_RECIPIENT_BUFFER_SIZE];
+
+char smsMessage[SMS_MSG_BUFFER_SIZE];
+
+
+void callbackCopyRecipientText(char *text) {
+  strncpy(smsRecipient, text, SMS_RECIPIENT_BUFFER_SIZE); // TODO: Should really be smallest of the two.
+  smsRecipient[SMS_RECIPIENT_BUFFER_SIZE-1] = 0;
+}
+
+
+void callbackSmsMessageText(char *text) {
+  strncpy(smsMessage, text, SMS_MSG_BUFFER_SIZE); // TODO: Should really be smallest of the two.
+  smsMessage[SMS_MSG_BUFFER_SIZE-1] = 0;
+}
+
+
+void callbackSMS() {
+  /*
+   */
+  // TODO: Should really check values are vaguely sane somewhere.
+  Handbag.sendSms(smsRecipient, smsMessage);
+  Handbag.showDialog("Message sent!");
+}
+
 
 void setupUI() {
   /*
@@ -641,6 +669,20 @@ void setupUI() {
   changeLabelWidgetId = Handbag.addLabel("Change Me", 0, 1);
 
   Handbag.addTextInput(callbackText);
+
+  Handbag.addLabel("", 25);
+
+
+  Handbag.addLabel("SMS number/name");
+
+  Handbag.addTextInput(callbackCopyRecipientText);
+
+  Handbag.addLabel("Message text");
+
+  Handbag.addTextInput(callbackSmsMessageText);
+
+
+  Handbag.addButton("Send SMS", callbackSMS);
 }
 
 
