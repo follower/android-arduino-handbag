@@ -15,6 +15,7 @@
 // NOTE: This includes 1 location for a terminal marker (with Id 'TERMINAL_WIDGET_ID' i.e. 0).
 #define MAX_INTERACTIVE_WIDGETS 11 // "Interactive" means associated with a callback
 
+// TODO: Call this sentinel instead?
 #define TERMINAL_WIDGET_ID 0
 
 class InteractiveWidget {
