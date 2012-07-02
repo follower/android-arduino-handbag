@@ -10,6 +10,8 @@ import android.util.Log;
 
 // TODO: Figure out a way to make permission for this optional?
 
+// TODO: Display a toast by default when a message is sent.
+
 public class SmsFeature extends FeatureConfig {
 
     final static int SMS_ARRAY_OFFSET_ACTION = 2;
