@@ -111,7 +111,7 @@ private:
     }
   }
 
-  // TODO: Refactor to remove duplication with above.
+  // TODO: Refactor more to remove duplication with above?
   void storeWidgetInfo(unsigned int widgetId, TEXT_CALLBACK(callback)) {
 
     unsigned int offset = getEmptyWidgetSlotOffset(widgetId);
