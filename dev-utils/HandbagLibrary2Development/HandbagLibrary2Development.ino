@@ -136,10 +136,7 @@ private:
     }
   }
 
-
-  InteractiveWidget getWidgetInfo(unsigned int widgetId) {
-    /*
-     */
+  unsigned int findOffsetOfWidget(unsigned int widgetId) {
     unsigned int offset = 0;
 
     while ((offset < MAX_INTERACTIVE_WIDGETS) // Note: if this is ever untrue it's a bailout error.
@@ -148,9 +145,16 @@ private:
       offset++;
     }
 
-    // TODO: Handle "not found" better?
+    // TODO: Handle "not found" better (and in callers)?
 
-    return widgets[offset];
+    return offset;
+  }
+
+  InteractiveWidget getWidgetInfo(unsigned int widgetId) {
+    /*
+     */
+
+    return widgets[findOffsetOfWidget(widgetId)];
   }
 
 
