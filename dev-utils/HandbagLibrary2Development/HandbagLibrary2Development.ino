@@ -102,7 +102,6 @@ private:
 
   InteractiveWidget widgets[MAX_INTERACTIVE_WIDGETS]; // TODO: Change name?
 
-  // TODO: Support other call back types.
   void storeWidgetInfo(unsigned int widgetId, BASIC_CALLBACK(callback)) {
 
     unsigned int offset = getEmptyWidgetSlotOffset(widgetId);
