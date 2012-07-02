@@ -64,6 +64,10 @@ public:
     // Note: We don't bother clearing the callback pointer.
   }
 
+  boolean isTerminalMarker() {
+    return id == TERMINAL_WIDGET_ID;
+  }
+
   void callback() {
     if (callbackType == BASIC) {
       basic_callback();
@@ -102,7 +106,7 @@ private:
 
     // TODO: Handle all this better?
     // TODO: Just store this value instead?
-    while (widgets[offset].id != TERMINAL_WIDGET_ID) {
+    while (!widgets[offset].isTerminalMarker()) {
       offset++;
     }
 
@@ -120,7 +124,7 @@ private:
 
     // TODO: Handle all this better?
     // TODO: Just store this value instead?
-    while (widgets[offset].id != TERMINAL_WIDGET_ID) {
+    while (!widgets[offset].isTerminalMarker()) {
       offset++;
     }
 
@@ -138,7 +142,7 @@ private:
      */
     unsigned int offset = 0;
 
-    while ((widgets[offset].id != TERMINAL_WIDGET_ID)
+    while ((!widgets[offset].isTerminalMarker())
            && (widgets[offset].id != widgetId)) {
       offset++;
     }
