@@ -616,8 +616,6 @@ public:
 
       if (client.connected()) {
 
-        // TODO: Process unread bytes
-        // TODO: Do this properly
         processPacket();
 
       } else {
