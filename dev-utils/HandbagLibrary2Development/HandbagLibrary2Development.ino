@@ -103,24 +103,24 @@ private:
   // TODO: Support other call back types.
   void storeWidgetInfo(unsigned int widgetId, BASIC_CALLBACK(callback)) {
 
-    InteractiveWidget& widget = getEmptyWidgetSlot(widgetId);
+    unsigned int offset = getEmptyWidgetSlotOffset(widgetId);
 
-    if (!widget.isTerminalMarker()) {
-      widget.setCallback(callback);
+    if (!widgets[offset].isTerminalMarker()) {
+      widgets[offset].setCallback(callback);
     }
   }
 
   // TODO: Refactor to remove duplication with above.
   void storeWidgetInfo(unsigned int widgetId, TEXT_CALLBACK(callback)) {
 
-    InteractiveWidget& widget = getEmptyWidgetSlot(widgetId);
+    unsigned int offset = getEmptyWidgetSlotOffset(widgetId);
 
-    if (!widget.isTerminalMarker()) {
-      widget.setCallback(callback);
+    if (!widgets[offset].isTerminalMarker()) {
+      widgets[offset].setCallback(callback);
     }
   }
 
-  InteractiveWidget& getEmptyWidgetSlot(unsigned int widgetId) {
+  unsigned int getEmptyWidgetSlotOffset(unsigned int widgetId) {
 
     // TODO: Just store this value instead?
     unsigned int offset = findOffsetOfWidget(TERMINAL_WIDGET_ID);
@@ -131,7 +131,7 @@ private:
       widgets[offset].id = widgetId; // Used to indicate a slot was found.
     }
 
-    return widgets[offset];
+    return offset;
   }
 
   unsigned int findOffsetOfWidget(unsigned int widgetId) {
