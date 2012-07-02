@@ -18,14 +18,62 @@
 #define TERMINAL_WIDGET_ID 0
 
 class InteractiveWidget {
-  // TODO: Store callback/widget type also?
-  unsigned int id;
+  /*
+
+     Note: The intention is that it should be safe for you call
+           a `callback()` method even when there is no callback
+           set--it should just silently do nothing. This is so
+           you don't need to worry if you've encountered the
+           "terminal" marker or not.
+
+   */
+
+private:
+  enum CallbackType {
+    NONE,
+    BASIC,
+    TEXT
+  };
+
+  // TODO: Store widget type also?
+
+  CallbackType callbackType;
+
   union {
     BASIC_CALLBACK(basic_callback);
     TEXT_CALLBACK(text_callback);
   };
 
-  friend class HandbagProtocolMixIn;
+public:
+
+  unsigned int id;
+
+  InteractiveWidget() {
+    callbackType = NONE;
+  }
+
+  void callback() {
+    if (callbackType == BASIC) {
+      basic_callback();
+    }
+  }
+
+  void callback(const char *text) {
+    if (callbackType == TEXT) {
+      text_callback(text);
+    }
+  }
+
+  void setCallback(BASIC_CALLBACK(callback)) {
+    basic_callback = callback;
+    callbackType = BASIC;
+  }
+
+  void setCallback(TEXT_CALLBACK(callback)) {
+    text_callback = callback;
+    callbackType = TEXT;
+  }
+
 };
 
 class HandbagProtocolMixIn {
