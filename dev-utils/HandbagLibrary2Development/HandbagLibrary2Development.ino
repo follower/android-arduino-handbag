@@ -10,7 +10,7 @@ IPAddress ip(169, 254, 254, 169);
 
 EthernetServer server(0xba9);
 
-Handbag2 Handbag(server);
+HandbagApp Handbag(server);
 
 
 unsigned int analogWidgetId;

@@ -559,7 +559,7 @@ public:
 #include <Ethernet.h>
 
 
-class Handbag2 : public HandbagProtocolMixIn {
+class NetworkHandbag : public HandbagProtocolMixIn {
 
 private:
   EthernetServer& server;
@@ -569,7 +569,7 @@ private:
   boolean uiIsSetup;
 
 public:
-  Handbag2(EthernetServer& server) : server(server) {
+  NetworkHandbag(EthernetServer& server) : server(server) {
     /*
      */
     // Ideally we'd use 'Server' instead but it doesn't have a 'available()' method
@@ -640,3 +640,4 @@ public:
 
 };
 
+#define HandbagApp NetworkHandbag
