@@ -84,7 +84,7 @@ private:
   InteractiveWidget widgets[MAX_INTERACTIVE_WIDGETS]; // TODO: Change name?
 
   // TODO: Support other call back types.
-  void storeWidgetInfo(unsigned int widgetId, BASIC_CALLBACK(basic_callback)) {
+  void storeWidgetInfo(unsigned int widgetId, BASIC_CALLBACK(callback)) {
     unsigned int offset = 0;
 
     // TODO: Handle all this better?
@@ -97,12 +97,12 @@ private:
       widgets[offset + 1].id = TERMINAL_WIDGET_ID;
 
       widgets[offset].id = widgetId;
-      widgets[offset].basic_callback = basic_callback;
+      widgets[offset].setCallback(callback);
     }
   }
 
   // TODO: Refactor to remove duplication with above.
-  void storeWidgetInfo(unsigned int widgetId, TEXT_CALLBACK(text_callback)) {
+  void storeWidgetInfo(unsigned int widgetId, TEXT_CALLBACK(callback)) {
     unsigned int offset = 0;
 
     // TODO: Handle all this better?
@@ -115,7 +115,7 @@ private:
       widgets[offset + 1].id = TERMINAL_WIDGET_ID;
 
       widgets[offset].id = widgetId;
-      widgets[offset].text_callback = text_callback;
+      widgets[offset].setCallback(callback);
     }
   }
 
@@ -375,13 +375,7 @@ protected:
             Serial.print("Click on: ");
             Serial.println(widgetId);
 
-            // TODO: Just make this a "call callback routine"?
-            InteractiveWidget widget = getWidgetInfo(widgetId);
-
-            if ((widget.id != TERMINAL_WIDGET_ID)
-                && widget.basic_callback != NULL) {
-                  widget.basic_callback();
-            }
+            getWidgetInfo(widgetId).callback();
 
           } else if (strcmp(scratchBuffer, "input") == 0) {
 
@@ -390,13 +384,7 @@ protected:
 
             getFieldContent();
 
-            // TODO: Just make this a "call callback routine"?
-            InteractiveWidget widget = getWidgetInfo(widgetId);
-
-            if ((widget.id != TERMINAL_WIDGET_ID)
-                && widget.text_callback != NULL) {
-                  widget.text_callback(scratchBuffer);
-            }
+            getWidgetInfo(widgetId).callback(scratchBuffer);
           }
 
         }
