@@ -142,7 +142,8 @@ private:
      */
     unsigned int offset = 0;
 
-    while ((!widgets[offset].isTerminalMarker())
+    while ((offset < MAX_INTERACTIVE_WIDGETS) // Note: if this is ever untrue it's a bailout error.
+           && !widgets[offset].isTerminalMarker()
            && (widgets[offset].id != widgetId)) {
       offset++;
     }
