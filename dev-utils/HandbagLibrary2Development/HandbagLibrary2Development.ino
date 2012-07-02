@@ -6,7 +6,7 @@
 #define BASIC_CALLBACK(varname) void (*varname)()
 
 // Text callback is a single character string argument, no return value callback.
-#define TEXT_CALLBACK(varname) void (*varname)(char *) // TODO: Change to const?
+#define TEXT_CALLBACK(varname) void (*varname)(const char *)
 
 
 #define SCRATCH_BUFFER_SIZE 32 // TODO: Change size?
@@ -620,7 +620,7 @@ void callbackToggle() {
 }
 
 
-void callbackText(char *text) {
+void callbackText(const char *text) {
   Handbag.setText(changeLabelWidgetId, text);
 }
 
@@ -632,13 +632,13 @@ char smsRecipient[SMS_RECIPIENT_BUFFER_SIZE];
 char smsMessage[SMS_MSG_BUFFER_SIZE];
 
 
-void callbackCopyRecipientText(char *text) {
+void callbackCopyRecipientText(const char *text) {
   strncpy(smsRecipient, text, SMS_RECIPIENT_BUFFER_SIZE); // TODO: Should really be smallest of the two.
   smsRecipient[SMS_RECIPIENT_BUFFER_SIZE-1] = 0;
 }
 
 
-void callbackSmsMessageText(char *text) {
+void callbackSmsMessageText(const char *text) {
   strncpy(smsMessage, text, SMS_MSG_BUFFER_SIZE); // TODO: Should really be smallest of the two.
   smsMessage[SMS_MSG_BUFFER_SIZE-1] = 0;
 }
