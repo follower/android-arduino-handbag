@@ -49,7 +49,19 @@ public:
   unsigned int id;
 
   InteractiveWidget() {
+    reset();
+  }
+
+  void reset() {
+    /*
+
+       Make this widget a "terminal" marker. (Also inactive/inert).
+
+     */
+    id = TERMINAL_WIDGET_ID;
     callbackType = NONE;
+
+    // Note: We don't bother clearing the callback pointer.
   }
 
   void callback() {
@@ -95,7 +107,7 @@ private:
     }
 
     if ((offset + 1) < MAX_INTERACTIVE_WIDGETS) {
-      widgets[offset + 1].id = TERMINAL_WIDGET_ID;
+      widgets[offset + 1].reset();
 
       widgets[offset].id = widgetId;
       widgets[offset].setCallback(callback);
@@ -113,7 +125,7 @@ private:
     }
 
     if ((offset + 1) < MAX_INTERACTIVE_WIDGETS) {
-      widgets[offset + 1].id = TERMINAL_WIDGET_ID;
+      widgets[offset + 1].reset();
 
       widgets[offset].id = widgetId;
       widgets[offset].setCallback(callback);
@@ -195,7 +207,7 @@ protected:
   void reset() { // TODO: Rename?
     lastWidgetId = 0;
 
-    widgets[0].id = TERMINAL_WIDGET_ID; // Mark as "last" widget
+    widgets[0].reset(); // Mark as "last" widget
 
     // TODO: Add other items?
   }
