@@ -481,6 +481,20 @@ public:
     sendField("1.0", true);
   }
 
+  void sendSms(const char *recipient, const char *messageText) {
+    /*
+
+      Note: `recipient` can be either a phone number or a contact name.
+
+     */
+
+    sendField("feature");
+    sendField("sms");
+    sendField("send");
+    sendField(recipient);
+    sendField(messageText, true);
+  }
+
 };
 
 
