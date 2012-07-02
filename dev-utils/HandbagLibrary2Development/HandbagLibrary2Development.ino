@@ -231,7 +231,6 @@ protected:
     // TODO: Handle this better?
     if (isFinalField) {
       strm->write("\n");
-      delay(100); // TODO: Move elsewhere?
     } else {
       strm->write(";");
     }
