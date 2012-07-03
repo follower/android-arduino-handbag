@@ -617,6 +617,7 @@ public:
         uiIsSetup = true;
       }
 
+      // TODO: Simplify/improve the handling of disconnected/available issues.
       if (client.connected()) {
 
         processPacket();
