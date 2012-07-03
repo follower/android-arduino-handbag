@@ -414,6 +414,7 @@ public class HandbagWiFiCommsService extends Service {
                     Log.d(this.getClass().getSimpleName(), "IOException sending initial handshake packet.");
                     e1.printStackTrace();
                     // TODO: Bail properly here.
+                    return -1;
                 }
 
                 while (true) {
