@@ -594,7 +594,9 @@ public:
     /*
      */
 
-    if (!client) {
+    if (!uiIsSetup) { // This implies we're not already connected to someone,
+                      // whereas checking `client` just says if there's data
+                      // available--it can be connected but still false.
       client = server.available();
     }
 
