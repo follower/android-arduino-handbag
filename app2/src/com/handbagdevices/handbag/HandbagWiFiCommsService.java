@@ -288,6 +288,9 @@ public class HandbagWiFiCommsService extends Service {
                         } catch (IOException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
+                        } catch (NullPointerException e) {
+                            // TODO: Handle this better?
+                            Log.d(this.getClass().getSimpleName(), "    Ignoring NullPointerException (probably due to failure to connect).");
                         }
                     }
                     break;
