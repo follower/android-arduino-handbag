@@ -396,6 +396,7 @@ public class HandbagWiFiCommsService extends Service {
         @Override
         protected Integer doInBackground(Void... params) {
             String[] newPacket;
+
             int result = -1;
 
             if (setUp()) {
@@ -430,6 +431,7 @@ public class HandbagWiFiCommsService extends Service {
 
                         publishProgress(newPacket);
                     }
+
 
                     try {
                         // TODO: Figure out why neither of these return true with the Python test server.
