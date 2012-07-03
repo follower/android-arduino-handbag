@@ -2,12 +2,17 @@ package com.handbagdevices.handbag;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
 
-class PacketParser {
+import android.util.Log;
+
+class PacketParser extends Thread {
 
     private InputStreamReader input;
 
     private Scanner scanner;
+
+    private BlockingQueue<String[]> packetsReceivedQueue;
 
 
     private StringBuilder currentFieldContent = new StringBuilder();
@@ -15,35 +20,40 @@ class PacketParser {
     private List<String> fieldsInPacket = new ArrayList<String>();
 
 
-    PacketParser(InputStream theInput) {
+    PacketParser(BlockingQueue<String[]> packetsReceivedQueue, InputStream theInput) {
         input = new InputStreamReader(theInput);
         scanner = new Scanner(input);
+
+        this.packetsReceivedQueue = packetsReceivedQueue;
     }
 
-    public String[] getNextPacket() {
+
+    @Override
+    public synchronized void run() {
+
+        Log.d(this.getClass().getSimpleName(), "Parser started.");
+
+        while (true) {
+            try {
+                packetsReceivedQueue.put(getNextPacket());
+            } catch (InterruptedException e) {
+                Log.d(this.getClass().getSimpleName(), "InterruptedException while getting/putting next packet.");
+                break;
+            } catch (NoSuchElementException e) {
+                Log.d(this.getClass().getSimpleName(),
+                        "NoSuchElementException while getting/putting next packet (probably due to disconnect).");
+                break;
+            }
+        }
+    }
+
+
+    private String[] getNextPacket() {
         boolean packetComplete = false;
         String token;
 
         currentFieldContent.setLength(0);
         fieldsInPacket.clear();
-
-
-        // TODO/NOTE: This doesn't avoid blocking mid-packet, only at the beginning.
-        //            We assume that if there is any data available then a complete
-        //            packet will be available in a "reasonable time frame".
-
-        boolean inputReady = false;
-
-        try {
-            inputReady = input.ready();
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Leaves `inputReady` as previous value. i.e. false
-        }
-
-        if (!inputReady) {
-            return new String[] {};
-        }
 
         while (true) {
 
@@ -55,7 +65,6 @@ class PacketParser {
                 break;
             }
 
-            // TODO: Handle blocking (here & elsewhere)?
             token = scanner.next();
 
             // Log.d(this.getClass().getSimpleName(), "Got token: " + token);
@@ -86,7 +95,7 @@ class PacketParser {
 
         }
 
-        // TODO: Handle incomplete packets.
+        Log.d(this.getClass().getSimpleName(), "Complete packet received.");
 
         return fieldsInPacket.toArray(new String[] {});
     }

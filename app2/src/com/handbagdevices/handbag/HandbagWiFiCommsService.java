@@ -342,9 +342,9 @@ public class HandbagWiFiCommsService extends Service {
 
         private PacketParser parser;
 
-        // TODO: Change to using same approach for received packets?
         public BlockingQueue<String[]> packetsToSendQueue = new LinkedBlockingQueue<String[]>();
 
+        public BlockingQueue<String[]> packetsReceivedQueue = new LinkedBlockingQueue<String[]>();
 
         public NetworkConnection(String hostName, int hostPort) {
             super();
@@ -386,7 +386,7 @@ public class HandbagWiFiCommsService extends Service {
                 Log.d(this.getClass().getSimpleName(), "dataOutStream: " + dataOutStream);
 
                 if ((dataInStream != null) && (dataOutStream != null)) {
-                    parser = new PacketParser(dataInStream);
+                    parser = new PacketParser(packetsReceivedQueue, dataInStream);
                 }
             }
 
@@ -417,23 +417,28 @@ public class HandbagWiFiCommsService extends Service {
                     return -1;
                 }
 
+                parser.start();
+
+                Log.d(this.getClass().getSimpleName(), "Entering main data transfer handling loop.");
+
                 while (true) {
                     if (this.isCancelled()) {
+                        parser.interrupt();
                         Log.d(this.getClass().getSimpleName(), "Connection canceled.");
                         break;
                     }
 
-                    // Note: If there is data available at the beginning of this
-                    //       call it will block until the whole packet is read.
-                    //       If there is no data available at the beginning of the call
-                    //       it returns immediately.
-                    // TODO: Handle disconnect.
-                    newPacket = parser.getNextPacket();
+                    try {
+                        newPacket = this.packetsReceivedQueue.poll(1, TimeUnit.MILLISECONDS);
 
-                    if (newPacket.length != 0) {
-                        Log.d(this.getClass().getSimpleName(), "Got result: " + Arrays.toString(newPacket));
+                        if (newPacket != null) {
+                            Log.d(this.getClass().getSimpleName(), "Got result: " + Arrays.toString(newPacket));
 
-                        publishProgress(newPacket);
+                            publishProgress(newPacket);
+                        }
+                    } catch (InterruptedException e) {
+                        // TODO: Handle properly?
+                        Log.d(this.getClass().getSimpleName(), "InterruptedException handling received packet.");
                     }
 
 
