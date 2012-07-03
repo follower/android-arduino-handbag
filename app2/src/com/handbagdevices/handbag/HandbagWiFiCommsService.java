@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,7 +46,7 @@ public class HandbagWiFiCommsService extends Service {
     NetworkConnection targetNetworkConnection;
 
 
-	private class TestSocketTask extends AsyncTask<Void, Void, String[]> {
+/*	private class TestSocketTask extends AsyncTask<Void, Void, String[]> {
 
 		@Override
 		protected String[] doInBackground(Void... params) {
@@ -93,8 +92,8 @@ public class HandbagWiFiCommsService extends Service {
 		}
 
 	};
-
-	String[] doSocketTest() {
+*/
+/*	String[] doSocketTest() {
 		Socket socket = null;
 
 		DataOutputStream dataOutStream = null;
@@ -199,7 +198,7 @@ public class HandbagWiFiCommsService extends Service {
 		return newPacket;
 
 	}
-
+*/
 
 
 
@@ -255,14 +254,14 @@ public class HandbagWiFiCommsService extends Service {
 					break;
 
 
-				case MSG_UI_TEST_NETWORK:
-					Log.d(this.getClass().getSimpleName(), "    MSG_UI_TEST_NETWORK");
-					// TODO: Retrieve host name/port from message rather than prefs?
-					if (parseService != null) {
-						//doSocketTest();
-						new TestSocketTask().execute();
-					}
-					break;
+//				case MSG_UI_TEST_NETWORK:
+//					Log.d(this.getClass().getSimpleName(), "    MSG_UI_TEST_NETWORK");
+//					// TODO: Retrieve host name/port from message rather than prefs?
+//					if (parseService != null) {
+//						//doSocketTest();
+//						new TestSocketTask().execute();
+//					}
+//					break;
 
 
                 case MSG_UI_CONNECT_TO_TARGET:
