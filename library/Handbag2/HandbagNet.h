@@ -601,6 +601,7 @@ public:
     if (client) {
 
       if (!uiIsSetup) {
+        Serial.println("setup ui");
         // TODO: Initialise here
 
         // TODO: Reset widget ids etc.
@@ -621,6 +622,9 @@ public:
         processPacket();
 
       } else {
+
+	Serial.println("client is being stopped. ");
+
         client.stop(); // TODO: Unnecessary and/or enough?
         uiIsSetup = false;
       }
