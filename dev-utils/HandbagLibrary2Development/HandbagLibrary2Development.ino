@@ -153,5 +153,5 @@ void loop() {
     saidSomething = false;
   }
 
-  delay(100);
+  delay(50);
 }
