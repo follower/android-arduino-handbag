@@ -171,7 +171,13 @@ private:
 
     int theChar = -1;
 
+    int timeoutAt = millis() + 1000;
+
     while ((theChar = strm->read()) == -1) {
+      if (millis() > timeoutAt) {
+	Serial.println("*readChar timeout*");
+	break;
+      }
         delay(10);
      }
 
