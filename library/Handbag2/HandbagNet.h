@@ -599,6 +599,7 @@ public:
     }
 
     if (client) {
+
       if (!uiIsSetup) {
         // TODO: Initialise here
 
