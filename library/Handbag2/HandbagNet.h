@@ -2,87 +2,13 @@
 #include <string.h>
 #include <Stream.h>
 
-#include "CallbackTypes.h"
-
 #define SCRATCH_BUFFER_SIZE 32 // TODO: Change size?
 
 // TODO: Increase this?
 // NOTE: This includes 1 location for a terminal marker (with Id 'TERMINAL_WIDGET_ID' i.e. 0).
 #define MAX_INTERACTIVE_WIDGETS 11 // "Interactive" means associated with a callback
 
-// TODO: Call this sentinel instead?
-#define TERMINAL_WIDGET_ID 0
-
-class InteractiveWidget {
-  /*
-
-     Note: The intention is that it should be safe for you call
-           a `callback()` method even when there is no callback
-           set--it should just silently do nothing. This is so
-           you don't need to worry if you've encountered the
-           "terminal" marker or not.
-
-   */
-
-private:
-  // TODO: Store widget type also?
-
-  CallbackType callbackType;
-
-  union {
-    BASIC_CALLBACK(basic_callback);
-    TEXT_CALLBACK(text_callback);
-  };
-
-
-public:
-
-  unsigned int id;
-
-  InteractiveWidget() {
-    reset();
-  }
-
-  void reset() {
-    /*
-
-       Make this widget a "terminal" marker. (Also inactive/inert).
-
-     */
-    id = TERMINAL_WIDGET_ID;
-    callbackType = NONE;
-
-    // Note: We don't bother clearing the callback pointer.
-  }
-
-  boolean isTerminalMarker() {
-    return id == TERMINAL_WIDGET_ID;
-  }
-
-  void callback() {
-    if (callbackType == BASIC) {
-      basic_callback();
-    }
-  }
-
-  void callback(const char *text) {
-    if (callbackType == TEXT) {
-      text_callback(text);
-    }
-  }
-
-  void setCallback(BASIC_CALLBACK(callback)) {
-    basic_callback = callback;
-    callbackType = BASIC;
-  }
-
-  void setCallback(TEXT_CALLBACK(callback)) {
-    text_callback = callback;
-    callbackType = TEXT;
-  }
-
-};
-
+#include "InteractiveWidget.h"
 
 class HandbagProtocolMixIn {
 
