@@ -2,13 +2,7 @@
 #include <string.h>
 #include <Stream.h>
 
-// Basic callback is a no-argument, no return value callback.
-// TODO: Rename?
-#define BASIC_CALLBACK(varname) void (*varname)()
-
-// Text callback is a single character string argument, no return value callback.
-#define TEXT_CALLBACK(varname) void (*varname)(const char *)
-
+#include "CallbackTypes.h"
 
 #define SCRATCH_BUFFER_SIZE 32 // TODO: Change size?
 
@@ -31,12 +25,6 @@ class InteractiveWidget {
    */
 
 private:
-  enum CallbackType {
-    NONE,
-    BASIC,
-    TEXT
-  };
-
   // TODO: Store widget type also?
 
   CallbackType callbackType;
