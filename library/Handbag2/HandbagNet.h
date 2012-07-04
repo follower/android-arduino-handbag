@@ -113,6 +113,7 @@ private:
   unsigned int getEmptyWidgetSlotOffset(unsigned int widgetId) {
 
     // TODO: Just store this value instead?
+    // TODO: Change default to be TERMINAL_WIDGET_ID so the definition doesn't need to be public?
     unsigned int offset = findOffsetOfWidget(TERMINAL_WIDGET_ID);
 
     if ((offset + 1) < MAX_INTERACTIVE_WIDGETS) {
