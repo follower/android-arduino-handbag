@@ -119,30 +119,39 @@ void setup() {
 }
 
 
+unsigned long nextUpdateDue = 0;
+
+
 void loop() {
 
   Handbag.refresh();
 
-  unsigned int value = analogRead(A0);
-
-  // Hacky itoa for analog range:
-  char result[5];
-  byte offset = 0;
-  if (value > 1000) {
-    result[offset++] = '1';
-  }
-  if (value > 100) {
-    result[offset++] = ((value / 100) % 10) + '0';
-  }
-  if (value > 10) {
-    result[offset++] = ((value / 10) % 10) + '0';
-  }
-  result[offset++] = (value % 10) + '0';
-  result[offset++] = '\0';
-
   if (Handbag.isConnected()) {
-    Handbag.setText(analogWidgetId, result);
-    Handbag.setProgressBar(progressWidgetId, ((value*100UL)/1023));
+
+    if (millis() > nextUpdateDue) {
+
+      unsigned int value = analogRead(A0);
+
+      // Hacky itoa for analog range:
+      char result[5];
+      byte offset = 0;
+      if (value > 1000) {
+        result[offset++] = '1';
+      }
+      if (value > 100) {
+        result[offset++] = ((value / 100) % 10) + '0';
+      }
+      if (value > 10) {
+        result[offset++] = ((value / 10) % 10) + '0';
+      }
+      result[offset++] = (value % 10) + '0';
+      result[offset++] = '\0';
+
+      Handbag.setText(analogWidgetId, result);
+      Handbag.setProgressBar(progressWidgetId, ((value*100UL)/1023));
+
+      nextUpdateDue = millis() + 100;
+    }
 
     if (!saidSomething) {
       Handbag.speakText("Hello from Ardweeno!");
@@ -151,7 +160,7 @@ void loop() {
 
   } else {
     saidSomething = false;
+    nextUpdateDue = 0;
   }
 
-  delay(50);
 }
