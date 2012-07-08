@@ -93,4 +93,5 @@ public:
 
 };
 
+// This enables us to have a single class name used publically
 #define HandbagApp NetworkHandbag
