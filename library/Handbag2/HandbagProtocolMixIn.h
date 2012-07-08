@@ -59,6 +59,8 @@ protected:
 public:
   char scratchBuffer[SCRATCH_BUFFER_SIZE];
 
+  // TODO: Include these (or at least their implementations) from a separate file?
+
   void setText(unsigned int widgetId, const char *labelText, byte fontSize = 0, byte alignment = 0);
 
   unsigned int addButton(const char *labelText, BASIC_CALLBACK(callback));
