@@ -1,7 +1,7 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
-#include "HandbagNet.h"
+#include "NetworkHandbag.h"
 
 
 
