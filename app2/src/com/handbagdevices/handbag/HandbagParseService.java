@@ -123,7 +123,7 @@ public class HandbagParseService extends Service {
 					shutdownRequested = false;
 
 					try {
-						uiActivity.send(Message.obtain(null, HandbagUI.MSG_UI_ACTIVITY_REGISTERED));
+                        uiActivity.send(Message.obtain(null, Activity_MainDisplay.MSG_DISPLAY_ACTIVITY_REGISTERED));
 					} catch (RemoteException e) {
 						// UI Activity client is dead so no longer try to access it.
 						uiActivity = null;
@@ -228,7 +228,7 @@ public class HandbagParseService extends Service {
         if (packet[PACKET_OFFSET_PACKET_TYPE].equals(PACKET_TYPE_WIDGET)) {
 
             // TODO: Pass around the Message object to save re-doing this?
-            Message msg = Message.obtain(null, HandbagUI.MSG_UI_RECEIVED_WIDGET_PACKET);
+            Message msg = Message.obtain(null, Activity_MainDisplay.MSG_DISPLAY_RECEIVED_WIDGET_PACKET);
             Bundle bundle = new Bundle();
             bundle.putStringArray(null, packet);
             msg.setData(bundle);
