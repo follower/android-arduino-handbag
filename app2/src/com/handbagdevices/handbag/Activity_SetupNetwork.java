@@ -196,10 +196,16 @@ public class Activity_SetupNetwork extends Activity {
 
 
     private boolean openNetworkConnection() {
+        return openNetworkConnection(false);
+    }
+
+
+    private boolean openNetworkConnection(boolean useLocalDemo) {
         boolean result = false;
 
         // TODO: Provide some sort of status feedback if any of this fails.
-        Message msg = getMessageForConnect();
+        Message msg = getMessageForConnect(useLocalDemo);
+
         if ((commsService != null) && (msg != null)) {
             try {
                 commsService.send(msg);
@@ -249,20 +255,28 @@ public class Activity_SetupNetwork extends Activity {
 
     }
 
-    private Message getMessageForConnect() {
+
+    private Message getMessageForConnect(boolean useLocalDemo) {
         Message msg;
+        String hostName;
+        Integer hostPort;
 
-        String hostName = appPrefs.getString("network_host_name", "");
-
-        if (hostName.isEmpty()) {
-            Log.e(this.getClass().getSimpleName(), "No hostname provided.");
-            return null; // TODO: Throw exception instead?
-        }
-
-        Integer hostPort = Integer.valueOf(appPrefs.getString("network_host_port", "0"));
-
-        if (hostPort == 0) {
+        if (useLocalDemo) {
+            hostName = "127.0.0.1";
             hostPort = 0xba9; // Default port
+        } else {
+            hostName = appPrefs.getString("network_host_name", "");
+
+            if (hostName.isEmpty()) {
+                Log.e(this.getClass().getSimpleName(), "No hostname provided.");
+                return null; // TODO: Throw exception instead?
+            }
+
+            hostPort = Integer.valueOf(appPrefs.getString("network_host_port", "0"));
+
+            if (hostPort == 0) {
+                hostPort = 0xba9; // Default port
+            }
         }
 
         Log.d(this.getClass().getSimpleName(), "Host: " + hostName + " Port: " + hostPort);
