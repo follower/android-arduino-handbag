@@ -472,6 +472,11 @@ public class HandbagWiFiCommsService extends Service {
 
 
         private void deliverPacket(String[] packet) {
+
+            Log.d(this.getClass().getSimpleName(), "Enter 'deliverPacket'.");
+
+            Log.d(this.getClass().getSimpleName(), "    'shutdownRequested`:" + shutdownRequested);
+
             // TODO: Do this properly...
             if (!shutdownRequested) {
                 // Only continue if we haven't been told to shutdown
@@ -488,6 +493,9 @@ public class HandbagWiFiCommsService extends Service {
                     parseService = null;
                 }
             }
+
+
+            Log.d(this.getClass().getSimpleName(), "Exit 'deliverPacket'.");
 
         }
 
