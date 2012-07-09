@@ -302,7 +302,7 @@ public class HandbagWiFiCommsService extends Service {
 					break;
 
 				default:
-					Log.d(this.getClass().getSimpleName(), "    (unknown)");
+                    Log.d(this.getClass().getSimpleName(), "    (unknown): " + msg.what);
 					super.handleMessage(msg);
 			}
 		}
