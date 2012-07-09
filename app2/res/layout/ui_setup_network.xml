@@ -52,7 +52,7 @@
         android:layout_gravity="center"
         android:layout_margin="40dp"
         android:onClick="onClick_buttonStartTestServer"
-        android:text="Start Test Server" />
+        android:text="Start local demo" />
 
     <EditText
         android:id="@+id/textToSend"

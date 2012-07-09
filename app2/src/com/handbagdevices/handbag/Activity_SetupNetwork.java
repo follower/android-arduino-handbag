@@ -237,6 +237,14 @@ public class Activity_SetupNetwork extends Activity {
                     server.setReuseAddress(true);
                     client = server.accept();
 
+                    // Hacky way to introduce a delay so that the parser (or display activity?)
+                    // doesn't miss any packets. Hey, it's only a demo. :p
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                     client.getOutputStream().write(params[0].getBytes());
 
                     client.close();
@@ -253,6 +261,9 @@ public class Activity_SetupNetwork extends Activity {
 
         serverThread.execute(((EditText) findViewById(R.id.textToSend)).getText().toString());
 
+        openNetworkConnection(true);
+
+        startDisplayActivity();
     }
 
 
