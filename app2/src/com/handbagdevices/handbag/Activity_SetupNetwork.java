@@ -178,24 +178,38 @@ public class Activity_SetupNetwork extends Activity {
 			return;
 		}
 
-        // TODO: Move this into separate routine
-        // TODO: Provide some sort of status feedback if any of this fails.
-        Message msg = getMessageForConnect();
-        if ((commsService != null) && (msg != null)) {
-            try {
-                commsService.send(msg);
-            } catch (RemoteException e) {
-                Log.d(this.getClass().getSimpleName(), "RemoteException on network connection.");
-            }
-        }
+        openNetworkConnection();
 
+        startDisplayActivity();
+	}
+
+
+    private void startDisplayActivity() {
         // open display activity
         Intent startDisplayActivityIntent = new Intent(Activity_SetupNetwork.this, Activity_MainDisplay.class);
 
         startDisplayActivityIntent.putExtra("COMMS_SERVICE", commsService); // TODO: Use a constant
 
         startActivity(startDisplayActivityIntent);
-	}
+    }
+
+
+    private boolean openNetworkConnection() {
+        boolean result = false;
+
+        // TODO: Provide some sort of status feedback if any of this fails.
+        Message msg = getMessageForConnect();
+        if ((commsService != null) && (msg != null)) {
+            try {
+                commsService.send(msg);
+                result = true;
+            } catch (RemoteException e) {
+                Log.d(this.getClass().getSimpleName(), "RemoteException on network connection.");
+            }
+        }
+
+        return result;
+    }
 
 
     public void onClick_buttonStartTestServer(View theView) {
