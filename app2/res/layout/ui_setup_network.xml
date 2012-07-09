@@ -60,6 +60,6 @@
         android:layout_height="match_parent"
         android:gravity="top"
         android:inputType="textMultiLine"
-        android:text="widget;label;1;35;1;A Handbag label!\nfeature;speech;speak;Hello from Handbag!;1.0;1.0\nwidget;progress;2;50\nwidget;dialog;alert!\nfeature;sms;send;Me;A message!\n" />
+        android:text="widget;label;1;35;1;A Handbag label!\nfeature;speech;speak;Hello from Handbag!;1.0;1.0\nwidget;progress;2;50\nwidget;dialog;alert!\nfeature;dummy;sms;send;Me;A message!\n" />
 
 </LinearLayout>
