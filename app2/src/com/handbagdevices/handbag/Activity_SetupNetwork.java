@@ -178,6 +178,7 @@ public class Activity_SetupNetwork extends Activity {
 			return;
 		}
 
+        // TODO: Wait for result from service before displaying activity?
         openNetworkConnection();
 
         startDisplayActivity();
