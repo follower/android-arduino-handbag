@@ -125,6 +125,12 @@ public class Activity_MainDisplay extends Activity implements ISetupActivity /* 
 		Log.d(this.getClass().getSimpleName(), "Entered onStart()");
 		super.onStart();
 
+        if (wasRestart) {
+            wasRestart = false;
+            finish();
+            return;
+        }
+
         // Bind to Parse Service which receives configuration information from the data
         // source, and to which we send event information. TODO: Improve class name?
         boolean bindSuccessful = bindService(new Intent(Activity_MainDisplay.this, HandbagParseService.class), connParseService, Context.BIND_AUTO_CREATE);
@@ -145,18 +151,32 @@ public class Activity_MainDisplay extends Activity implements ISetupActivity /* 
 		Log.d(this.getClass().getSimpleName(), "Exited onStart()");
 	}
 
+    boolean wasRestart = false;
+
+    @Override
+    protected void onRestart() {
+        Log.d(this.getClass().getSimpleName(), "onRestart() called.");
+        super.onRestart();
+        wasRestart = true;
+    }
+
+
+    @Override
+    protected void onStop() {
+        Log.d(this.getClass().getSimpleName(), "onStop() called.");
+        super.onStop();
+
+        // We currently make no promises to keep things going in the background, so
+        // we handle this as if the user had pressed the back button first.
+        // TODO: Keep some and/or all things running in the background? (e.g. SMS service?)
+        onDestroy();
+    }
 
 	@Override
-	protected void onPause() {
-		super.onPause();
-	}
+    protected void onDestroy() {
+        Log.d(this.getClass().getSimpleName(), "Entered onDestroy()");
 
-
-	@Override
-	protected void onStop() {
-		Log.d(this.getClass().getSimpleName(), "Entered onStop()");
-
-		super.onStop();
+        super.onDestroy();
 
 		try {
 			parseService.send(Message.obtain(null, HandbagParseService.MSG_UI_SHUTDOWN_REQUEST));
@@ -170,10 +190,12 @@ public class Activity_MainDisplay extends Activity implements ISetupActivity /* 
 			// Service crashed so just ignore it
 		}
 
-        unbindService(connParseService);
-        connParseService = null;
+        if (connParseService != null) {
+            unbindService(connParseService);
+            connParseService = null;
+        }
 
-		Log.d(this.getClass().getSimpleName(), "Exited onStop()");
+        Log.d(this.getClass().getSimpleName(), "Exited onDestroy()");
 	}
 
 
