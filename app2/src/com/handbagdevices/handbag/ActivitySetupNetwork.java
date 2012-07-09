@@ -1,9 +1,5 @@
 package com.handbagdevices.handbag;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -22,38 +18,29 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.os.Handler;
 
-public class ActivitySetupNetwork extends Activity implements ISetupActivity {
+public class ActivitySetupNetwork extends Activity {
 
-	// Messages to UI activity (i.e. us)
-	static final int MSG_UI_ACTIVITY_REGISTERED = 1;
-    static final int MSG_UI_RECEIVED_WIDGET_PACKET = 5;
-
-	Messenger parseService = null;
-	boolean parseServiceIsBound = false;
+    // Messages to setup activity (i.e. us)
+    static final int MSG_SETUP_ACTIVITY_REGISTERED = 1;
 
 	Messenger commsService = null;
 	boolean commsServiceIsBound = false;
 
-	// Used to receive messages from service(s)
-	class IncomingUiHandler extends Handler {
+    // Used to receive messages from comms service
+    class CommsMessageHandler extends Handler {
+
 		@Override
 		public void handleMessage(Message msg) {
 
 			// TODO: Only continue if a shutdown hasn't been ordered? (Can we stop this handler directly?)
 
 			switch (msg.what) {
-				case MSG_UI_ACTIVITY_REGISTERED:
-					Log.d(this.getClass().getSimpleName(), "received: MSG_UI_ACTIVITY_REGISTERED");
+                case MSG_SETUP_ACTIVITY_REGISTERED:
+                    Log.d(this.getClass().getSimpleName(), "received: MSG_SETUP_ACTIVITY_REGISTERED");
 					break;
-
-
-                case MSG_UI_RECEIVED_WIDGET_PACKET:
-                    handleWidgetPacket(msg.getData().getStringArray(null));
-                    break;
 
 				default:
 					super.handleMessage(msg);
@@ -62,27 +49,7 @@ public class ActivitySetupNetwork extends Activity implements ISetupActivity {
 	}
 
 	// Services we connect to will use this to communicate with us.
-    final Messenger ourMessenger = new Messenger(new IncomingUiHandler());
-
-
-    private ServiceConnection connParseService = new ServiceConnection() {
-
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			// Store the object we will use to communicate with the service.
-			parseService = new Messenger(service);
-			parseServiceIsBound = true;
-			Log.d(this.getClass().getSimpleName(), "Parse Service bound");
-
-			registerWithParseServer();
-		}
-
-		public void onServiceDisconnected(ComponentName className) {
-			// Called when the service crashes/unexpectedly disconnects.
-			parseService = null;
-			parseServiceIsBound = false;
-		}
-
-	};
+    final Messenger ourMessenger = new Messenger(new CommsMessageHandler());
 
 
     private ServiceConnection connCommsService = new ServiceConnection() {
@@ -146,28 +113,11 @@ public class ActivitySetupNetwork extends Activity implements ISetupActivity {
     }
 
 
-    private void registerWithParseServer() {
-
-    	Log.d(this.getClass().getSimpleName(), "Registering with Parse Server.");
-
-		Message msg = Message.obtain(null, HandbagParseService.MSG_UI_ACTIVITY_REGISTER);
-		msg.replyTo = ourMessenger;
-
-		try {
-			parseService.send(msg);
-		} catch (RemoteException ex1) {
-			// Service crashed so just ignore it
-			// TODO: Do something else?
-		}
-
-    }
-
-
     private void registerWithWiFiCommsService() {
 
     	Log.d(this.getClass().getSimpleName(), "Registering with WiFi Comms Service.");
 
-		Message msg = Message.obtain(null, HandbagParseService.MSG_UI_ACTIVITY_REGISTER); // TODO: Use Comms-specific constant or move here.
+		Message msg = Message.obtain(null, HandbagWiFiCommsService.MSG_SETUP_ACTIVITY_REGISTER); // TODO: Use Comms-specific constant or move here.
 		msg.replyTo = ourMessenger;
 
 		try {
@@ -185,20 +135,11 @@ public class ActivitySetupNetwork extends Activity implements ISetupActivity {
 		Log.d(this.getClass().getSimpleName(), "Entered onStart()");
 		super.onStart();
 
-		// Bind to Parse Service which receives configuration information from the data
-		// source, and to which we send event information. TODO: Improve class name?
-		boolean bindSuccessful = bindService(new Intent(ActivitySetupNetwork.this, HandbagParseService.class), connParseService, Context.BIND_AUTO_CREATE);
-		Log.d(this.getClass().getSimpleName(), "Parse Service bound:" + bindSuccessful);
 
 		// TODO: Use the chosen Comms Service (WiFi, USB ADK, BT?)
-		bindSuccessful = bindService(new Intent(ActivitySetupNetwork.this, HandbagWiFiCommsService.class), connCommsService, Context.BIND_AUTO_CREATE);
+        startService(new Intent(ActivitySetupNetwork.this, HandbagWiFiCommsService.class));
+		boolean bindSuccessful = bindService(new Intent(ActivitySetupNetwork.this, HandbagWiFiCommsService.class), connCommsService, Context.BIND_AUTO_CREATE);
 		Log.d(this.getClass().getSimpleName(), "Comms Service bound:" + bindSuccessful);
-
-		if (parseService != null) {
-			// We do this here to handle the situation that we're "resuming" after being
-			// hidden. This ensures the Parse Server is "woken up".
-			registerWithParseServer();
-		}
 
 		if (commsService != null) {
 			// We do this here to handle the situation that we're "resuming" after being
@@ -222,27 +163,10 @@ public class ActivitySetupNetwork extends Activity implements ISetupActivity {
 
 		super.onStop();
 
-		try {
-			parseService.send(Message.obtain(null, HandbagParseService.MSG_UI_SHUTDOWN_REQUEST));
-		} catch (RemoteException e) {
-			// Service crashed so just ignore it
-		}
+		// Note: MainDisplay activity is responsible for closing connections
 
-		try {
-			commsService.send(Message.obtain(null, HandbagParseService.MSG_UI_SHUTDOWN_REQUEST));
-		} catch (RemoteException e) {
-			// Service crashed so just ignore it
-		}
-
-/*
-        // For some reason this causes a "Service not registered" error:
-         *
-		// Unbind from Parse Service if we're still connected.
-		if (parseServiceIsBound) {
-			unbindService(connParseService);
-			parseServiceIsBound = false;
-		}
-*/
+        unbindService(connCommsService);
+        // connCommsService = null;
 
 		Log.d(this.getClass().getSimpleName(), "Exited onStop()");
 	}
@@ -266,37 +190,6 @@ public class ActivitySetupNetwork extends Activity implements ISetupActivity {
 
 	}
 
-	private boolean showingMainStage = false;
-
-	private void displayMainStage() {
-		if (!showingMainStage) {
-			setContentView(R.layout.mainstage);
-			showingMainStage = true;
-		}
-	}
-
-	private void hideMainStage() {
-		if (showingMainStage) {
-			setContentView(R.layout.main);
-			showingMainStage = false;
-			populateFromPrefs();
-
-            // TODO: Move this functionality elsewhere?
-            disconnectFromTarget();
-		}
-	}
-
-
-    private void disconnectFromTarget() {
-        if (commsService != null) {
-            try {
-                commsService.send(Message.obtain(null, HandbagWiFiCommsService.MSG_UI_DISCONNECT_FROM_TARGET));
-            } catch (RemoteException e) {
-                // Service crashed so just ignore it
-            }
-        }
-    }
-
 
 	private boolean isOnline() {
 		NetworkInfo netInfo = ((ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
@@ -314,8 +207,6 @@ public class ActivitySetupNetwork extends Activity implements ISetupActivity {
 			return;
 		}
 
-		displayMainStage();
-
         // TODO: Move this into separate routine
         // TODO: Provide some sort of status feedback if any of this fails.
         Message msg = getMessageForConnect();
@@ -327,6 +218,12 @@ public class ActivitySetupNetwork extends Activity implements ISetupActivity {
             }
         }
 
+        // open display activity
+        Intent startDisplayActivityIntent = new Intent(ActivitySetupNetwork.this, Activity_MainDisplay.class);
+
+        startDisplayActivityIntent.putExtra("COMMS_SERVICE", commsService); // TODO: Use a constant
+
+        startActivity(startDisplayActivityIntent);
 	}
 
 
@@ -398,88 +295,9 @@ public class ActivitySetupNetwork extends Activity implements ISetupActivity {
 	@Override
 	public void onBackPressed() {
 
-		hideMainStage();
-
 		// TODO: Need to solve "leaked connection" errors before re-enabling this:
-		//super.onBackPressed();
+        super.onBackPressed();
 	}
 
 
-    private static final String WIDGET_TYPE_LABEL = "label";
-    private static final String WIDGET_TYPE_BUTTON = "button";
-    private static final String WIDGET_TYPE_DIALOG = "dialog";
-    private static final String WIDGET_TYPE_PROGRESS_BAR = "progress";
-    private static final String WIDGET_TYPE_TEXT_INPUT = "textinput";
-
-    private static final int PACKET_OFFSET_WIDGET_TYPE = 1;
-
-    private static final Map<String, String> MAP_WIDGET_TO_CLASS = new HashMap<String, String>();
-
-    static {
-        MAP_WIDGET_TO_CLASS.put(WIDGET_TYPE_LABEL, "LabelWidget");
-        MAP_WIDGET_TO_CLASS.put(WIDGET_TYPE_DIALOG, "DialogWidget");
-        MAP_WIDGET_TO_CLASS.put(WIDGET_TYPE_PROGRESS_BAR, "ProgressBarWidget");
-        MAP_WIDGET_TO_CLASS.put(WIDGET_TYPE_BUTTON, "ButtonWidget");
-        MAP_WIDGET_TO_CLASS.put(WIDGET_TYPE_TEXT_INPUT, "TextInputWidget");
-    };
-
-
-    private void handleWidgetPacket(String[] packet) {
-
-        WidgetConfig widget = null;
-
-        String widgetClassName = MAP_WIDGET_TO_CLASS.get(packet[PACKET_OFFSET_WIDGET_TYPE]);
-
-        if (widgetClassName != null) {
-
-            // TODO: Find a better way to add the package name to make the fully qualified name?
-            widgetClassName = this.getPackageName() + "." + widgetClassName;
-
-            try {
-                widget = (WidgetConfig) Class.forName(widgetClassName).getMethod("fromArray", String[].class).invoke(null, (Object) packet);
-            } catch (NoSuchMethodException e) {
-                Log.e(this.getClass().getSimpleName(), "fromArray method not found in widget class: " + widgetClassName);
-            } catch (ClassNotFoundException e) {
-                Log.e(this.getClass().getSimpleName(), "no class found of name: " + widgetClassName);
-            } catch (IllegalArgumentException e) {
-                Log.e(this.getClass().getSimpleName(), "IllegalArgumentException occurred instantiating: " + widgetClassName);
-            } catch (IllegalAccessException e) {
-                Log.e(this.getClass().getSimpleName(), "IllegalAccessException occurred instantiating: " + widgetClassName);
-            } catch (InvocationTargetException e) {
-                Log.e(this.getClass().getSimpleName(), "InvocationTargetException occurred instantiating: " + widgetClassName);
-            }
-
-            if (widget != null) {
-
-                widget.setParentActivity(this); // TODO: Do better/properly?
-
-                ViewGroup mainstage = (ViewGroup) findViewById(R.id.mainstage);
-
-                // If we can't find mainstage it's probably because the
-                // active view has changed since the request was made.
-                if (mainstage != null) {
-                    widget.displaySelf(mainstage);
-                }
-            }
-
-        } else {
-            Log.d(this.getClass().getSimpleName(), "Unknown widget type: " + packet[PACKET_OFFSET_WIDGET_TYPE]);
-        }
-
-    }
-
-
-    /* protected */ public void sendPacket(String[] packet) {
-        try {
-            Message msg = Message.obtain(null, HandbagWiFiCommsService.MSG_COMMS_SEND_PACKET);
-            Bundle bundle = new Bundle();
-            bundle.putStringArray(null, packet);
-            msg.setData(bundle);
-
-            commsService.send(msg);
-        } catch (RemoteException e) {
-            // Comms service client is dead so no longer try to access it.
-            commsService = null;
-        }
-    }
 }

@@ -79,6 +79,15 @@ public class HandbagParseService extends Service {
 
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        unbindService(connCommsService);
+        connCommsService = null;
+    }
+
+
     private void registerWithWiFiCommsService() {
 
     	Log.d(this.getClass().getSimpleName(), "Registering with WiFi Comms Service.");

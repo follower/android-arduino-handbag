@@ -23,8 +23,7 @@ import android.util.Log;
 
 public class HandbagWiFiCommsService extends Service {
 
-    // Messages from UI activity
-	static final int MSG_UI_TEST_NETWORK = 501;
+    // Messages from activities connecting to us
 
 
 	static final int MSG_PARSE_SERVICE_REGISTERED = 502;
@@ -34,6 +33,9 @@ public class HandbagWiFiCommsService extends Service {
 
     static final int MSG_COMMS_PACKET_RECEIVED = 505;
     static final int MSG_COMMS_SEND_PACKET = 506;
+
+
+    static final int MSG_SETUP_ACTIVITY_REGISTER = 600;
 
 
 	// Flag that should be checked
