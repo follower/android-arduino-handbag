@@ -21,10 +21,10 @@ abstract class WidgetConfig {
 	}
 
     // TODO: Do all this properly to provide "callback" method?.
-    protected ISetupActivity activity = null;
+    protected IDisplayActivity activity = null;
 
 
-    protected void setParentActivity(ISetupActivity activity) {
+    protected void setParentActivity(IDisplayActivity activity) {
         this.activity = activity;
     }
 

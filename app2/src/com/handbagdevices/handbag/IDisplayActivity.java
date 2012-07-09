@@ -1,7 +1,7 @@
 package com.handbagdevices.handbag;
 
-// TODO: Rename?
-public interface ISetupActivity {
+// TODO: Remove as now unnecessary?
+public interface IDisplayActivity {
 
     abstract void sendPacket(String[] packet);
 

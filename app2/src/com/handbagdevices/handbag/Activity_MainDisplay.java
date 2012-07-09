@@ -18,7 +18,7 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.ViewGroup;
 
-public class Activity_MainDisplay extends Activity implements ISetupActivity /* TODO: Rename interface */{
+public class Activity_MainDisplay extends Activity implements IDisplayActivity {
 
     // Messages to display activity (i.e. us)
     static final int MSG_DISPLAY_ACTIVITY_REGISTERED = 1;
