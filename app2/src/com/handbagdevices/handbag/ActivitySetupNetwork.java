@@ -129,12 +129,6 @@ public class ActivitySetupNetwork extends Activity {
 
 
 	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-
-	@Override
 	protected void onStop() {
 		Log.d(this.getClass().getSimpleName(), "Entered onStop()");
 
