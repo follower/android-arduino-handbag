@@ -30,10 +30,6 @@ public class HandbagUI extends Activity {
 
 	// Messages to UI activity (i.e. us)
 	static final int MSG_UI_ACTIVITY_REGISTERED = 1;
-	static final int MSG_UI_TEST_MESSAGE = 2;
-	static final int MSG_UI_TEST_STRING_MESSAGE = 3;
-	static final int MSG_UI_TEST_ARRAY_MESSAGE = 4;
-
     static final int MSG_UI_RECEIVED_WIDGET_PACKET = 5;
 
 	Messenger parseService = null;
@@ -46,46 +42,12 @@ public class HandbagUI extends Activity {
 	class IncomingUiHandler extends Handler {
 		@Override
 		public void handleMessage(Message msg) {
-			WidgetConfig newWidget;
 
 			// TODO: Only continue if a shutdown hasn't been ordered? (Can we stop this handler directly?)
 
 			switch (msg.what) {
 				case MSG_UI_ACTIVITY_REGISTERED:
 					Log.d(this.getClass().getSimpleName(), "received: MSG_UI_ACTIVITY_REGISTERED");
-					break;
-
-				case MSG_UI_TEST_MESSAGE:
-					new AlertDialog.Builder(HandbagUI.this).setMessage("Message received!").show();
-
-					Log.d(this.getClass().getSimpleName(), "Tid (ui):" + android.os.Process.myTid());
-
-//					if (commsService != null) {
-//						try {
-//							commsService.send(Message.obtain(null, HandbagWiFiCommsService.MSG_UI_TEST_NETWORK));
-//						} catch (RemoteException e) {
-//							Log.d(this.getClass().getSimpleName(), "RemoteException on network test.");
-//						}
-//					}
-
-					break;
-
-				case MSG_UI_TEST_STRING_MESSAGE:
-					new AlertDialog.Builder(HandbagUI.this).setMessage(msg.getData().getString(null)).show();
-					break;
-
-				case MSG_UI_TEST_ARRAY_MESSAGE:
-					// TODO: Should really check it's a label widget.
-					newWidget = LabelWidget.fromArray(msg.getData().getStringArray(null));
-
-					ViewGroup mainstage = (ViewGroup) findViewById(R.id.mainstage);
-
-					// If we can't find mainstage it's probably because the
-					// active view has changed since the request was made.
-					if (mainstage != null) {
-						newWidget.displaySelf(mainstage);
-					}
-
 					break;
 
 
@@ -243,15 +205,6 @@ public class HandbagUI extends Activity {
 			// hidden. This ensures the Comms Server is "woken up".
 			registerWithWiFiCommsService(); // TODO: Make generic.
 		}
-
-//		if (commsService != null) {
-//			try {
-//				commsService.send(Message.obtain(null, HandbagWiFiCommsService.MSG_UI_TEST_NETWORK));
-//			} catch (RemoteException e) {
-//				Log.d(this.getClass().getSimpleName(), "RemoteException on network test.");
-//			}
-//		}
-
 
 		Log.d(this.getClass().getSimpleName(), "Exited onStart()");
 	}
