@@ -42,46 +42,6 @@ public class HandbagParseService extends Service {
 	// Flag that should be checked
 	private boolean shutdownRequested = false;
 
-	private Handler testMessageHandler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-
-			if (!shutdownRequested) {
-				// Only continue if we haven't been told to shutdown.
-
-				try {
-					uiActivity.send(Message.obtain(null, HandbagUI.MSG_UI_TEST_MESSAGE));
-				} catch (RemoteException e) {
-					// UI Activity client is dead so no longer try to access it.
-					uiActivity = null;
-				}
-
-
-				if (commsService != null) {
-					try {
-						commsService.send(Message.obtain(null, HandbagWiFiCommsService.MSG_UI_TEST_NETWORK));
-					} catch (RemoteException e) {
-						Log.d(this.getClass().getSimpleName(), "RemoteException on network test.");
-					}
-				}
-
-
-				// Only doing this once now...
-				//testMessageHandler.sendEmptyMessageDelayed(0, 10000);
-
-
-
-			}
-
-		}
-
-	};
-
-	private void startTestMessages() {
-		testMessageHandler.removeCallbacksAndMessages(null);
-		testMessageHandler.sendEmptyMessageDelayed(0, 5000);
-	}
 
 	private void bindCommsService() {
 
