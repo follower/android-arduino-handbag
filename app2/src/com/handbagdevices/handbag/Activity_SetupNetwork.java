@@ -21,7 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.os.Handler;
 
-public class ActivitySetupNetwork extends Activity {
+public class Activity_SetupNetwork extends Activity {
 
     // Messages to setup activity (i.e. us)
     static final int MSG_SETUP_ACTIVITY_REGISTERED = 1;
@@ -120,8 +120,8 @@ public class ActivitySetupNetwork extends Activity {
 
 
 		// TODO: Use the chosen Comms Service (WiFi, USB ADK, BT?)
-        startService(new Intent(ActivitySetupNetwork.this, HandbagWiFiCommsService.class));
-		boolean bindSuccessful = bindService(new Intent(ActivitySetupNetwork.this, HandbagWiFiCommsService.class), connCommsService, Context.BIND_AUTO_CREATE);
+        startService(new Intent(Activity_SetupNetwork.this, HandbagWiFiCommsService.class));
+		boolean bindSuccessful = bindService(new Intent(Activity_SetupNetwork.this, HandbagWiFiCommsService.class), connCommsService, Context.BIND_AUTO_CREATE);
 		Log.d(this.getClass().getSimpleName(), "Comms Service bound:" + bindSuccessful);
 
 		Log.d(this.getClass().getSimpleName(), "Exited onStart()");
@@ -190,7 +190,7 @@ public class ActivitySetupNetwork extends Activity {
         }
 
         // open display activity
-        Intent startDisplayActivityIntent = new Intent(ActivitySetupNetwork.this, Activity_MainDisplay.class);
+        Intent startDisplayActivityIntent = new Intent(Activity_SetupNetwork.this, Activity_MainDisplay.class);
 
         startDisplayActivityIntent.putExtra("COMMS_SERVICE", commsService); // TODO: Use a constant
 
