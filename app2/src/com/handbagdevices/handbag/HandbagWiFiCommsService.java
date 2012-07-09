@@ -481,16 +481,23 @@ public class HandbagWiFiCommsService extends Service {
             if (!shutdownRequested) {
                 // Only continue if we haven't been told to shutdown
 
-                try {
-                    Message msg = Message.obtain(null, MSG_COMMS_PACKET_RECEIVED);
-                    Bundle bundle = new Bundle();
-                    bundle.putStringArray(null, packet);
-                    msg.setData(bundle);
+                if (parseService != null) {
 
-                    parseService.send(msg);
-                } catch (RemoteException e) {
-                    // Parse service client is dead so no longer try to access it.
-                    parseService = null;
+                    try {
+                        Message msg = Message.obtain(null, MSG_COMMS_PACKET_RECEIVED);
+                        Bundle bundle = new Bundle();
+                        bundle.putStringArray(null, packet);
+                        msg.setData(bundle);
+
+                        parseService.send(msg);
+                    } catch (RemoteException e) {
+                        Log.d(this.getClass().getSimpleName(), "Remote exception occurred deliverying packet.");
+                        // Parse service client is dead so no longer try to access it.
+                        parseService = null;
+                    }
+
+                } else {
+                    Log.d(this.getClass().getSimpleName(), "Dropping packet as 'parseService' is null.");
                 }
             }
 
