@@ -29,6 +29,6 @@
          <service android:name=".HandbagWiFiCommsService" 
              	  android:process=":remote_wifi_comms" />
         
-         </application>
+	</application>
 
 </manifest>
