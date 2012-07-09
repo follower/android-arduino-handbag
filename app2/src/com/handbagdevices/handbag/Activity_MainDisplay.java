@@ -92,6 +92,22 @@ public class Activity_MainDisplay extends Activity implements ISetupActivity /* 
 
     }
 
+    private void registerWithCommsService() {
+
+        Log.d(this.getClass().getSimpleName(), "Registering with current comms service.");
+
+        Message msg = Message.obtain(null, HandbagWiFiCommsService.MSG_SETUP_ACTIVITY_REGISTER); // TODO: Use Comms-specific interface constant or move here.
+        msg.replyTo = ourMessenger;
+
+        try {
+            commsService.send(msg);
+        } catch (RemoteException ex1) {
+            // Service crashed so just ignore it
+            // TODO: Do something else?
+        }
+
+    }
+
 
     /** Called when the activity is first created. */
     @Override
@@ -118,6 +134,10 @@ public class Activity_MainDisplay extends Activity implements ISetupActivity /* 
             // We do this here to handle the situation that we're "resuming" after being
             // hidden. This ensures the Parse Server is "woken up".
             registerWithParseServer();
+        }
+
+        if (commsService != null) {
+            registerWithCommsService();
         }
 
         setContentView(R.layout.mainstage);

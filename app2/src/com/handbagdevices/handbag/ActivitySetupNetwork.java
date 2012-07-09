@@ -59,8 +59,6 @@ public class ActivitySetupNetwork extends Activity {
 			commsService = new Messenger(service);
 			commsServiceIsBound = true;
 			Log.d(this.getClass().getSimpleName(), "Comms Service bound");
-
-			registerWithWiFiCommsService();
 		}
 
 		public void onServiceDisconnected(ComponentName className) {
@@ -113,21 +111,6 @@ public class ActivitySetupNetwork extends Activity {
     }
 
 
-    private void registerWithWiFiCommsService() {
-
-    	Log.d(this.getClass().getSimpleName(), "Registering with WiFi Comms Service.");
-
-		Message msg = Message.obtain(null, HandbagWiFiCommsService.MSG_SETUP_ACTIVITY_REGISTER); // TODO: Use Comms-specific constant or move here.
-		msg.replyTo = ourMessenger;
-
-		try {
-			commsService.send(msg);
-		} catch (RemoteException ex1) {
-			// Service crashed so just ignore it
-			// TODO: Do something else?
-		}
-
-    }
 
 
 	@Override
@@ -140,12 +123,6 @@ public class ActivitySetupNetwork extends Activity {
         startService(new Intent(ActivitySetupNetwork.this, HandbagWiFiCommsService.class));
 		boolean bindSuccessful = bindService(new Intent(ActivitySetupNetwork.this, HandbagWiFiCommsService.class), connCommsService, Context.BIND_AUTO_CREATE);
 		Log.d(this.getClass().getSimpleName(), "Comms Service bound:" + bindSuccessful);
-
-		if (commsService != null) {
-			// We do this here to handle the situation that we're "resuming" after being
-			// hidden. This ensures the Comms Server is "woken up".
-			registerWithWiFiCommsService(); // TODO: Make generic.
-		}
 
 		Log.d(this.getClass().getSimpleName(), "Exited onStart()");
 	}

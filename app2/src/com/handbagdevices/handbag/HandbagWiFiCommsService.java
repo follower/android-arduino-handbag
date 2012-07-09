@@ -216,15 +216,15 @@ public class HandbagWiFiCommsService extends Service {
 
 			switch (msg.what) {
 
-				case HandbagParseService.MSG_UI_ACTIVITY_REGISTER: // TODO: Move this constant into UI class?
+				case MSG_SETUP_ACTIVITY_REGISTER: // TODO: Move this constant into UI class?
 					// TODO: Handle receiving this more than once?
-					Log.d(this.getClass().getSimpleName(), "    MSG_UI_ACTIVITY_REGISTER");
+					Log.d(this.getClass().getSimpleName(), "    MSG_SETUP_ACTIVITY_REGISTER");
 					uiActivity = msg.replyTo;
 
 					shutdownRequested = false;
 
 					try {
-						uiActivity.send(Message.obtain(null, HandbagUI.MSG_UI_ACTIVITY_REGISTERED)); // TODO: Change to specify who was registered with. ***
+						uiActivity.send(Message.obtain(null, Activity_MainDisplay.MSG_DISPLAY_ACTIVITY_REGISTERED)); // TODO: Change to specify who was registered with. ***
 					} catch (RemoteException e) {
 						// UI Activity client is dead so no longer try to access it.
 						uiActivity = null;
@@ -299,6 +299,8 @@ public class HandbagWiFiCommsService extends Service {
                         Log.d(this.getClass().getSimpleName(), "    Cancelling target connection.");
                         targetNetworkConnection.cancel(true); // TODO: Handle like MSG_UI_DISCONNECT_FROM_TARGET above.
                     }
+
+                    parseService = null;
 					break;
 
 				default:
