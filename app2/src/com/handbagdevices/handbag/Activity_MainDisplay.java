@@ -169,6 +169,9 @@ public class Activity_MainDisplay extends Activity implements ISetupActivity /* 
         // We currently make no promises to keep things going in the background, so
         // we handle this as if the user had pressed the back button first.
         // TODO: Keep some and/or all things running in the background? (e.g. SMS service?)
+        // Note: If we remove this onDestroy & the wasRestart above then things will run
+        // okay apart from the pre-existing widgets are saved. If we saved them we
+        // could keep things going.
         onDestroy();
     }
 
