@@ -43,6 +43,7 @@ public class Activity_MainDisplay extends Activity implements ISetupActivity /* 
                     break;
 
                 case MSG_DISPLAY_RECEIVED_WIDGET_PACKET:
+                    Log.d(this.getClass().getSimpleName(), "received: MSG_DISPLAY_RECEIVED_WIDGET_PACKET");
                     handleWidgetPacket(msg.getData().getStringArray(null));
                     break;
 
