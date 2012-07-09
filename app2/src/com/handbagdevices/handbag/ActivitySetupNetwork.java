@@ -26,7 +26,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.os.Handler;
 
-public class HandbagUI extends Activity implements ISetupActivity {
+public class ActivitySetupNetwork extends Activity implements ISetupActivity {
 
 	// Messages to UI activity (i.e. us)
 	static final int MSG_UI_ACTIVITY_REGISTERED = 1;
@@ -187,11 +187,11 @@ public class HandbagUI extends Activity implements ISetupActivity {
 
 		// Bind to Parse Service which receives configuration information from the data
 		// source, and to which we send event information. TODO: Improve class name?
-		boolean bindSuccessful = bindService(new Intent(HandbagUI.this, HandbagParseService.class), connParseService, Context.BIND_AUTO_CREATE);
+		boolean bindSuccessful = bindService(new Intent(ActivitySetupNetwork.this, HandbagParseService.class), connParseService, Context.BIND_AUTO_CREATE);
 		Log.d(this.getClass().getSimpleName(), "Parse Service bound:" + bindSuccessful);
 
 		// TODO: Use the chosen Comms Service (WiFi, USB ADK, BT?)
-		bindSuccessful = bindService(new Intent(HandbagUI.this, HandbagWiFiCommsService.class), connCommsService, Context.BIND_AUTO_CREATE);
+		bindSuccessful = bindService(new Intent(ActivitySetupNetwork.this, HandbagWiFiCommsService.class), connCommsService, Context.BIND_AUTO_CREATE);
 		Log.d(this.getClass().getSimpleName(), "Comms Service bound:" + bindSuccessful);
 
 		if (parseService != null) {

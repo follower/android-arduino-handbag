@@ -21,8 +21,10 @@ abstract class WidgetConfig {
 	}
 
     // TODO: Do all this properly to provide "callback" method?.
-    protected HandbagUI activity = null;
-    protected void setParentActivity(HandbagUI activity) {
+    protected ISetupActivity activity = null;
+
+
+    protected void setParentActivity(ISetupActivity activity) {
         this.activity = activity;
     }
 
