@@ -50,9 +50,9 @@ public class HandbagParseService extends Service {
     }
 
 
-    private void registerWithWiFiCommsService() {
+    private void registerWithCommsService() {
 
-    	Log.d(this.getClass().getSimpleName(), "Registering with WiFi Comms Service.");
+        Log.d(this.getClass().getSimpleName(), "Registering with Comms Service.");
 
 		Message msg = Message.obtain(null, MSG_PARSE_SERVICE_REGISTER); // TODO: Use Comms-specific constant or move here.
 		msg.replyTo = ourMessenger;
@@ -95,7 +95,7 @@ public class HandbagParseService extends Service {
 
                         // Note: We receive the bound comms service when we're started.
 						if (commsService != null) {
-							registerWithWiFiCommsService();
+							registerWithCommsService();
 						}
 
 						//startTestMessages();
