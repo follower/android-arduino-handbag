@@ -22,6 +22,8 @@ public class Activity_SetupUsb extends Activity {
             commsService = new Messenger(service);
             commsServiceIsBound = true;
             Log.d(this.getClass().getSimpleName(), "USB Comms Service bound");
+            // TODO: Check if we should have the same location of this in the network activity?
+            startDisplayActivity();
         }
 
 
