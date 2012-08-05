@@ -58,7 +58,7 @@ public class Activity_SetupNetwork extends Activity {
 			// Store the object we will use to communicate with the service.
 			commsService = new Messenger(service);
 			commsServiceIsBound = true;
-			Log.d(this.getClass().getSimpleName(), "Comms Service bound");
+            Log.d(this.getClass().getSimpleName(), "Network Comms Service bound");
 		}
 
 		public void onServiceDisconnected(ComponentName className) {
