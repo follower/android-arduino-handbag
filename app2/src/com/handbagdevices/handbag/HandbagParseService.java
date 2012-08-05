@@ -5,10 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -34,7 +32,7 @@ public class HandbagParseService extends Service {
 	// We passively receive this connection.
 	Messenger uiActivity = null;
 
-	// We pro-actively make this connection.
+    // We passively receive this connection.
 	Messenger commsService = null;
 	boolean commsServiceIsBound = false;
 
@@ -43,48 +41,12 @@ public class HandbagParseService extends Service {
 	private boolean shutdownRequested = false;
 
 
-	private void bindCommsService() {
-
-		// TODO: Use the chosen Comms Service (WiFi, USB ADK, BT?)
-		boolean bindSuccessful = bindService(new Intent(HandbagParseService.this, CommsService_WiFi.class), connCommsService, Context.BIND_AUTO_CREATE);
-		Log.d(this.getClass().getSimpleName(), "Comms Service bound:" + bindSuccessful);
-
-		if (commsService != null) {
-			// We do this here to handle the situation that we're "resuming" after being
-			// hidden. This ensures the Comms Server is "woken up".
-			registerWithWiFiCommsService(); // TODO: Make generic.
-		}
-
-	}
-
-	// TODO: Just receive the required comms communication objects directly from the UI activity?
-	private ServiceConnection connCommsService = new ServiceConnection() {
-
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			// Store the object we will use to communicate with the service.
-			commsService = new Messenger(service);
-			commsServiceIsBound = true;
-			Log.d(this.getClass().getSimpleName(), "Comms Service bound");
-
-			registerWithWiFiCommsService();
-		}
-
-		public void onServiceDisconnected(ComponentName className) {
-			// Called when the service crashes/unexpectedly disconnects.
-			commsService = null;
-			commsServiceIsBound = false;
-		}
-
-	};
-
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        unbindService(connCommsService);
-        connCommsService = null;
+        // Note: Because *we* didn't bind to the comms service
+        // we don't unbind here--that is left to the caller to do.
     }
 
 
@@ -131,8 +93,7 @@ public class HandbagParseService extends Service {
 
 					if (uiActivity != null) {
 
-						bindCommsService();
-
+                        // Note: We receive the bound comms service when we're started.
 						if (commsService != null) {
 							registerWithWiFiCommsService();
 						}
@@ -195,6 +156,10 @@ public class HandbagParseService extends Service {
 	public IBinder onBind(Intent intent) {
 		// Return our `messenger` instance to enable clients to send us messages.
 		Log.d(this.getClass().getSimpleName(), "onBind entered");
+
+        commsService = intent.getExtras().getParcelable("COMMS_SERVICE");
+        commsServiceIsBound = true;
+
 		return ourMessenger.getBinder();
 	}
 
