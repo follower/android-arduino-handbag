@@ -90,7 +90,7 @@ public class Activity_SetupNetwork extends Activity {
         // TODO: Find a simpler approach for all these prefs...
         String pref_network_host_name = appPrefs.getString("network_host_name", "");
 
-        if (!pref_network_host_name.isEmpty()) {
+        if (!(pref_network_host_name.length() == 0)) {
         	EditText widgetHostName = (EditText) findViewById(R.id.hostName);
         	widgetHostName.setText(pref_network_host_name);
         }
@@ -100,7 +100,7 @@ public class Activity_SetupNetwork extends Activity {
 
         String pref_network_host_port = appPrefs.getString("network_host_port", "");
 
-        if (!pref_network_host_port.isEmpty()) {
+        if (!(pref_network_host_port.length() == 0)) {
         	EditText widgetHostPort = (EditText) findViewById(R.id.hostPort);
         	widgetHostPort.setText(pref_network_host_port);
         }
@@ -278,7 +278,7 @@ public class Activity_SetupNetwork extends Activity {
         } else {
             hostName = appPrefs.getString("network_host_name", "");
 
-            if (hostName.isEmpty()) {
+            if (hostName.length() == 0) {
                 Log.e(this.getClass().getSimpleName(), "No hostname provided.");
                 return null; // TODO: Throw exception instead?
             }
