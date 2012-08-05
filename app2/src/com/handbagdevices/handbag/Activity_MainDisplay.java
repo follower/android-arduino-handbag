@@ -96,7 +96,7 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
 
         Log.d(this.getClass().getSimpleName(), "Registering with current comms service.");
 
-        Message msg = Message.obtain(null, HandbagWiFiCommsService.MSG_SETUP_ACTIVITY_REGISTER); // TODO: Use Comms-specific interface constant or move here.
+        Message msg = Message.obtain(null, CommsService_WiFi.MSG_SETUP_ACTIVITY_REGISTER); // TODO: Use Comms-specific interface constant or move here.
         msg.replyTo = ourMessenger;
 
         try {
@@ -205,7 +205,7 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
     private void disconnectFromTarget() {
         if (commsService != null) {
             try {
-                commsService.send(Message.obtain(null, HandbagWiFiCommsService.MSG_UI_DISCONNECT_FROM_TARGET));
+                commsService.send(Message.obtain(null, CommsService_WiFi.MSG_UI_DISCONNECT_FROM_TARGET));
             } catch (RemoteException e) {
                 // Service crashed so just ignore it
             }
@@ -289,7 +289,7 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
 
     /* protected */ public void sendPacket(String[] packet) {
         try {
-            Message msg = Message.obtain(null, HandbagWiFiCommsService.MSG_COMMS_SEND_PACKET);
+            Message msg = Message.obtain(null, CommsService_WiFi.MSG_COMMS_SEND_PACKET);
             Bundle bundle = new Bundle();
             bundle.putStringArray(null, packet);
             msg.setData(bundle);

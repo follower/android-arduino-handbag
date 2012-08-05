@@ -50,7 +50,7 @@
         <service android:name=".HandbagParseService"
              	  android:process=":remote_parse" />
         
-         <service android:name=".HandbagWiFiCommsService" 
+         <service android:name=".CommsService_WiFi" 
              	  android:process=":remote_wifi_comms" />
         
 	</application>

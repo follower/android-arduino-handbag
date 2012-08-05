@@ -21,7 +21,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
-public class HandbagWiFiCommsService extends Service {
+public class CommsService_WiFi extends Service {
 
     // Messages from activities connecting to us
 

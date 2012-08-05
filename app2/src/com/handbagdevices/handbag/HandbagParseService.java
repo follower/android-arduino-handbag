@@ -46,7 +46,7 @@ public class HandbagParseService extends Service {
 	private void bindCommsService() {
 
 		// TODO: Use the chosen Comms Service (WiFi, USB ADK, BT?)
-		boolean bindSuccessful = bindService(new Intent(HandbagParseService.this, HandbagWiFiCommsService.class), connCommsService, Context.BIND_AUTO_CREATE);
+		boolean bindSuccessful = bindService(new Intent(HandbagParseService.this, CommsService_WiFi.class), connCommsService, Context.BIND_AUTO_CREATE);
 		Log.d(this.getClass().getSimpleName(), "Comms Service bound:" + bindSuccessful);
 
 		if (commsService != null) {
@@ -142,12 +142,12 @@ public class HandbagParseService extends Service {
 
 					break;
 
-				case HandbagWiFiCommsService.MSG_PARSE_SERVICE_REGISTERED:
+				case CommsService_WiFi.MSG_PARSE_SERVICE_REGISTERED:
 					Log.d(this.getClass().getSimpleName(), "received: MSG_PARSE_SERVICE_REGISTERED");
 					break;
 
 
-                case HandbagWiFiCommsService.MSG_COMMS_PACKET_RECEIVED:
+                case CommsService_WiFi.MSG_COMMS_PACKET_RECEIVED:
                     Log.d(this.getClass().getSimpleName(), "received: MSG_COMMS_PACKET_RECEIVED");
                     processPacketContent(msg.getData().getStringArray(null));
                     break;

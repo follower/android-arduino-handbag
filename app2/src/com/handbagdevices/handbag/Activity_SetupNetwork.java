@@ -120,8 +120,8 @@ public class Activity_SetupNetwork extends Activity {
 
 
 		// TODO: Use the chosen Comms Service (WiFi, USB ADK, BT?)
-        startService(new Intent(Activity_SetupNetwork.this, HandbagWiFiCommsService.class));
-		boolean bindSuccessful = bindService(new Intent(Activity_SetupNetwork.this, HandbagWiFiCommsService.class), connCommsService, Context.BIND_AUTO_CREATE);
+        startService(new Intent(Activity_SetupNetwork.this, CommsService_WiFi.class));
+		boolean bindSuccessful = bindService(new Intent(Activity_SetupNetwork.this, CommsService_WiFi.class), connCommsService, Context.BIND_AUTO_CREATE);
 		Log.d(this.getClass().getSimpleName(), "Comms Service bound:" + bindSuccessful);
 
 		Log.d(this.getClass().getSimpleName(), "Exited onStart()");
@@ -296,7 +296,7 @@ public class Activity_SetupNetwork extends Activity {
         bundle.putString("hostName", hostName);
         bundle.putInt("hostPort", hostPort);
 
-        msg = Message.obtain(null, HandbagWiFiCommsService.MSG_UI_CONNECT_TO_TARGET);
+        msg = Message.obtain(null, CommsService_WiFi.MSG_UI_CONNECT_TO_TARGET);
         msg.setData(bundle);
 
         return msg;
