@@ -96,7 +96,8 @@ public class Activity_SetupUsb extends Activity {
 
         startService(new Intent(Activity_SetupUsb.this, CommsService_Usb.class));
         boolean bindSuccessful = bindService(new Intent(Activity_SetupUsb.this, CommsService_Usb.class), connCommsService, Context.BIND_AUTO_CREATE);
-        Log.d(this.getClass().getSimpleName(), "Comms Service bound:" + bindSuccessful);
+        Log.d(this.getClass().getSimpleName(), "Comms Service bound: " + bindSuccessful);
+        Log.d(this.getClass().getSimpleName(), "Comms Service: " + commsService);
 
         if (bindSuccessful) {
             startDisplayActivity();
