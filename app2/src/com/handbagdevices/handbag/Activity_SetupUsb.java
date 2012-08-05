@@ -101,10 +101,9 @@ public class Activity_SetupUsb extends Activity {
         Log.d(this.getClass().getSimpleName(), "Comms Service bound: " + bindSuccessful);
         Log.d(this.getClass().getSimpleName(), "Comms Service: " + commsService);
 
-        if (bindSuccessful) {
-            startDisplayActivity();
-        } else {
-            Log.e(this.getClass().getSimpleName(), "Comms service not bound--not starting display activity.");
+        if (!bindSuccessful) {
+            // TODO: Do something else here?
+            Log.e(this.getClass().getSimpleName(), "Comms service not bound--display activity will not be started.");
         }
 
         Log.d(this.getClass().getSimpleName(), "Exited onStart()");
