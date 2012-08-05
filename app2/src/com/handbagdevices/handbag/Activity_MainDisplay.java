@@ -104,6 +104,7 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
         } catch (RemoteException ex1) {
             // Service crashed so just ignore it
             // TODO: Do something else?
+            Log.e(this.getClass().getSimpleName(), "Failed to register with comms service");
         }
 
     }
@@ -117,6 +118,7 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
         // TODO: Store connections from bundle
         commsService = getIntent().getExtras().getParcelable("COMMS_SERVICE");
 
+        Log.d(this.getClass().getSimpleName(), "onCreate received COMMS_SERVICE: " + commsService);
     }
 
 
