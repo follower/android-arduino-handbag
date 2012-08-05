@@ -134,6 +134,8 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
         // Bind to Parse Service which receives configuration information from the data
         // source, and to which we send event information. TODO: Improve class name?
         Intent startParseServiceIntent = new Intent(Activity_MainDisplay.this, HandbagParseService.class);
+        startParseServiceIntent.putExtra("COMMS_SERVICE", commsService); // TODO: Use a constant
+
         boolean bindSuccessful = bindService(startParseServiceIntent, connParseService, Context.BIND_AUTO_CREATE);
         Log.d(this.getClass().getSimpleName(), "Parse Service bound:" + bindSuccessful);
 
