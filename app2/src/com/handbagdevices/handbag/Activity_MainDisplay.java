@@ -190,11 +190,13 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
 			// Service crashed so just ignore it
 		}
 
-		try {
-			commsService.send(Message.obtain(null, HandbagParseService.MSG_UI_SHUTDOWN_REQUEST));
-		} catch (RemoteException e) {
-			// Service crashed so just ignore it
-		}
+        if (commsService != null) {
+            try {
+                commsService.send(Message.obtain(null, HandbagParseService.MSG_UI_SHUTDOWN_REQUEST));
+            } catch (RemoteException e) {
+                // Service crashed so just ignore it
+            }
+        }
 
         if (connParseService != null) {
             unbindService(connParseService);
