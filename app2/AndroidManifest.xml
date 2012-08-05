@@ -53,6 +53,9 @@
         
          <service android:name=".CommsService_WiFi" 
              	  android:process=":remote_wifi_comms" />
+
+         <service android:name=".CommsService_Usb"
+                  android:process=":remote_usb_comms" />
         
 	</application>
 
