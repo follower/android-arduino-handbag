@@ -36,6 +36,7 @@
 
         <activity
             android:name=".Activity_SetupUsb"
+            android:exported="false"
             android:label="@string/app_name" android:screenOrientation="nosensor">
 
             <intent-filter>
