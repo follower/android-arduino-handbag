@@ -249,7 +249,7 @@ public class CommsService_WiFi extends Service {
 					try {
 						parseService.send(Message.obtain(null, MSG_PARSE_SERVICE_REGISTERED));
 					} catch (RemoteException e) {
-						// UI Activity client is dead so no longer try to access it.
+                        // Parse service client is dead so no longer try to access it.
 						parseService = null;
 					}
 
