@@ -225,7 +225,7 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
 
         disconnectFromTarget();
 
-		// TODO: Need to solve "leaked connection" errors before re-enabling this:
+        // TODO: Need to solve "leaked connection" errors before re-enabling this:
         super.onBackPressed();
 	}
 
