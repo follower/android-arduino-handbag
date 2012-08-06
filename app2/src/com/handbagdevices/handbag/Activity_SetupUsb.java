@@ -72,6 +72,9 @@ public class Activity_SetupUsb extends Activity {
 
         startDisplayActivityIntent.putExtra("COMMS_SERVICE", commsService); // TODO: Use a constant
 
+        startDisplayActivityIntent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME | Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         startActivity(startDisplayActivityIntent);
 
         // TODO: Make back button go to "main" config screen.
