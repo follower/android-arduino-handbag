@@ -1,7 +1,7 @@
 package com.handbagdevices.handbag;
 
-import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.ParcelFileDescriptor;
 
@@ -9,7 +9,7 @@ public interface UsbAccessoryHandlerInterface {
 
 	public abstract String get_ACTION_USB_ACCESSORY_DETACHED();
 
-	public abstract void setManager(Activity theActivity);
+	public abstract void setManager(Context theContext);
 
 	public abstract void setAccessory(Object theAccessoryObj);
 

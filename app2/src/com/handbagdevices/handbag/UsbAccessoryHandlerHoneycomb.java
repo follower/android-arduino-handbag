@@ -21,8 +21,8 @@ public class UsbAccessoryHandlerHoneycomb implements UsbAccessoryHandlerInterfac
 		return UsbManager.ACTION_USB_ACCESSORY_DETACHED;
 	}
 
-	public void setManager(Activity theActivity) {
-		mUsbManager = (UsbManager) theActivity.getSystemService(Context.USB_SERVICE);
+	public void setManager(Context theContext) {
+		mUsbManager = (UsbManager) theContext.getSystemService(Context.USB_SERVICE);
 	}
 
 	public void setAccessory(Object theAccessoryObj) {

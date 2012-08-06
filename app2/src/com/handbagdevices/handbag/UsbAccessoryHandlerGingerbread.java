@@ -1,7 +1,7 @@
 package com.handbagdevices.handbag;
 
-import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import com.android.future.usb.UsbAccessory;
 import com.android.future.usb.UsbManager;
@@ -18,8 +18,8 @@ public class UsbAccessoryHandlerGingerbread implements UsbAccessoryHandlerInterf
 		return UsbManager.ACTION_USB_ACCESSORY_DETACHED;
 	}
 
-	public void setManager(Activity theActivity) {
-		mUsbManager = UsbManager.getInstance(theActivity);
+    public void setManager(Context theContext) {
+        mUsbManager = UsbManager.getInstance(theContext);
 	}
 
 	public void setAccessory(Object theAccessoryObj) {
