@@ -72,12 +72,28 @@ public class Activity_SetupUsb extends Activity {
 
         startDisplayActivityIntent.putExtra("COMMS_SERVICE", commsService); // TODO: Use a constant
 
-        startDisplayActivityIntent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME | Intent.FLAG_ACTIVITY_NEW_TASK
+        // "ForResult" is used so we can make back button go to "main" config screen.
+        startDisplayActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivityForResult(startDisplayActivityIntent, 0);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // TODO: Change to use "choose comms method screen" rather than network.
+        // This is the second part of our "back button" functionality.
+        Log.d(this.getClass().getSimpleName(), "Entered onActivityResult.");
+        Intent startChooseActivityIntent = new Intent(Activity_SetupUsb.this, Activity_SetupNetwork.class);
+        startChooseActivityIntent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME | Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(startChooseActivityIntent);
 
-        startActivity(startDisplayActivityIntent);
+        // TODO: Fix this? (Maybe with something in 'onResume'?)
+        finish(); // Without this we have to press back twice--but with it we get a "duplicate finish" log message.
 
-        // TODO: Make back button go to "main" config screen.
+        Log.d(this.getClass().getSimpleName(), "Exited onActivityResult.");
     }
 
 
