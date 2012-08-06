@@ -2,6 +2,8 @@ package com.handbagdevices.handbag;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -11,6 +13,8 @@ import android.util.Log;
 
 public class CommsService_Usb extends Service {
 
+    public static final int MSG_USB_START_CONNECTION = 701;
+
     // Used to communicate with the UI Activity & Communication Service
     Messenger uiActivity = null; // Orders us around
     Messenger parseService = null; // Receives our data, sends us its data.
@@ -18,6 +22,7 @@ public class CommsService_Usb extends Service {
     // Flag that should be checked
     private boolean shutdownRequested = false;
 
+    UsbConnection usbConnection = null;
 
     // Used to receive messages from client(s)
     public class IncomingUsbCommsServiceHandler extends Handler {
@@ -59,6 +64,35 @@ public class CommsService_Usb extends Service {
                         parseService = null;
                     }
 
+                    // TODO: Handle somewhere else?
+                    if ((parseService != null) && (usbConnection == null)) {
+                        startUsbConnection();
+                    }
+
+                    break;
+
+
+                case MSG_USB_START_CONNECTION:
+                    Log.d(this.getClass().getSimpleName(), "    MSG_USB_START_CONNECTION");
+                    startUsbConnection();
+                    // TODO: Send some sort of response?
+                    break;
+
+
+                case HandbagParseService.MSG_UI_SHUTDOWN_REQUEST: // TODO: Move this constant into UI class?
+                    Log.d(this.getClass().getSimpleName(), "    MSG_UI_SHUTDOWN_REQUEST");
+
+                    // Set a flag so repeating sub-tasks will stop themselves.
+                    shutdownRequested = true;
+                    // TODO: Be more proactive and stop them here instead?
+
+                    if (usbConnection != null) {
+                        Log.d(this.getClass().getSimpleName(), "    Cancelling USB connection.");
+                        usbConnection.cancel(true);
+                        usbConnection = null;
+                    }
+
+                    parseService = null;
                     break;
 
 
@@ -68,6 +102,78 @@ public class CommsService_Usb extends Service {
             }
 
         }
+    }
+
+
+    private void startUsbConnection() {
+        usbConnection = new UsbConnection();
+        usbConnection.start();
+    }
+
+    // TODO: Extract interface/base-class from this and NetworkConnection class?
+
+    public class UsbConnection extends AsyncTask<Void, String[], Integer> {
+
+        private void start() {
+            this.execute();
+        }
+
+
+        // TODO: This is a duplicate of the same in NetworkConnection so extract it.
+        private void deliverPacket(String[] packet) {
+
+            Log.d(this.getClass().getSimpleName(), "Enter 'deliverPacket'.");
+
+            Log.d(this.getClass().getSimpleName(), "    'shutdownRequested`:" + shutdownRequested);
+
+            // TODO: Do this properly...
+            if (!shutdownRequested) {
+                // Only continue if we haven't been told to shutdown
+
+                if (parseService != null) {
+
+                    try {
+                        Message msg = Message.obtain(null, CommsService_WiFi.MSG_COMMS_PACKET_RECEIVED);
+                        Bundle bundle = new Bundle();
+                        bundle.putStringArray(null, packet);
+                        msg.setData(bundle);
+
+                        parseService.send(msg);
+                    } catch (RemoteException e) {
+                        Log.d(this.getClass().getSimpleName(), "Remote exception occurred deliverying packet.");
+                        // Parse service client is dead so no longer try to access it.
+                        parseService = null;
+                    }
+
+                } else {
+                    Log.d(this.getClass().getSimpleName(), "Dropping packet as 'parseService' is null.");
+                }
+            }
+
+
+            Log.d(this.getClass().getSimpleName(), "Exit 'deliverPacket'.");
+
+        }
+
+
+        @Override
+        protected void onProgressUpdate(String[]... values) {
+            deliverPacket(values[0]);
+        }
+
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            String[] newPacket;
+
+            newPacket = new String[] { "widget", "label", "1", "35", "1", "hello!", };
+
+            publishProgress(newPacket);
+
+            return 0;
+        }
+
+
     }
 
 

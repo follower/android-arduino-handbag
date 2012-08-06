@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 
 public class Activity_SetupUsb extends Activity {
@@ -24,6 +26,7 @@ public class Activity_SetupUsb extends Activity {
             Log.d(this.getClass().getSimpleName(), "USB Comms Service bound");
             // TODO: Check if we should have the same location of this in the network activity?
             startDisplayActivity();
+            // startUsbConnection();
         }
 
 
@@ -70,6 +73,22 @@ public class Activity_SetupUsb extends Activity {
         startDisplayActivityIntent.putExtra("COMMS_SERVICE", commsService); // TODO: Use a constant
 
         startActivity(startDisplayActivityIntent);
+
+        // TODO: Make back button go to "main" config screen.
+    }
+
+
+    private void startUsbConnection() {
+        // TODO: Just make this automatic within the USB comms service?
+
+        if (commsService != null) {
+            try {
+                commsService.send(Message.obtain(null, CommsService_Usb.MSG_USB_START_CONNECTION));
+            } catch (RemoteException e) {
+                Log.d(this.getClass().getSimpleName(), "RemoteException on start USB connection.");
+            }
+        }
+
     }
 
 
