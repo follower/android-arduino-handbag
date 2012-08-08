@@ -10,8 +10,6 @@ class PacketParser extends Thread {
 
     private InputStreamReader input;
 
-    private Scanner scanner;
-
     private BlockingQueue<String[]> packetsReceivedQueue;
 
 
@@ -22,7 +20,6 @@ class PacketParser extends Thread {
 
     PacketParser(BlockingQueue<String[]> packetsReceivedQueue, InputStream theInput) {
         input = new InputStreamReader(theInput);
-        scanner = new Scanner(input);
 
         this.packetsReceivedQueue = packetsReceivedQueue;
     }
@@ -36,6 +33,9 @@ class PacketParser extends Thread {
         while (true) {
             try {
                 packetsReceivedQueue.put(getNextPacket());
+            } catch (IOException e) {
+                Log.d(this.getClass().getSimpleName(), "IOException while getting/putting next packet.");
+                break;
             } catch (InterruptedException e) {
                 Log.d(this.getClass().getSimpleName(), "InterruptedException while getting/putting next packet.");
                 break;
@@ -48,7 +48,7 @@ class PacketParser extends Thread {
     }
 
 
-    private String[] getNextPacket() {
+    private String[] getNextPacket() throws IOException {
         boolean packetComplete = false;
         String token;
 
@@ -57,19 +57,15 @@ class PacketParser extends Thread {
 
         while (true) {
 
-            // TODO: Fix this so we don't end up getting a character
-            // at a time... (I think from the last '?' character in the regex?)
-            scanner.useDelimiter("((?=\\[|;|\n))?");
-
             if (packetComplete) {
                 break;
             }
 
-            token = scanner.next();
+            token = Character.toString((char) input.read());
 
             // Log.d(this.getClass().getSimpleName(), "Got token: " + token);
 
-            switch (token.charAt(0)) {
+            switch (token.charAt(0)) { // TODO: Do properly.
 
                 case '\n': // Fall through
                     packetComplete = true;
@@ -79,12 +75,18 @@ class PacketParser extends Thread {
                     break;
 
                 case '[':
-                    scanner.useDelimiter("]");
-                    int stringLength = scanner.nextInt();
-                    scanner.useDelimiter("");
-                    scanner.next(); // Skip the trailing "]". TODO: Avoid this?
+                    // TODO: Do this properly:
+                    int stringLength = 0;
+                    while (true) {
+                        token = Character.toString((char) input.read());
+                        if (token.equals("]")) {
+                            break;
+                        }
+                        stringLength = (stringLength * 10) + Integer.valueOf(token);
+                    }
+
                     for (int i = 0; i < stringLength; i++) {
-                        currentFieldContent.append(scanner.next());
+                        currentFieldContent.append(Character.toString((char) input.read()));
                     }
                     break;
 
