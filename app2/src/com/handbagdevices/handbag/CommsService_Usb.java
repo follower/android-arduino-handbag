@@ -6,8 +6,10 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Service;
 import android.content.Intent;
@@ -145,6 +147,13 @@ public class CommsService_Usb extends Service {
                     break;
 
 
+                case CommsService_WiFi.MSG_COMMS_SEND_PACKET:
+                    Log.d(this.getClass().getSimpleName(), "    MSG_COMMS_SEND_PACKET");
+                    sendPacketToTarget(msg.getData().getStringArray(null));
+                    // TODO: Return some sort of response?
+                    break;
+
+
                 default:
                     Log.d(this.getClass().getSimpleName(), "    (unknown): " + msg.what);
                     super.handleMessage(msg);
@@ -158,6 +167,12 @@ public class CommsService_Usb extends Service {
         usbConnection = new UsbConnection();
         usbConnection.start();
     }
+
+
+    public void sendPacketToTarget(String[] packet) {
+        usbConnection.packetsToSendQueue.add(packet);
+    }
+
 
     // TODO: Extract interface/base-class from this and NetworkConnection class?
 
@@ -264,9 +279,63 @@ public class CommsService_Usb extends Service {
 
             if (setUp()) {
 
-                newPacket = new String[] { "widget", "label", "1", "35", "1", "hello!", };
+                // TODO: Do proper handshake.
+                // Note: We have to send bytes first for an Arduino-based network device to detect us.
+                try {
+                    dataOutStream.writeBytes(PacketGenerator.fromArray(new String[] { "HB2" }));
+                    dataOutStream.flush();
+                } catch (IOException e1) {
+                    Log.d(this.getClass().getSimpleName(), "IOException sending initial handshake packet.");
+                    e1.printStackTrace();
+                    // TODO: Bail properly here.
+                    return -1;
+                }
 
-                publishProgress(newPacket);
+
+                // TODO: Extract most of this common copy-pasta from WiFi comms service.
+                parser.start();
+
+                Log.d(this.getClass().getSimpleName(), "Entering main data transfer handling loop.");
+
+                while (true) {
+                    if (this.isCancelled()) {
+                        parser.interrupt();
+                        Log.d(this.getClass().getSimpleName(), "Connection canceled.");
+                        break;
+                    }
+
+                    try {
+                        newPacket = this.packetsReceivedQueue.poll(1, TimeUnit.MILLISECONDS);
+
+                        if (newPacket != null) {
+                            Log.d(this.getClass().getSimpleName(), "Got result: " + Arrays.toString(newPacket));
+
+                            publishProgress(newPacket);
+                        }
+                    } catch (InterruptedException e) {
+                        // TODO: Handle properly?
+                        Log.d(this.getClass().getSimpleName(), "InterruptedException handling received packet.");
+                    }
+
+
+                    try {
+                        String[] packetToSend = this.packetsToSendQueue.poll(1, TimeUnit.MILLISECONDS);
+
+                        if (packetToSend != null) {
+                            Log.d(this.getClass().getSimpleName(), "Sending packet. ");
+                            dataOutStream.writeBytes(PacketGenerator.fromArray(packetToSend));
+                            dataOutStream.flush();
+                        }
+
+                    } catch (IOException e) {
+                        // TODO: Handle properly?
+                        Log.d(this.getClass().getSimpleName(), "IOException sending packet.");
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        // TODO: Handle properly?
+                        Log.d(this.getClass().getSimpleName(), "InterruptedException sending packet.");
+                    }
+                }
 
                 cleanUp();
             }
