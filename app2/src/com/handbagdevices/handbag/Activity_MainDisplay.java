@@ -23,6 +23,7 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
     // Messages to display activity (i.e. us)
     static final int MSG_DISPLAY_ACTIVITY_REGISTERED = 1;
     static final int MSG_DISPLAY_RECEIVED_WIDGET_PACKET = 5;
+    static final int MSG_DISPLAY_TARGET_DISCONNECTED_NORMAL = 7;
 
 	Messenger parseService = null;
 
@@ -45,6 +46,12 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
                 case MSG_DISPLAY_RECEIVED_WIDGET_PACKET:
                     Log.d(this.getClass().getSimpleName(), "received: MSG_DISPLAY_RECEIVED_WIDGET_PACKET");
                     handleWidgetPacket(msg.getData().getStringArray(null));
+                    break;
+
+                case MSG_DISPLAY_TARGET_DISCONNECTED_NORMAL:
+                    Log.d(this.getClass().getSimpleName(), "received: MSG_DISPLAY_TARGET_DISCONNECTED_NORMAL");
+                    normalDisconnect();
+                    finish();
                     break;
 
                 default:

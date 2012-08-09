@@ -12,7 +12,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,6 +42,31 @@ public class CommsService_Usb extends Service {
     private UsbAccessoryHandlerInterface usbHandler = null;
 
 
+    // TODO: Make this part of the UsbHandler class instead?
+    private final BroadcastReceiver usbActionReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            Log.d(this.getClass().getSimpleName(), "Entered usbActionReceiver onReceive.");
+            if (usbHandler.get_ACTION_USB_ACCESSORY_DETACHED().equals(action)) {
+                Log.d(this.getClass().getSimpleName(), "Detach event occurred.");
+                if (usbHandler.matchesThisAccessory(intent)) {
+                    Log.d(this.getClass().getSimpleName(), "Detached accessory matches us.");
+
+                    try {
+                        uiActivity.send(Message.obtain(null, Activity_MainDisplay.MSG_DISPLAY_TARGET_DISCONNECTED_NORMAL));
+                    } catch (RemoteException e) {
+                        // UI Activity client is dead so no longer try to access it.
+                        uiActivity = null;
+                    }
+
+                }
+            }
+        }
+    };
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -49,6 +77,11 @@ public class CommsService_Usb extends Service {
         }
 
         usbHandler.setManager(this.getApplicationContext());
+
+        // TODO: Put in UsbConnection class instead?
+        IntentFilter filter = new IntentFilter(usbHandler.get_ACTION_USB_ACCESSORY_DETACHED());
+        registerReceiver(usbActionReceiver, filter);
+
     }
 
 
@@ -130,6 +163,9 @@ public class CommsService_Usb extends Service {
                     break;
 
 
+                case CommsService_WiFi.MSG_UI_DISCONNECT_FROM_TARGET:
+                    Log.d(this.getClass().getSimpleName(), "    MSG_UI_DISCONNECT_FROM_TARGET (treating as next case...)");
+                    // Falling through to:
                 case HandbagParseService.MSG_UI_SHUTDOWN_REQUEST: // TODO: Move this constant into UI class?
                     Log.d(this.getClass().getSimpleName(), "    MSG_UI_SHUTDOWN_REQUEST");
 
