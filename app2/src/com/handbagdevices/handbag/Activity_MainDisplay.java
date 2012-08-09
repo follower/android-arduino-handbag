@@ -220,12 +220,20 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
     }
 
 
-	@Override
-	public void onBackPressed() {
+    private void normalDisconnect() {
 
+        // This is kinda redundant when called as a result of a "target disconnected" message
+        // but enables us to be consistent in our handling of exits.
         disconnectFromTarget();
 
         setResult(RESULT_OK);
+    }
+
+
+	@Override
+	public void onBackPressed() {
+
+        normalDisconnect();
 
         // TODO: Need to solve "leaked connection" errors before re-enabling this:
         super.onBackPressed();
