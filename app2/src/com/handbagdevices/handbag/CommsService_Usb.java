@@ -240,6 +240,8 @@ public class CommsService_Usb extends Service {
 
             fileDescriptorParcel = usbHandler.openAccessory(accessory);
 
+            usbHandler.setAccessory(accessory);
+
             if (fileDescriptorParcel != null) {
                 FileDescriptor fd = fileDescriptorParcel.getFileDescriptor();
 
