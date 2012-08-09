@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbManager;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
 
 
 @TargetApi(12)
@@ -48,6 +49,9 @@ public class UsbAccessoryHandlerHoneycomb implements UsbAccessoryHandlerInterfac
 	}
 
 	public boolean matchesThisAccessory(Intent intent) { // TODO: Name this something better
+
+        Log.d(this.getClass().getSimpleName(), "In matchesThisAccessory mAccessory is: " + mAccessory);
+
 		UsbAccessory accessory = (UsbAccessory) intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
 		return (accessory != null) && accessory.equals(mAccessory);
 	}
