@@ -49,6 +49,7 @@ public class Activity_MainDisplay extends Activity implements IDisplayActivity {
                     break;
 
                 case MSG_DISPLAY_TARGET_DISCONNECTED_NORMAL:
+                    // TODO: Add support to the WiFi comms server for this as well?
                     Log.d(this.getClass().getSimpleName(), "received: MSG_DISPLAY_TARGET_DISCONNECTED_NORMAL");
                     normalDisconnect();
                     finish();
