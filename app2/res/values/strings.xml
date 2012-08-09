@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, HandbagUI!</string>
+    <string name="hello">Handbag (beta)\n</string>
     <string name="app_name">Handbag</string>
     <string name="labelHostname">Hostname</string>
     <string name="labelPortValue">Port</string>
