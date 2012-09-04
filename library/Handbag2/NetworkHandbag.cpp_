@@ -1,3 +1,5 @@
+// See the following include file for why this file has a `.cpp_` extension.
+
 #include "NetworkHandbag.h"
 
 NetworkHandbag::NetworkHandbag(EthernetServer& server) : server(server) {

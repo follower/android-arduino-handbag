@@ -1,3 +1,5 @@
+// See the following include file for why this file has a `.cpp_` extension.
+
 #include "Handbag.h"
 
 UsbHandbag::UsbHandbag(AndroidAccessory& accessory) : accessory(accessory) {
