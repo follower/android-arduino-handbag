@@ -20,7 +20,7 @@
         <uses-library android:name="com.android.future.usb.accessory" />
 
         <activity
-            android:name=".Activity_SetupNetwork"
+            android:name=".Activity_Launcher"
             android:label="@string/app_name" android:screenOrientation="nosensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,15 +28,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity
-            android:name=".Activity_MainDisplay"
-            android:label="@string/app_name" android:screenOrientation="nosensor">
-        </activity>
 
         <activity
-            android:name=".Activity_SetupUsb"
+            android:name=".Activity_LaunchFromUsb"
             android:exported="false"
+            android:taskAffinity="" android:launchMode="singleInstance" android:excludeFromRecents="true"
             android:label="@string/app_name" android:screenOrientation="nosensor">
 
             <intent-filter>
@@ -46,6 +42,22 @@
             <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
                        android:resource="@xml/accessory_filter" />
 
+        </activity>
+
+
+        <activity
+            android:name=".Activity_SetupNetwork"
+            android:label="@string/app_name" android:screenOrientation="nosensor">
+        </activity>
+        
+        <activity
+            android:name=".Activity_MainDisplay"
+            android:label="@string/app_name" android:screenOrientation="nosensor">
+        </activity>
+
+        <activity
+            android:name=".Activity_SetupUsb"
+            android:label="@string/app_name" android:screenOrientation="nosensor">
         </activity>
 
         <service android:name=".HandbagParseService"

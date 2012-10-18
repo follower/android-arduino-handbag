@@ -5,11 +5,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Message;
 import android.os.Messenger;
-import android.os.RemoteException;
 import android.util.Log;
 
 public class Activity_SetupUsb extends Activity {
@@ -27,6 +24,7 @@ public class Activity_SetupUsb extends Activity {
             // TODO: Check if we should have the same location of this in the network activity?
             startDisplayActivity();
             // startUsbConnection();
+            finish();
         }
 
 
@@ -45,49 +43,9 @@ public class Activity_SetupUsb extends Activity {
 
         startDisplayActivityIntent.putExtra("COMMS_SERVICE", commsService); // TODO: Use a constant
 
-        // "ForResult" is used so we can make back button go to "main" config screen.
-        startDisplayActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivityForResult(startDisplayActivityIntent, 0);
-    }
+        startDisplayActivityIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // TODO: Change to use "choose comms method screen" rather than network.
-        // This is the second part of our "back button" functionality.
-        Log.d(this.getClass().getSimpleName(), "Entered onActivityResult.");
-        Intent startChooseActivityIntent = new Intent(Activity_SetupUsb.this, Activity_SetupNetwork.class);
-        startChooseActivityIntent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME | Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(startChooseActivityIntent);
-
-        // TODO: Fix this? (Maybe with something in 'onResume'?)
-        finish(); // Without this we have to press back twice--but with it we get a "duplicate finish" log message.
-
-        Log.d(this.getClass().getSimpleName(), "Exited onActivityResult.");
-    }
-
-
-    private void startUsbConnection() {
-        // TODO: Just make this automatic within the USB comms service?
-
-        if (commsService != null) {
-            try {
-                commsService.send(Message.obtain(null, CommsService_Usb.MSG_USB_START_CONNECTION));
-            } catch (RemoteException e) {
-                Log.d(this.getClass().getSimpleName(), "RemoteException on start USB connection.");
-            }
-        }
-
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+        startActivity(startDisplayActivityIntent);
     }
 
 
