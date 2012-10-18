@@ -274,6 +274,13 @@ public class CommsService_Usb extends Service {
 
             Object accessory = usbHandler.getConnectedAccessory();
 
+            // It's possible we end up here with no accessory connected because
+            // Android's intents/activities/lifecycle approach is annoying.
+            if (accessory == null) {
+                Log.d(this.getClass().getSimpleName(), "Early exit of 'setup()' as 'accessory' is null.");
+                return false;
+            }
+
             fileDescriptorParcel = usbHandler.openAccessory(accessory);
 
             usbHandler.setAccessory(accessory);
