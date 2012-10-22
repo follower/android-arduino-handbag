@@ -69,6 +69,8 @@ public class CommsService_Usb extends Service {
     public void onCreate() {
         super.onCreate();
 
+        Log.d(this.getClass().getSimpleName(), "onCreate() called");
+
         if (usbHandler == null) {
             // TODO: Display error message. (Shouldn't happen when only using intents.)
             return;
@@ -147,6 +149,8 @@ public class CommsService_Usb extends Service {
                     }
 
                     // TODO: Handle somewhere else?
+                    Log.d(this.getClass().getSimpleName(), "parseService: " + parseService);
+                    Log.d(this.getClass().getSimpleName(), "usbConnection: " + usbConnection);
                     if ((parseService != null) && (usbConnection == null)) {
                         startUsbConnection();
                     }
@@ -295,6 +299,7 @@ public class CommsService_Usb extends Service {
 
 
         private void cleanUp() {
+            Log.d(this.getClass().getSimpleName(), "cleanUp() called.");
             try {
                 fileDescriptorParcel.close();
             } catch (IOException e) {

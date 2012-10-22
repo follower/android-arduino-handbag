@@ -30,6 +30,7 @@ public class Activity_SetupUsb extends Activity {
 
         public void onServiceDisconnected(ComponentName className) {
             // Called when the service crashes/unexpectedly disconnects.
+            Log.d(this.getClass().getSimpleName(), "connCommsService onServiceDisconnected() called");
             commsService = null;
             commsServiceIsBound = false;
         }
