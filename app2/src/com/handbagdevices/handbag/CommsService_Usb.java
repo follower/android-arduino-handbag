@@ -175,6 +175,9 @@ public class CommsService_Usb extends Service {
                     }
 
                     parseService = null;
+
+                    stopSelf();
+
                     break;
 
 
@@ -191,6 +194,16 @@ public class CommsService_Usb extends Service {
             }
 
         }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(this.getClass().getSimpleName(), "onDestroy() called");
+        unregisterReceiver(usbActionReceiver);
+        usbHandler = null;
+
     }
 
 
