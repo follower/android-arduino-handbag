@@ -307,6 +307,7 @@ public class CommsService_Usb extends Service {
             } catch (IOException e) {
                 Log.d(this.getClass().getSimpleName(), "Ignoring IOException when closing USB device.");
             }
+            usbHandler.setAccessory(null);
         }
 
 
