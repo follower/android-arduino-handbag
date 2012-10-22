@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -203,6 +204,13 @@ public class CommsService_Usb extends Service {
         Log.d(this.getClass().getSimpleName(), "onDestroy() called");
         unregisterReceiver(usbActionReceiver);
         usbHandler = null;
+
+        // This attempts to work around "Device not found" error on
+        // Gingerbread (& less often Honeycomb) for a second connection.
+        // TODO: Solve this error properly.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
 
     }
 
