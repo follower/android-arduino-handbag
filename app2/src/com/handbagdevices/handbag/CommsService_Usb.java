@@ -301,6 +301,8 @@ public class CommsService_Usb extends Service {
         private void cleanUp() {
             Log.d(this.getClass().getSimpleName(), "cleanUp() called.");
             try {
+                dataOutStream.close();
+                dataInStream.close();
                 fileDescriptorParcel.close();
             } catch (IOException e) {
                 Log.d(this.getClass().getSimpleName(), "Ignoring IOException when closing USB device.");
