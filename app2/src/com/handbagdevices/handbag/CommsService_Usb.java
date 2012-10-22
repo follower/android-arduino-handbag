@@ -28,8 +28,6 @@ import android.util.Log;
 
 public class CommsService_Usb extends Service {
 
-    public static final int MSG_USB_START_CONNECTION = 701;
-
     // Used to communicate with the UI Activity & Communication Service
     Messenger uiActivity = null; // Orders us around
     Messenger parseService = null; // Receives our data, sends us its data.
@@ -153,13 +151,6 @@ public class CommsService_Usb extends Service {
                         startUsbConnection();
                     }
 
-                    break;
-
-
-                case MSG_USB_START_CONNECTION:
-                    Log.d(this.getClass().getSimpleName(), "    MSG_USB_START_CONNECTION");
-                    startUsbConnection();
-                    // TODO: Send some sort of response?
                     break;
 
 
